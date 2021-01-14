@@ -986,6 +986,10 @@ git log
 >
 > git pull
 
+## 优化
+
+### git push之后需要输入账号密码
+
 
 
 # dubbo 源码学习
