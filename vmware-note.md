@@ -1375,6 +1375,39 @@ shift+alt+鼠标左键点击选取   同步填充 光标信息
 
 选中项目   点击 file 》setting 》 version control 》选中目录 ，右侧插掉即可
 
++ 项目中隐藏  `.idea` 文件 
+  + 打开file--》settings--》editor---->file types
+  + 选择 `*.gitignore`    在底下已有的很多类文件中追加   `.idea;`
+
+
+
+## 常用设置
+
+### 设置 选中对象时背景颜色
+
+setting =》  editor  =》  color scheme  =》  general    右侧   editor  =》  selection background 
+
+
+
+
+
+## 推荐插件
+
++ Translation    翻译工具
++ GsonFormat
++ Free-idea-mybatis
++ CodeGlance
++ Activate-power-mode
+  + <font color=red>去掉 代码界面的 max 0  </font>              window   =》   activate-power-mode  =》  combo  (不勾选即可)
++ Alibaba Java Coding Guidelines
++ Lombok
++ Material Theme UI
+  + 主题选的是 material oceanic 、
+  + <font color=red>修改默认 选中对象背景颜色以及关联对象的颜色</font>     setting  =》 editor  =》 color scheme  =》  general   右侧  code  =》  identifier under caret
++ Rainbow Brackets
++ Maven Helper
++ SequenceDiagram
+
 
 
 ## 问题记录
@@ -1423,7 +1456,11 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 根据  `.class`文件内的包名创建目录结构，然后把它丢进去，再在需要使用的地方通过import 引入，末尾的.class文件名改为* 即可。
 
+###  idea 设置字体大小失效
 
+[参考链接](https://blog.csdn.net/qq_35396093/article/details/89518591)
+
+设置错误的原因是修改的是默认值，而系统使用的是主题的字体设置
 
 
 
