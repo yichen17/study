@@ -1464,6 +1464,12 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 
 
+### 在进行github相关操作的时候一直被要求"Enter passphrase for key". 如何避免每次操作都重新填写一遍passphrase?
+
+[参考链接](https://blog.csdn.net/nankai0912678/article/details/105550421/)
+
+
+
 # 网络编程
 
 ## jdk  NIO 存在的问题
