@@ -1388,6 +1388,15 @@ shift+alt+鼠标左键点击选取   同步填充 光标信息
 + 项目中隐藏  `.idea` 文件 
   + 打开file--》settings--》editor---->file types
   + 选择 `*.gitignore`    在底下已有的很多类文件中追加   `.idea;`
++ <font color=red>查看  class 文件的字节码内容</font>
+
+> 通过 `javac`命令 编译指定的  	`.java`文件，例如  `javac hello.java`  此时会在同一目录下生成对应的`.class`文件，此时在idea中打开该文件是反编译优化后的内容，如果想查看原始的   字节码文件，可以cd到对应的`.class`文件目录，然后执行 `javap -c xxx`，例如，`javap -c hello.class`,此时，控制台就会显示对应的指令信息。  `javap -v xxx` 命令则是显示具体内容
+
+[参考文章](https://blog.csdn.net/weixin_41276238/article/details/103769956)
+
++ 快速查看java动态生成class内容的方法
+
+[参考链接](https://blog.csdn.net/wenyuan65/article/details/82634118)
 
 
 
