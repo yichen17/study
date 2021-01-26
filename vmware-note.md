@@ -2214,7 +2214,92 @@ List<Shape> shapes = ...
 
 
 
+## java 中相关功能对应的依赖关系
 
+### @RestController
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+### JSONObject 
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.69</version>
+</dependency>
+```
+
+### 判空工具类
+
+```
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+</dependency>
+```
+
+### hutool 
+
+```
+<dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
+    <version>5.5.7</version>
+</dependency>
+```
+
+
+
+
+
+
+
+
+
+## 正则表达式
+
+### 简单转义字符
+
+|                            符号                             |       含义       |
+| :---------------------------------------------------------: | :--------------: |
+|                            `\n`                             |    代表换行符    |
+|                            `\t`                             |      制表符      |
+|                            `\\`                             |   代表`\`本身    |
+| `\^`,`\$`,`\(`,`\)`,`\{`,`\}`,`\?`,`\+`,`\*`,`\|`,`\[`,`\]` | 匹配这些字符本身 |
+
+### 标准字符集
+
+| 符号 |                             含义                             |
+| :--: | :----------------------------------------------------------: |
+| `\w` |    任一一个字母或数字或下划线，即0-9，a-z,A-Z,_中任意一个    |
+| `\d` |                任一一个数字，即0-9 中任意一个                |
+| `\s` |      包括 空格，制表符，换行符等空白字符的其中任意一个       |
+| `\b` |             匹配一个单词便捷，即字与空格间的位置             |
+| `.`  | 小数点可以匹配任意一个字符，<font color=red>除了换行符</font>，如果要匹配包括`\n`在内的所有字符，一般用`[\s\S]` |
+
+<font color=red>如上，字母从小写变大写，代表取反操作</font>
+
+### 特殊字符
+
+| 符号 |           含义           |
+| :--: | :----------------------: |
+| `^`  | 匹配输入字符串开始的位置 |
+| `$`  | 匹配输入字符串结尾的位置 |
+| `?`  |     匹配0个或1个字符     |
+| `*`  |  匹配0个或1个或多个字符  |
+| `+`  |    匹配一个或多个字符    |
+
+###  括号 ，匹配其中所有内容
+
++ 括号内 `^`  表示对之后的取反，即不包含
+
++ 括号内`-` 表示范围内均包括
 
 
 
