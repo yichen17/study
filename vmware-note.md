@@ -1436,6 +1436,22 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 
 
+
+
+## 调试技巧
+
+### debug 循环时，指定到某个条件，例如0-10遍历，想直接到6
+
++ 在循环的地方打上断点，然后右击，可以设置条件，设置完毕后debug的时候，会直接进入符合改条件的情况
+
+<img src="./images/2021-01-27-2.jpg" alt="示例" style="zoom: 67%;" />
+
+### 方法之间 回跳，回到前一个方法
+
+<img src="./images/2021-01-27-3.jpg" alt="图解" style="zoom:67%;" />
+
+
+
 ## 问题记录
 
 ### mevan  pom.xml中包没有自动导入
@@ -2235,6 +2251,25 @@ List<Shape> shapes = ...
 </dependency>
 ```
 
+####  常用操作
+
+```
+// 将字符串转为  JSONObject
+String result=nulll;
+JSONObject jsonResult=JSONObject.parseObject(result);
+
+// 将 对象转为 JSONObject
+Person body=new Person():
+JSONObject.toJSONString(body)
+
+//将map转为json对象
+Map<String,Object> res=new LinkedHashMap<>();
+res.put("code-describe","解码失败");
+JSONObject jsonObject=new JSONObject(res);
+```
+
+
+
 ### 判空工具类
 
 ```
@@ -2307,6 +2342,12 @@ List<Shape> shapes = ...
 
 
 
+
+
+
+
+
+
 # 生活技巧
 
 ## ps
@@ -2333,3 +2374,27 @@ List<Shape> shapes = ...
 
 跟上面一样的步骤调整位置画出正圆，然后鼠标右击该选框，选择描边，设定指定的宽度即可
 
+
+
+
+
+
+
+# 知识盲区
+
+##  http-client 
+
+版本为4.5，使用`CloseableHttpClient` 发送 请求时，少量请求可行，频繁发送出现异常如下
+
+```
+// 异常信息
+java.lang.IllegalStateException: Connection pool shut down
+// 错误提示定位是在
+CloseableHttpClient 类的  execute 方法执行过程中出错
+```
+
+[参考文章](http://www.mamicode.com/info-detail-2297359.html)
+
+在构建 `CloseableHttpClient` 对象时设置 `setConnectionManagerShared` 属性为  `true`
+
+![定义CloseableHttpClient](./images/2021-01-27-1.jpg)
