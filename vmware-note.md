@@ -1431,7 +1431,21 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 
 
+## idea 跑项目  cpu 狂响
 
+> 修改 idea安装目录下的 idea.exe.vmoptions    位置是  安装位置/bin/idea.exe.vmoptions
+>
+> 设置其中的 
+>
+> -Xms 800m
+>
+> -Xmx 800m
+>
+> -XX:ReservedCodeCacheSize=350m
+>
+> 以上为8g内存的配置，如果是16g的，则改为 1g、2g、1g
+
+[参考链接](https://blog.csdn.net/qq_27093465/article/details/81947933?utm_source=blogxgwz7)
 
 ## 推荐插件
 
