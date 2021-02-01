@@ -990,6 +990,23 @@ git log
 
 ### git push之后需要输入账号密码
 
+```
+// 执行如下文件会生成 一个  .git-crredentials 文件，里面记录了用户名，密码，git地址等信息
+git config --global credential.helper store
+```
+
+
+
+## 问题
+
+### 删除是 因为文件或者路径是中文找不到
+
+```
+git config --global core.quotepath false
+```
+
+
+
 
 
 # dubbo 源码学习
@@ -2371,9 +2388,92 @@ JSONObject jsonObject=new JSONObject(res);
 
 
 
+## java  自定义对象复制问题
 
+### 测试 自定义类对象定义
 
+```
+package com.yichen.jvmtest.dataPosition;
 
+/**
+ * @author Qiuxinchao
+ * @version 1.0
+ * @date 2021/2/1 17:04
+ */
+public class Person {
+    private String name;
+    private Integer age;
+
+    public Person(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Person() {
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Person person=new Person();
+        person.setName(this.name);
+        person.setAge(this.age);
+        return person;
+    }
+}
+
+```
+
+### 测试 方法
+
+```
+public class Test {
+    public static void main(String[] args)throws Exception {
+        Person person=new Person("yichen",17);
+        Person person1=(Person)person.clone();
+        System.out.println(person==person1);
+        Person person2=person;
+        person.setName("banyu");
+        person.setAge(18);
+        System.out.println(person==person1);
+        System.out.println(person==person2);
+        System.out.println(person);
+        System.out.println(person1);
+        System.out.println(person2);
+    }
+}
+```
+
+### 测试结果
+
+<img src="./images/2021-02-01-1.jpg" alt="测试结果" style="zoom:67%;" />
+
+### 总结
+
+复杂对象如果只是单纯的通过`=`复制，那么各个变量之间访问的还是同一块内存区域，如果通过实现`clone`方法，并且通过该方法来创建，那么两个对象就是不相关的。
 
 
 
