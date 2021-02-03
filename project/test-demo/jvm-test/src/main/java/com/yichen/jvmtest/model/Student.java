@@ -6,9 +6,12 @@ package com.yichen.jvmtest.model;
  * @date 2021/1/25 16:47
  */
 public class Student {
-    private String name;
-    private Integer age;
+    private String name="yichen";
+    private Integer age=18;
     private String certId;
+    static{
+        System.out.println("student class static field");
+    }
 
     public String getName() {
         return name;
@@ -39,6 +42,7 @@ public class Student {
         this.age = age;
         this.certId = certId;
     }
+    public Student(){}
 
     @Override
     public String toString() {

@@ -2491,6 +2491,119 @@ public class Test {
 
 
 
+## java 对象构建 顺序问题
+
++ 调用对应类的构造函数之前  先初始化类中 静态代码块以及 静态属性
++ 现根据入参 选择匹配的类的构造函数
++ 进入匹配的构造函数
++ 对有默认赋值的  类属性进行初始化赋值以及重写（如int 类型初始化赋值是0，但是如果一开始定义该类型时设置它为3，则此时会将该值由0改为3）
++ 如果 类属性 是 其他非基本数据类型的 定义的，则调用对应的构造方法，流程如上重复
+
+### 测试代码
+
+#### 测试顺序主类
+
+```
+public class TestOrder {
+    private String name;
+    private int age=10;
+    private boolean state=true;
+    private Student student=new Student();
+
+    public String sex;
+
+    static{
+        System.out.println("test order has start-up");
+    }
+
+    private static String POSITION="test position";
+
+
+    public TestOrder(String name, int age, String sex) {
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    }
+
+    @Override
+    public String toString() {
+        return "TestOrder{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", state=" + state +
+                ", student=" + student +
+                ", sex='" + sex + '\'' +
+                '}';
+    }
+}
+```
+
+#### 测试顺序  副类
+
+```
+public class Student {
+    private String name="yichen";
+    private Integer age=18;
+    private String certId;
+    static{
+        System.out.println("student class static field");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getCertId() {
+        return certId;
+    }
+
+    public void setCertId(String certId) {
+        this.certId = certId;
+    }
+
+    public Student(String name, Integer age, String certId) {
+        this.name = name;
+        this.age = age;
+        this.certId = certId;
+    }
+    public Student(){}
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", certId='" + certId + '\'' +
+                '}';
+    }
+}
+```
+
+#### 调试方法 入口
+
+```
+public class Test {
+    public static void main(String[] args) {
+        TestOrder order=new TestOrder("yichen",18,"男");
+        System.out.println(order);
+    }
+}
+```
+
+
+
 
 
 # 生活技巧

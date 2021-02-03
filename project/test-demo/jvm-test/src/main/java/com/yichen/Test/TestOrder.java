@@ -1,5 +1,7 @@
 package com.yichen.Test;
 
+import com.yichen.jvmtest.model.Student;
+
 /**
  * @author Qiuxinchao
  * @version 1.0
@@ -8,12 +10,17 @@ package com.yichen.Test;
  */
 public class TestOrder {
     private String name;
-    private int age;
+    private int age=10;
+    private boolean state=true;
+    private Student student=new Student();
 
     public String sex;
 
-    private static String POSITION="test position";
+    static{
+        System.out.println("test order has start-up");
+    }
 
+    private static String POSITION="test position";
 
 
     public TestOrder(String name, int age, String sex) {
@@ -27,6 +34,8 @@ public class TestOrder {
         return "TestOrder{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", state=" + state +
+                ", student=" + student +
                 ", sex='" + sex + '\'' +
                 '}';
     }
