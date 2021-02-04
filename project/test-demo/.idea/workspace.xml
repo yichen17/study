@@ -9,7 +9,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91a146be-4fcb-44a0-8e80-651c2f7d0187" name="Default Changelist" comment="" />
+    <list default="true" id="91a146be-4fcb-44a0-8e80-651c2f7d0187" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/Child.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/ChildX.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/ChildY.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/InheritedTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/InheritedTest2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/Parent.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/ParentX.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/ParentY.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/Test.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Annotation/Test/TestX.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Test/Child.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Test/DebugMethod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Test/GoBack.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Test/Parent.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Test/Test.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/Test/TestOrder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/JvmTestApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/Test/ByteCodeDemo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/Test/JvmPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/Test/JvmTest$TestClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/Test/JvmTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/Test/TestClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/controller/PostmanTestController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/controller/TestController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/dataPosition/Person.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/dataPosition/Test.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/classes/com/yichen/jvmtest/model/Student.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jvm-test/target/test-classes/com/yichen/jvmtest/JvmTestApplicationTests.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/Test/TestOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/Test/TestOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/jvmtest/model/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/jvmtest/model/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../vmware-note.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../vmware-note.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,6 +55,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -31,6 +66,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1n5JkCXdYrksGQhFaA0jNkoPHTp" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
@@ -49,7 +85,7 @@
     <property name="project.structure.proportion" value="0.15429688" />
     <property name="project.structure.side.proportion" value="0.30324072" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="yiiguxing.plugin.translate" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -104,19 +140,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.yichen.Annotation.Test.TestX" />
-      <module name="jvm-test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.yichen.Annotation.Test.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.yichen.Test.Test" />
       <module name="jvm-test" />
@@ -130,15 +153,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration name="TestX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.yichen.Annotation.Test.TestX" />
+      <module name="jvm-test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yichen.Annotation.Test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -151,20 +185,21 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Test" />
       <item itemvalue="Application.TestX" />
       <item itemvalue="Application.DebugMethod" />
       <item itemvalue="Application.GoBack" />
       <item itemvalue="Application.Test (1)" />
-      <item itemvalue="Spring Boot.JvmTestApplication" />
       <item itemvalue="Application.Test (2)" />
+      <item itemvalue="Spring Boot.JvmTestApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Test" />
         <item itemvalue="Application.Test (2)" />
         <item itemvalue="Application.Test (1)" />
         <item itemvalue="Application.GoBack" />
         <item itemvalue="Application.DebugMethod" />
-        <item itemvalue="Application.TestX" />
       </list>
     </recent_temporary>
   </component>
@@ -198,6 +233,7 @@
       <workItem from="1612229645962" duration="427000" />
       <workItem from="1612230085863" duration="358000" />
       <workItem from="1612230460277" duration="21490000" />
+      <workItem from="1612314911774" duration="13061000" />
     </task>
     <servers />
   </component>
@@ -217,10 +253,10 @@
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="421" y="66" key="#com.intellij.ide.macro.MacrosDialog/0.0.1280.720@0.0.1280.720" timestamp="1610678103000" />
-    <state x="446" y="64" key="#com.intellij.ide.util.MemberChooser" timestamp="1612260050783">
+    <state x="446" y="64" key="#com.intellij.ide.util.MemberChooser" timestamp="1612318618023">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="446" y="64" key="#com.intellij.ide.util.MemberChooser/0.0.1280.720@0.0.1280.720" timestamp="1612260050783" />
+    <state x="446" y="64" key="#com.intellij.ide.util.MemberChooser/0.0.1280.720@0.0.1280.720" timestamp="1612318618023" />
     <state x="386" y="186" key="#com.intellij.tools.ToolEditorDialog" timestamp="1610690872911">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
@@ -229,66 +265,66 @@
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="354" y="200" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1280.720@0.0.1280.720" timestamp="1612170563289" />
-    <state width="1115" height="618" key="DebuggerActiveHint" timestamp="1612251407741">
+    <state width="1115" height="618" key="DebuggerActiveHint" timestamp="1612333364137">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1115" height="618" key="DebuggerActiveHint/0.0.1280.720@0.0.1280.720" timestamp="1612251407741" />
+    <state width="1115" height="618" key="DebuggerActiveHint/0.0.1280.720@0.0.1280.720" timestamp="1612333364137" />
     <state x="421" y="115" key="FileChooserDialogImpl" timestamp="1610682033200">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="421" y="115" key="FileChooserDialogImpl/0.0.1280.720@0.0.1280.720" timestamp="1610682033200" />
-    <state width="1237" height="332" key="GridCell.Tab.0.bottom" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.0.bottom" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="332" key="GridCell.Tab.0.center" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.0.center" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="332" key="GridCell.Tab.0.left" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.0.left" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="332" key="GridCell.Tab.0.right" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.0.right" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="332" key="GridCell.Tab.1.bottom" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.1.bottom" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.1.bottom/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="332" key="GridCell.Tab.1.center" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.1.bottom/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.1.center" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.1.center/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="332" key="GridCell.Tab.1.left" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.1.center/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.1.left" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.1.left/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="332" key="GridCell.Tab.1.right" timestamp="1612260682419">
+    <state width="1237" height="268" key="GridCell.Tab.1.left/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.1.right" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="332" key="GridCell.Tab.1.right/0.0.1280.720@0.0.1280.720" timestamp="1612260682419" />
-    <state width="1237" height="268" key="GridCell.Tab.2.bottom" timestamp="1612260682416">
+    <state width="1237" height="268" key="GridCell.Tab.1.right/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.2.bottom" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="268" key="GridCell.Tab.2.bottom/0.0.1280.720@0.0.1280.720" timestamp="1612260682416" />
-    <state width="1237" height="268" key="GridCell.Tab.2.center" timestamp="1612260682416">
+    <state width="1237" height="268" key="GridCell.Tab.2.bottom/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.2.center" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="268" key="GridCell.Tab.2.center/0.0.1280.720@0.0.1280.720" timestamp="1612260682416" />
-    <state width="1237" height="268" key="GridCell.Tab.2.left" timestamp="1612260682416">
+    <state width="1237" height="268" key="GridCell.Tab.2.center/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.2.left" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="268" key="GridCell.Tab.2.left/0.0.1280.720@0.0.1280.720" timestamp="1612260682416" />
-    <state width="1237" height="268" key="GridCell.Tab.2.right" timestamp="1612260682416">
+    <state width="1237" height="268" key="GridCell.Tab.2.left/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state width="1237" height="268" key="GridCell.Tab.2.right" timestamp="1612333416834">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="1237" height="268" key="GridCell.Tab.2.right/0.0.1280.720@0.0.1280.720" timestamp="1612260682416" />
-    <state x="121" y="0" key="SettingsEditor" timestamp="1612233637134">
+    <state width="1237" height="268" key="GridCell.Tab.2.right/0.0.1280.720@0.0.1280.720" timestamp="1612333416834" />
+    <state x="121" y="0" key="SettingsEditor" timestamp="1612334108605">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="121" y="0" key="SettingsEditor/0.0.1280.720@0.0.1280.720" timestamp="1612233637134" />
+    <state x="121" y="0" key="SettingsEditor/0.0.1280.720@0.0.1280.720" timestamp="1612334108605" />
     <state x="28" y="0" key="new project wizard" timestamp="1610674284760">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
@@ -312,9 +348,14 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/jvmtest/controller/PostmanTestController.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/jvmtest/JvmTestApplication.java</url>
+          <line>9</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/Test/Test.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
