@@ -1315,6 +1315,20 @@ AbstractRegistry 中还有另外两个需要关注的方法：recover() 方法�
 
 
 
+# redis
+
+## redis 运行变慢，性能排查
+
+### 思维导图
+
+![思维导图](./images/2021-02-05-1.png)
+
+### 参考文章
+
+[参考文章](https://mp.weixin.qq.com/s/Cvq51psUQaNFThL0HJy11g)
+
+
+
 # 代理
 
 ## 代理模式
@@ -2076,7 +2090,68 @@ List<Shape> shapes = ...
     }
 ```
 
-## 方法引用
+## Stream 方法中常用接口
+
+### reduce()
+
+reduce操作可以实现从一组元素中生成一个值，`sum()`、`max()`、`min()`、`count()`等都是reduce操作，将他们单独设为函数只是因为常用。`reduce()`的方法定义有三种重写形式：
+
+- `Optional<T> reduce(BinaryOperator<T> accumulator)`
+
+<img src="./images/2021-02-05-4.jpg" alt="等价代码" style="zoom:67%;" />
+
+- `T reduce(T identity, BinaryOperator<T> accumulator)`
+
+<img src="./images/2021-02-05-3.jpg" alt="等价代码" style="zoom:67%;" />
+
+- `<U> U reduce(U identity, BiFunction<U,? super T,U> accumulator, BinaryOperator<U> combiner)`
+
+<font color=red> 三个参数整体理解</font>
+
+<img src="./images/2021-02-05-2.jpg" alt="三个参数说明" style="zoom:50%;" />
+
+#### 示例代码
+
+```
+public class StreamDemo {
+    private static final String [] WORD={"hello","hi","name","height","exciting"};
+    public static void main(String[] args) {
+        System.out.println(getLongestWord());
+        System.out.println(getAllCharacter());
+
+    }
+    public static String getLongestWord(){
+        Optional<String> result= Arrays.stream(WORD).reduce((a,b)->a.length()>=b.length()?a:b);
+        return result.get();
+    }
+
+    public static Integer getAllCharacter(){
+        Integer result=Arrays.stream(WORD).reduce(0,(a,b)->a+b.length(),(a,b)->a+b);
+        return result;
+    }
+}
+```
+
+#### 运行结果
+
+![运行结果](./images/2021-02-05-5.jpg)
+
+### collect()
+
+#### 方法引用
+
+|    方法引用类型    |      举例      |
+| :----------------: | :------------: |
+|    引用静态方法    |  Integer::sum  |
+| 引用某个对象的方法 |   list::add    |
+|  引用某个类的方法  | String::length |
+|    引用构造函数    |  HashMap::new  |
+
+#### 参数介绍
+
+<img src="./images/2021-02-05-6.jpg" alt="三个参数示意" style="zoom:50%;" />
+
+
 
 
 
@@ -2605,6 +2680,16 @@ public class Test {
     }
 }
 ```
+
+
+
+## 看 openjdk
+
+### object.wait 和 object.notify
+
+[参考链接](https://blog.51cto.com/13981400/2374217)
+
+
 
 
 
