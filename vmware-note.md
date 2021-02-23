@@ -774,7 +774,11 @@ location /shanliang/ {
 }
 ```
 
+## postman 请求无 返回值
 
+[参考链接](https://blog.csdn.net/qqxyy99/article/details/93876124)
+
+修改postman中的setting，将其中的 SSL certificate verfication 改为off
 
 # linux 命令
 
@@ -2690,6 +2694,44 @@ public class Test {
 [参考链接](https://blog.51cto.com/13981400/2374217)
 
 
+
+## 编码格式
+
+[参考链接](http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html)
+
+### unicode概述
+
+unicode ，占据2个字节，可以表示65535 个字符。
+
+> Unicode 只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。
+
+<img src="./images/2021-02-23-1.jpg" alt="常见的前128个unicode 对应表" style="zoom: 80%;" />
+
+### ascll 概述
+
+每个字符占用一个字节，ascll 可以表示最大字符数是255个。适用于英文，但不适合中文
+
+
+
+### gb2312
+
+简体中文的常用编码方式
+
+
+
+### utf-8 
+
+<font color=red>它是unicode 的一种实现</font>
+
+> UTF-8 就是在互联网上使用最广的一种 Unicode 的实现方式。其他实现方式还包括 UTF-16（字符用两个字节或四个字节表示）和 UTF-32（字符用四个字节表示）
+
+编码规则如下：
+
+1、对于单字节的符号，字节的第一位设为`0`，后面7位为这个符号的 Unicode 码。因此对于英语字母，UTF-8 编码和 ASCII 码是相同的。
+
+2、对于`n`字节的符号（`n > 1`），第一个字节的前`n`位都设为`1`，第`n + 1`位设为`0`，后面字节的前两位一律设为`10`。剩下的没有提及的二进制位，全部为这个符号的 Unicode 码。
+
+<img src="./images/2021-02-23-2.jpg" alt="unicode与utf-8转换表" style="zoom:67%;" />
 
 
 
