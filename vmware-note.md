@@ -780,6 +780,16 @@ location /shanliang/ {
 
 修改postman中的setting，将其中的 SSL certificate verfication 改为off
 
+##  如何下载指定版本 的openjdk
+
+[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
+
+> http://hg.openjdk.java.net/
+>
+> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+
+
+
 # linux 命令
 
 ##  /目录下的文件夹介绍
