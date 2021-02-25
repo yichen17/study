@@ -17,6 +17,7 @@
 
 	<modules>
 		<module>jvm-test</module>
+		<module>test</module>
 	</modules>
 
 	<properties>
