@@ -1569,6 +1569,18 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 [参考链接](https://blog.csdn.net/nankai0912678/article/details/105550421/)
 
+### 同级目录下的两个项目有引用关系怎么解决
+
+<img src="./images/2021-02-24-1.jpg" alt="引用关系图示" style="zoom:67%;" />
+
+> outer-interface-parent 项目存在对 common-starter 项目的依赖，但是如果单纯启动outer-interface-parent项目时，在导入依赖的时候会提示错误，无法找到common-starter 。
+
+#### 解决方法
+
+<img src="./images/2021-02-24-2.jpg" alt="解决方法" style="zoom:50%;" />
+
+在打开的  outer-interface-parent 项目中通过mevan 引入依赖的项目即可，最后通过重新导入maven 依赖就可以了
+
 
 
 # 网络编程
@@ -2423,6 +2435,36 @@ JSONObject jsonObject=new JSONObject(res);
 
 ## 正则表达式
 
+### java中正则匹配
+
+<font color=red>java中用正则表达式去分片时，如果两个分隔符中间没有内容，则会跳过而不是保存一个空的数据。</font>
+
+>```java
+>private static final Pattern NAME_SEPARATOR=Pattern.compile("\\s*[,]+\\s*");
+>String[] names = NAME_SEPARATOR.split("a,b,c");
+>for(String name:names){
+>	System.out.println(name);
+>}
+>```
+>
+>以上，运行输出结果为：
+>
+>a
+>
+>b
+>
+>c
+
+>```java
+>private static final Pattern NAME_SEPARATOR=Pattern.compile("\\s*[,]+\\s*");
+>String[] names = NAME_SEPARATOR.split(",,");
+>for(String name:names){
+>	System.out.println(name);
+>}
+>```
+>
+>以上，输出结果为空，即names 数组中没有内容
+
 ### 简单转义字符
 
 |                            符号                             |       含义       |
@@ -2457,8 +2499,31 @@ JSONObject jsonObject=new JSONObject(res);
 ###  括号 ，匹配其中所有内容
 
 + 括号内 `^`  表示对之后的取反，即不包含
-
 + 括号内`-` 表示范围内均包括
+
+### 三种括号的作用
+
+#### 圆括号（）
+
+() 是为了提取匹配的字符串。表达式中有几个()就有几个相应的匹配字符串。
+
+#### 中括号[]
+
+[]是定义匹配的字符范围。比如 [a-zA-Z0-9] 表示相应位置的字符要匹配英文字符和数字。[\s]表示空格或者号。
+
+>```java
+>Pattern p=Pattern.compile("[.]+");
+>Matcher m1=p.matcher(".");  
+>boolean b1=m.matches();  //1
+>Matcher m2=p.matcher("");  
+>boolean b2=m.matches();  //2
+>```
+>
+>以上，1处的结果为true，2处的结果为false
+
+#### 大括号{}
+
+{}一般用来表示匹配的长度
 
 
 
