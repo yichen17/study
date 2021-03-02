@@ -9,22 +9,30 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.yichen</groupId>
-	<artifactId>test-demo</artifactId>
+	<artifactId>test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>test-demo</name>
+	<name>test</name>
 	<description>Demo project for Spring Boot</description>
-	<packaging>pom</packaging>
-
-	<modules>
-		<module>jvm-test</module>
-		<module>test</module>
-		<module>agent</module>
-	</modules>
-
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>

@@ -1007,6 +1007,12 @@ git log
 >
 > git pull
 
+##  合并分支  git merge
+
+[参考链接](https://www.jianshu.com/p/ff1877c5864e)
+
+
+
 ## 优化
 
 ### git push之后需要输入账号密码
@@ -2814,6 +2820,35 @@ unicode ，占据2个字节，可以表示65535 个字符。
 2、对于`n`字节的符号（`n > 1`），第一个字节的前`n`位都设为`1`，第`n + 1`位设为`0`，后面字节的前两位一律设为`10`。剩下的没有提及的二进制位，全部为这个符号的 Unicode 码。
 
 <img src="./images/2021-02-23-2.jpg" alt="unicode与utf-8转换表" style="zoom:67%;" />
+
+## java 中对象比较
+
+###  == 比较对象
+
+> == 比较的是两个对象的 地址值，只有两个对象的地址一样才返回true
+
+### 非基本类型
+
+> 备注，基本类型有如下8种
+>
+> byte,short,char,int ,long,float,double,boolean  <font color=red>都被final修饰，不可重写</font>
+
+<font color=red> 非基本类型对象比较，与基本类型类似，但是它们有一个优势，即虽然通过`==`判断的仍然是两者的地址值，但是，如果使用`eqauls`方法去判断，那么此时我们可以通过重写该方法来实现我们自定义的对象比较规则</font>
+
+### map中的key 值比对
+
+```
+if (p.hash == hash &&
+                ((k = p.key) == key || (key != null && key.equals(k))))
+```
+
+> 比较逻辑如上，首先比较的是原有key和插入key的hash值，这里调用了对象的hashcode方法
+>
+> 之后则 有两种方法核实是否为同一个key：
+>
+> 1、直接通过  两个key的地址值比对
+>
+> 2、通过equals方法比较两个key
 
 
 
