@@ -13,5 +13,10 @@ public class Test {
         int code=name.codePointAt(0);
         System.out.println(code);
 //        System.out.println(code=='y');
+
+        System.out.println(Long.MIN_VALUE);
+        System.out.println(Long.MAX_VALUE);
+        System.out.println(-Long.MAX_VALUE);
+
     }
 }
