@@ -877,6 +877,13 @@ getcong LONG_BIT
 
 
 
+## 在linux 上部署常用命令
+
++ jps -l  查看java进程
++ pwdx 2772  查看指定进程id 的执行目录
+
+
+
 ## 基础性知识
 
 ### - 和  -- 的区别
@@ -2862,3 +2869,20 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 在构建 `CloseableHttpClient` 对象时设置 `setConnectionManagerShared` 属性为  `true`
 
 ![定义CloseableHttpClient](./images/2021-01-27-1.jpg)
+
+
+
+
+
+# mongodb
+
+[安装步骤](https://blog.csdn.net/dandanfengyun/article/details/95497728)
+
+## 常用命令
+
+>net start mongodb   // 开启mongodb 服务
+>
+>net stop mongodb  // 关闭mongodb服务
+>
+>use admin   // 如果没有对应的数据库，则默认自动创建
+
