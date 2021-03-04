@@ -2931,9 +2931,9 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 
 
-# unbutu 中安装 redis
+# unbutu 
 
-## 安装步骤
+## redis安装步骤
 
 + 执行命令  `sudo apt-get install redis-server` 安装
 + 
@@ -2962,6 +2962,10 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >ps agx|grep redis  查看redis 进程
 >
 >netstat -ntpl|grep 6379  查看redis 的端口是否在监听。
+
+## 安装openjdk 7u4 所依赖的东西
+
+>sudo apt-get install build-essential gawk m4 openjdk-6-jdk libasound2-dev libcups2-dev libxrender-dev xorg-dev xutils-dev xllproto-print-dev binutils libmotif3 libmotif-dev ant
 
 # 数学知识
 
