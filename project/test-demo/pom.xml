@@ -19,6 +19,7 @@
 		<module>jvm-test</module>
 		<module>test</module>
 		<module>agent</module>
+		<module>jedis-demo</module>
 	</modules>
 
 	<properties>

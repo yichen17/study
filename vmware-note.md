@@ -840,7 +840,9 @@ location /shanliang/ {
 
 
 
+### vi下 关键字查询
 
+按下`/` ，然后输入关键字，最后按下回车即可，之后按 `n`  下一个，按`N` 上一个
 
 
 
@@ -2385,65 +2387,6 @@ public class StreamDemo {
 
 
 
-## java 中相关功能对应的依赖关系
-
-### @RestController
-
-```
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-```
-
-### JSONObject 
-
-```
-<dependency>
-    <groupId>com.alibaba</groupId>
-    <artifactId>fastjson</artifactId>
-    <version>1.2.69</version>
-</dependency>
-```
-
-####  常用操作
-
-```
-// 将字符串转为  JSONObject
-String result=nulll;
-JSONObject jsonResult=JSONObject.parseObject(result);
-
-// 将 对象转为 JSONObject
-Person body=new Person():
-JSONObject.toJSONString(body)
-
-//将map转为json对象
-Map<String,Object> res=new LinkedHashMap<>();
-res.put("code-describe","解码失败");
-JSONObject jsonObject=new JSONObject(res);
-```
-
-
-
-### 判空工具类
-
-```
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
-</dependency>
-```
-
-### hutool 
-
-```
-<dependency>
-    <groupId>cn.hutool</groupId>
-    <artifactId>hutool-all</artifactId>
-    <version>5.5.7</version>
-</dependency>
-```
-
 
 
 
@@ -2933,18 +2876,45 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 # unbutu 
 
-## redis安装步骤
+## redis
+
+### redis  安装
 
 + 执行命令  `sudo apt-get install redis-server` 安装
-+ 
 
-## 问题记录
+### redis 常用命令
 
-### apt-get安装软件Unable to locate package错误解决办法
+>redis-cli   接入redis  客户端
+>
+>quit 退出redis 客户端
+>
+>shutdown  关闭redis
+
+### 设置redis  访问 auth 密码
+
+[参考文章](https://blog.csdn.net/u013829518/article/details/82621694)
+
+#### 临时设置 重启后失效
+
+> config get requirepass    //  查看有没有设置密码
+>
+> config set requirepass  yichen   // 设置密码为yichen
+>
+> auth yichen    // 连接redis 客户端后 需要认证才能  查询数据信息
+>
+> redis-cli -a yichen shutdown   // 关闭redis 是也需要该密码
+
+#### 永久设置
+
+> 修改  redis.conf   中的 requirepass 的值为你想要设置的密码
+
+### 问题记录
+
+#### apt-get安装软件Unable to locate package错误解决办法
 
 > 这个错误一般是因为软件源未更新造成的，于是采用命令：sudo apt-get update 来更新软件源。
 
-### 安装好 redis 后无法启动
+#### 安装好 redis 后无法启动
 
 [参考链接](https://blog.csdn.net/weixin_43968936/article/details/102809536)
 
@@ -2962,6 +2932,40 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >ps agx|grep redis  查看redis 进程
 >
 >netstat -ntpl|grep 6379  查看redis 的端口是否在监听。
+
+## mysql
+
+### 安装
+
++ apt-cache search mysql | grep mysql-server    // 查看可以安装的版本
++ sudo apt-get install mysql-server-查询到的版本    // 安装mysql
++ service mysql start   // 启动mysql服务
++ sudo cat /etc/mysql/debian.cnf   // 第一次登陆查看账号密码
++ mysql -u  账号  -p密码    // 登陆mysql
+
+### 第一次 修改root 密码
+
+>ALTER USER 'root'@'localhost'  IDENTIFIED WITH mysql_native_password  BY 'root';
+>
+><font color=red> mysql 8后修改密码的方式</font>
+
+
+
+>update mysql.user set authentication_string=password('root') where user='root' and Host ='localhost';
+>update user set plugin="mysql_native_password"; 
+>flush privileges;
+>
+><font color=red> mysql 8之前修改密码的方式</font>
+
+### 遇到的问题
+
+#### apt 安装后无法通过  service mysql start 启动
+
+<font color=red> 子系统和主系统公用端口号，需要把主系统的mysql关闭。
+
+
+
+
 
 ## 安装openjdk 7u4 所依赖的东西
 
@@ -3009,7 +3013,74 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 
 
+# meven 功能和依赖对应
 
+## @RestController
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+## @ConfigurationProperties(prefix = "user")
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+
+一般在该注解上还要添加  @Component  ，将该类加入bean 或者
+
+## JSONObject 
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.69</version>
+</dependency>
+```
+
+####  常用操作
+
+```
+// 将字符串转为  JSONObject
+String result=nulll;
+JSONObject jsonResult=JSONObject.parseObject(result);
+
+// 将 对象转为 JSONObject
+Person body=new Person():
+JSONObject.toJSONString(body)
+
+//将map转为json对象
+Map<String,Object> res=new LinkedHashMap<>();
+res.put("code-describe","解码失败");
+JSONObject jsonObject=new JSONObject(res);
+```
+
+## 判空工具类
+
+```
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+</dependency>
+```
+
+## hutool 
+
+```
+<dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
+    <version>5.5.7</version>
+</dependency>
+```
 
 
 
