@@ -2310,9 +2310,8 @@ public class StreamDemo {
 &gt;    =》  >
 &#060;   =》  <
 &#062;  =>    >
+&quot;   =>  "
 ```
-
-
 
 
 
@@ -2882,13 +2881,21 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 + 执行命令  `sudo apt-get install redis-server` 安装
 
-### redis 常用命令
+### redis 运行命令
 
 >redis-cli   接入redis  客户端
 >
 >quit 退出redis 客户端
 >
 >shutdown  关闭redis
+
+### 操作命令
+
+>keys *   // 查看所有的key
+>
+>select 6 使用6号数据库  <font color=red> 在jedis中如果设置了    redis_database=6 ，如果数字大于六，到时候查询数据的时候可能存在查不到的情况，原因是保存在不同的数据库中，可以用该命令切换数据库</font>
+>
+>
 
 ### 设置redis  访问 auth 密码
 
@@ -3013,6 +3020,24 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 
 
+## 相关性分析
+
+相关性分析其实是进行回归分析的必要前提工作。通俗地讲，相关性分析是定性、回归分析是定量。我们在确定衡量某个变量时一定要遵循“先定性、再定量”，所以要先进行相关性分析，再做回归分析。
+
+<img src="C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210305094311204.png" alt="步骤" style="zoom: 50%;" />
+
+### 过程
+
+分析两个因素是否有关联，一般通过因素拆解，拆解到有相关性因素时，用AB测试（即控制变量法），改变该因素发现是否发生相关的变动，如果发现没有相关性，则可以用前面拆解出来的因素，然后进行再次验证。
+
+## 回归分析
+
+### 建立回归模型的步骤
+
+> 分析目的 =》 确定变量  =》 建立回归模型   =》回归方程检验  =》  建立回归公式
+
+
+
 # meven 功能和依赖对应
 
 ## @RestController
@@ -3083,4 +3108,13 @@ JSONObject jsonObject=new JSONObject(res);
 ```
 
 
+
+## 加密工具    DigestUtils.md5Hex("shanliang28");
+
+```
+<dependency>
+    <groupId>commons-codec</groupId>
+    <artifactId>commons-codec</artifactId>
+</dependency>
+```
 
