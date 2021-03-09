@@ -909,7 +909,23 @@ df -h
 + v   =》   verbose   显示执行细节
 + i   =》 information   执行前通知
 
+### 默认颜色代表的含义
 
++ 蓝色  =》  目录
++ 绿色  =》 可执行文件
++ 红色  =》  压缩文件
++ 浅蓝  =》  链接文件
++ 白色  =》 其他文件
++ 黄色  =》 设备文件，包括block、char、fifo
+
+# window相关问题记录
+
+## window 查看端口以及对应的进程名称
+
++ netstat -ano  // 展示端口列表
+
++ netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
++ tasklist | findstr "上一步最后一列查询出来的  pid "
 
 # git 常用命令
 
@@ -2800,6 +2816,19 @@ if (p.hash == hash &&
 
 
 
+## 数据库
+
+### 将 `.sql` 文件中的数据插入到数据库中
+
+> source /tmp/phone202103-mysql.sql     // 后面是对应的sql 文件位置
+> <font color=red>这里需要在cmd命令行执行，而不能用三方工具，如navicat premiun</font>
+
+### java jdbc数据库报错  closing inbound before receiving peer's close_notify
+
+> 在数据库的url 加上    &useSSL=false
+
+
+
 
 
 # 生活技巧
@@ -2875,6 +2904,10 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 # unbutu 
 
+## 查看磁盘信息
+
+> df -h 
+
 ## redis
 
 ### redis  安装
@@ -2939,6 +2972,17 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >ps agx|grep redis  查看redis 进程
 >
 >netstat -ntpl|grep 6379  查看redis 的端口是否在监听。
+
+#### 启动redis-server 报错  Fatal error, can't open config file '/etc/redis/redis.conf'
+failed
+
+> whereis redis-server   // 找到redis-server 所在文件夹，到该文件夹
+>
+> redis-server  /etc/redis/redis.conf    //  以指定地方的配置文件运行  redis-server
+>
+> service redis-server status    // 查看启动状态
+
+
 
 ## mysql
 
@@ -3118,3 +3162,48 @@ JSONObject jsonObject=new JSONObject(res);
 </dependency>
 ```
 
+# ssdb 在unbutu 下安装
+
+## 步骤
+
+[参考文章](https://blog.csdn.net/zwjyyy1203/article/details/89386301)
+
+
+
+>wget --no-check-certificate https://github.com/ideawu/ssdb/archive/master.zip  // 下载
+>
+>unzip master    // 解压
+>
+>cd ssdb-master  //进入目录
+>
+>make //编译
+>
+>sudo make install  //  默认安装在  /usr/local
+>
+>sudo make install PREFIX=/your/directory     // 指定安装位置
+
+## 常用命令
+
+> ./ssdb-server ssdb.conf     // 启动
+>
+> ./ssdb-server ssdb.conf -s stop    //关闭
+
+## 问题
+
+### make 报错 autoconf required! install autoconf first
+
+`apt install autoconf` 因为没有  `autoconf` 而报错
+
+### cannot stat 'ssdb-server': No such file or directory
+
+> 确认上面是不是还有错误如下
+>
+> configure: error: no acceptable C compiler found in $PATH
+
+如果有，则表示需要安装 c的编译器，执行如下命令
+
+> apt install gcc
+
+### 如果一直安装不了，尝试安装就版本
+
+>wget --no-check-certificate https://github.com/ideawu/ssdb/archive/stable-1.9.5.zip
