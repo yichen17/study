@@ -885,6 +885,12 @@ df -h
 
 
 
+### crul
+
+[学习链接](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
+
+
+
 ## 在linux 上部署常用命令
 
 + jps -l  查看java进程
@@ -2984,6 +2990,56 @@ failed
 
 
 
+
+
+## ssdb 
+
+### 步骤
+
+[参考文章](https://blog.csdn.net/zwjyyy1203/article/details/89386301)
+
+
+
+>wget --no-check-certificate https://github.com/ideawu/ssdb/archive/master.zip  // 下载
+>
+>unzip master    // 解压
+>
+>cd ssdb-master  //进入目录
+>
+>make //编译
+>
+>sudo make install  //  默认安装在  /usr/local
+>
+>sudo make install PREFIX=/your/directory     // 指定安装位置
+
+### 常用命令
+
+> ./ssdb-server ssdb.conf     // 启动
+>
+> ./ssdb-server ssdb.conf -s stop    //关闭
+
+### 问题
+
+#### make 报错 autoconf required! install autoconf first
+
+`apt install autoconf` 因为没有  `autoconf` 而报错
+
+#### cannot stat 'ssdb-server': No such file or directory
+
+> 确认上面是不是还有错误如下
+>
+> configure: error: no acceptable C compiler found in $PATH
+
+如果有，则表示需要安装 c的编译器，执行如下命令
+
+> apt install gcc
+
+#### 如果一直安装不了，尝试安装就版本
+
+>wget --no-check-certificate https://github.com/ideawu/ssdb/archive/stable-1.9.5.zip
+
+
+
 ## mysql
 
 ### 安装
@@ -3013,6 +3069,16 @@ failed
 #### apt 安装后无法通过  service mysql start 启动
 
 <font color=red> 子系统和主系统公用端口号，需要把主系统的mysql关闭。
+
+## nacos
+
+### 安装步骤
+
+[参考链接](https://blog.csdn.net/weixin_41317520/article/details/90027449)
+
+>git clone https://github.com/alibaba/nacos.git    // 从git上  下载代码
+>
+>
 
 
 
@@ -3082,9 +3148,11 @@ failed
 
 
 
-# meven 功能和依赖对应
+# meven 
 
-## @RestController
+## 常用注解以及对应的maven依赖
+
+### @RestController
 
 ```
 <dependency>
@@ -3093,7 +3161,7 @@ failed
 </dependency>
 ```
 
-## @ConfigurationProperties(prefix = "user")
+### @ConfigurationProperties(prefix = "user")
 
 ```
 <dependency>
@@ -3105,7 +3173,7 @@ failed
 
 一般在该注解上还要添加  @Component  ，将该类加入bean 或者
 
-## JSONObject 
+### JSONObject 
 
 ```
 <dependency>
@@ -3132,7 +3200,7 @@ res.put("code-describe","解码失败");
 JSONObject jsonObject=new JSONObject(res);
 ```
 
-## 判空工具类
+### 判空工具类
 
 ```
 <dependency>
@@ -3141,7 +3209,7 @@ JSONObject jsonObject=new JSONObject(res);
 </dependency>
 ```
 
-## hutool 
+### hutool 
 
 ```
 <dependency>
@@ -3153,7 +3221,7 @@ JSONObject jsonObject=new JSONObject(res);
 
 
 
-## 加密工具    DigestUtils.md5Hex("shanliang28");
+### 加密工具    DigestUtils.md5Hex("shanliang28");
 
 ```
 <dependency>
@@ -3162,48 +3230,8 @@ JSONObject jsonObject=new JSONObject(res);
 </dependency>
 ```
 
-# ssdb 在unbutu 下安装
+## 打包常用命令
 
-## 步骤
-
-[参考文章](https://blog.csdn.net/zwjyyy1203/article/details/89386301)
-
-
-
->wget --no-check-certificate https://github.com/ideawu/ssdb/archive/master.zip  // 下载
+>mvn install -Dmaven.test.skip=true   // 跳过test 打包
 >
->unzip master    // 解压
 >
->cd ssdb-master  //进入目录
->
->make //编译
->
->sudo make install  //  默认安装在  /usr/local
->
->sudo make install PREFIX=/your/directory     // 指定安装位置
-
-## 常用命令
-
-> ./ssdb-server ssdb.conf     // 启动
->
-> ./ssdb-server ssdb.conf -s stop    //关闭
-
-## 问题
-
-### make 报错 autoconf required! install autoconf first
-
-`apt install autoconf` 因为没有  `autoconf` 而报错
-
-### cannot stat 'ssdb-server': No such file or directory
-
-> 确认上面是不是还有错误如下
->
-> configure: error: no acceptable C compiler found in $PATH
-
-如果有，则表示需要安装 c的编译器，执行如下命令
-
-> apt install gcc
-
-### 如果一直安装不了，尝试安装就版本
-
->wget --no-check-certificate https://github.com/ideawu/ssdb/archive/stable-1.9.5.zip
