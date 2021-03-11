@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Qiuxinchao
  * @version 1.0
@@ -21,4 +23,11 @@ public class TestController {
         System.out.println("name: "+properties.getRealName()+"| age: "+properties.getAge());
         return properties.getRealName();
     }
+    @RequestMapping("/test/url/path")
+    public String path(HttpServletRequest request){
+        System.out.println("Path: "+request.getContextPath());
+        return request.getContextPath();
+    }
+
+
 }

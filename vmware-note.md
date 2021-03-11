@@ -889,6 +889,34 @@ df -h
 
 [学习链接](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
 
+#### 参数介绍
+
+> -A      // 用于设置   指定客户端的用户代理标头    即 User-Agent用于发送 POST 请求的数据体。
+>
+> curl -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"  http://127.0.0.1:8080/getResult
+
+> -b    // 用于设置向服务端发送的cookie
+>
+> curl -b 'name=yichen'  http://127.0.0.1:8080/getResult
+
+> -c  将服务器设置的 Cookie 写入一个文件
+>
+> curl -c /test/cookie.txt http:/127.0.0.1:8080/getResult
+
+> -d 用于发送 POST 请求的数据体
+>
+> curl -d 'name=yichen' http://127.0.0.1:8080/post     // -d 会自动将请求转为 post方式
+>
+> curl -d '@data.txt'  http://127.0.0.1:8080/post     // 读取文件中的信息
+
+> -k  跳过 SSL 检测。
+>
+> curl -k http://www.baidu.com
+
+
+
+
+
 
 
 ## 在linux 上部署常用命令
@@ -923,6 +951,23 @@ df -h
 + 浅蓝  =》  链接文件
 + 白色  =》 其他文件
 + 黄色  =》 设备文件，包括block、char、fifo
+
+### 单双引号的区别
+
+> 单引号与双引号的最大不同在于双引号仍然可以保有变量的内容，但单引号内仅能是
+> 一般字符 ，而不会有特殊符号。
+>
+> 例子
+>
+> [root@linux ~]# name=VBird 
+> [root@linux ~]# echo $name 
+> VBird 
+> [root@linux ~]# myname="$name its me" 
+> [root@linux ~]# echo $myname 
+> VBird its me 
+> [root@linux ~]# myname='$name its me' 
+> [root@linux ~]# echo $myname 
+> $name its me 
 
 # window相关问题记录
 
@@ -1040,6 +1085,39 @@ git log
 ##  合并分支  git merge
 
 [参考链接](https://www.jianshu.com/p/ff1877c5864e)
+
+
+
+## 能快速访问github.com 以及 加速下载
+
+> 在 hosts中配置 github.com  的ip 映射关系   
+>
+>  //  window 下 hosts所在位置  C:\Windows\System32\drivers\etc
+>
+> // 添加内容如下
+>
+> 140.82.114.4 github.com
+> 199.232.69.194 github.global.ssl.fastly.net
+> 185.199.108.153 assets-cdn.github.com
+> 151.101.88.249       github.global.ssl.fastly.net
+> 151.101.73.194       github.global.ssl.fastly.net
+> 151.101.229.194       github.global.ssl.fastly.net
+> 151.101.184.133    assets-cdn.github.com
+> 151.101.184.133    raw.githubusercontent.com
+> 151.101.184.133    gist.githubusercontent.com
+> 151.101.184.133    cloud.githubusercontent.com
+> 151.101.184.133    camo.githubusercontent.com
+> 151.101.184.133    avatars0.githubusercontent.com
+> 151.101.184.133    avatars1.githubusercontent.com
+> 151.101.184.133    avatars2.githubusercontent.com
+> 151.101.184.133    avatars3.githubusercontent.com
+> 151.101.184.133    avatars4.githubusercontent.com
+> 151.101.184.133    avatars5.githubusercontent.com
+> 151.101.184.133    avatars6.githubusercontent.com
+> 151.101.184.133    avatars7.githubusercontent.com
+> 151.101.184.133    avatars8.githubusercontent.com
+>
+> 
 
 
 
@@ -1556,7 +1634,30 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 新建的 配置文件  bootstrap.properties 输入没有提示
+
++ 先打开项目架构
+
+![第一步](./images/2021-03-11-1.jpg)
+
++ 点击 自定化配置图标
+
+![第二部](./images/2021-03-11-2.jpg)
+
++ 输入配置文件的名称，加入即可
+
+<img src="./images/2021-03-11-3.jpg" alt="第三部" style="zoom:50%;" />
+
++ 成功后，配置文件的图标颜色变化
+
+![第四步](C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210311141658004.png)
+
+
+
+
+
 ### mevan  pom.xml中包没有自动导入
+
 1）看maven（%MAVEN_HOME%\bin） 是否加入环境变量中   mvn -V可以查看
 2)查看idea中maven的配置：file>setting>build,Execution,deployment>build tools>maven 中最后三项，一般是最后两项没有匹配（自己设置安装目录）
 默认：  User setting file:    C:\Users\wine_light\.m2\settings.xml
@@ -3076,13 +3177,45 @@ failed
 
 [参考链接](https://blog.csdn.net/weixin_41317520/article/details/90027449)
 
->git clone https://github.com/alibaba/nacos.git    // 从git上  下载代码
+> 下载 nacos 的zip，解压
 >
+> 在conf 中修改配置文件
 >
+> sh start.sh -m standalone    // 启动 nacos
+>
+> http://127.0.0.1:8848/nacos/index.html   // 登陆nacos 后台界面
 
+虽然nacos有内置mysql数据库，这里一般使用自己的数据库。其中数据库表定义在`nacos/distribution/conf` 路径下的 `nacos-mysql.sql`。同时修改该路径下的`application.properties`，修改其中如下参数
 
+```
+spring.datasource.platform=mysql
+db.num=1
+db.url.0=jdbc:mysql://ip:port/data_name?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true
+db.user.0=root
+db.password.0=root
+```
 
+### 问题记录
 
+#### 启动 nacos 执行  sh start.sh -m standalone  后仍以集群模式启动，而不是单例
+
+[参考链接](https://blog.csdn.net/wgc0802402/article/details/88171755)
+
+执行  `bash start.sh -m standalone` 以代替
+
+## java  jdk
+
+### 安装
+
+> apt-get install openjdk-8-jdk  
+>
+> java -version
+
+### 卸载
+
+[参考链接](https://www.cnblogs.com/dengtang/p/11644751.html)
+
+> apt-get remove openjdk*
 
 ## 安装openjdk 7u4 所依赖的东西
 
@@ -3234,4 +3367,4 @@ JSONObject jsonObject=new JSONObject(res);
 
 >mvn install -Dmaven.test.skip=true   // 跳过test 打包
 >
->
+>mvn -q clean install   //隐藏 打印  info 的相关信息
