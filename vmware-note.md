@@ -971,6 +971,12 @@ git clone 地址
 // 初始化 本地仓库
 git init
 
+// 将文件添加到暂存区
+git add 文件名
+
+// 查看暂存区中的文件信息，包含已提交，未提交
+git ls-files --stage
+
 // 查看暂存区（即本地仓库）内的文件信息
 git status 
 
@@ -1064,6 +1070,26 @@ git log
 [参考链接](https://www.jianshu.com/p/ff1877c5864e)
 
 
+
+## 版本回退
+
+[版本回退](https://yijiebuyi.com/blog/8f985d539566d0bf3b804df6be4e0c90.html)
+
+[index理解](https://www.jianshu.com/p/6bb76450d763)
+
++ --mixed  会保留源码,只是将git commit和index 信息回退到了某个版本.
+
+  > git reset --mixed 版本号
+
++ --soft  保留源码,只回退到commit 信息到某个版本.不涉及index的回退,如果还需要提交,直接commit即可
+
+  > git reset --soft 版本号
+
++ --hard  源码也会回退到某个版本,commit和index 都回回退到某个版本.(注意,这种方式是改变本地代码仓库源码)
+
+  > git reset --hard 版本号
+
+<font color=red>此处所说的index是指对暂存区文件的版本标识，如果index回退，即`--mixed`，此时即使有新文件，它也无法识别。因为旧的   index 中不存在</font>
 
 ## 能快速访问github.com 以及 加速下载
 
