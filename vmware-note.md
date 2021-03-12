@@ -749,44 +749,21 @@ shutdown.sh
 
 
 
-# 问题
+# 开发问题记录
 
-## nginx 反向代理报错404
+## mybatis dao 接口和 mapper.xml 无法匹配
 
-### nginx 运行时  error.log 错误提示   request: "GET /favicon.ico HTTP/1.1",referrer: "http://192.168.175.130:9001/banyu/"
-
-```
-// 网站图标问题，添加如下内容
-location /favicon.ico {
-			log_not_found off;
-			access_log off;
-		}
-```
-
-### 无法访问 反向代理配置的url
+错误内容如下
 
 ```
-location  /banyu/ {
-	proxy_pass  http://192.168.175.128:8080/;
-}
-location /shanliang/ {
-	proxy_pass http://192.168.175.130:8080/;
-}
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
 ```
 
-## postman 请求无 返回值
+解决方法有两种：
 
-[参考链接](https://blog.csdn.net/qqxyy99/article/details/93876124)
+1、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，通过`mybatis.mapper-locations=classpath:com/yichen/useall/dao/*.xml` 指定对应的  xml 文件存放位置
 
-修改postman中的setting，将其中的 SSL certificate verfication 改为off
-
-##  如何下载指定版本 的openjdk
-
-[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
-
-> http://hg.openjdk.java.net/
->
-> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+2、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，同时创建对应的xml文件，<font color=red>这里对xml的放置位置以及文件名称有要求：文件位置需要同dao接口位置一致，只不过是放置在类路径下，文件名同dao接口一致，不过文件后缀有dao  的  `.java` 改为  `.xml`</font>
 
 
 
@@ -1634,6 +1611,10 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 从git上下载的项目中，pom显示被划掉
+
+[参考链接](https://blog.csdn.net/xufengzhu/article/details/114496727)
+
 ### 新建的 配置文件  bootstrap.properties 输入没有提示
 
 + 先打开项目架构
@@ -2394,6 +2375,47 @@ public class StreamDemo {
 ## k -＞ (parentPath, currentChilds) -＞ {} 怎么理解
 
 查看自己的博客
+
+
+
+## nginx 反向代理报错404
+
+### nginx 运行时  error.log 错误提示   request: "GET /favicon.ico HTTP/1.1",referrer: "http://192.168.175.130:9001/banyu/"
+
+```
+// 网站图标问题，添加如下内容
+location /favicon.ico {
+			log_not_found off;
+			access_log off;
+		}
+```
+
+### 无法访问 反向代理配置的url
+
+```
+location  /banyu/ {
+	proxy_pass  http://192.168.175.128:8080/;
+}
+location /shanliang/ {
+	proxy_pass http://192.168.175.130:8080/;
+}
+```
+
+## postman 请求无 返回值
+
+[参考链接](https://blog.csdn.net/qqxyy99/article/details/93876124)
+
+修改postman中的setting，将其中的 SSL certificate verfication 改为off
+
+##  如何下载指定版本 的openjdk
+
+[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
+
+> http://hg.openjdk.java.net/
+>
+> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+
+
 
 
 
@@ -3202,6 +3224,35 @@ db.password.0=root
 [参考链接](https://blog.csdn.net/wgc0802402/article/details/88171755)
 
 执行  `bash start.sh -m standalone` 以代替
+
+
+
+## rocketmq
+
+
+
+## maven
+
+[下载地址](https://maven.apache.org/download.cgi)
+
+> //将下载的zip 文件解压。
+>
+> //配置 全局配置文件，添加如下内容
+>
+> export M2_HOME=/usr/local/apache-maven-3.5.3
+> export PATH=${M2_HOME}/bin:$PATH
+>
+> //使修改的配置生效
+>
+> source /etc/profile
+>
+> // 查看是否配置成功
+>
+> mvn -v
+
+### 简单方法
+
+> apt install maven
 
 ## java  jdk
 
