@@ -1661,6 +1661,12 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 
 
+### pom.xml 没有划掉，但是也无法将 bootstrap文件设置为配置文件
+
+> 删除该项目模块，重新加入。
+
+
+
 
 
 ### mevan  pom.xml中包没有自动导入
@@ -2606,7 +2612,7 @@ location /shanliang/ {
 |                            `\\`                             |   代表`\`本身    |
 | `\^`,`\$`,`\(`,`\)`,`\{`,`\}`,`\?`,`\+`,`\*`,`\|`,`\[`,`\]` | 匹配这些字符本身 |
 
-### 标准字符集
+### 
 
 | 符号 |                             含义                             |
 | :--: | :----------------------------------------------------------: |
@@ -3253,6 +3259,26 @@ db.password.0=root
 
 
 
+## activemq
+
+### 安装
+
+>下载jar包，地址如下      [下载地址](https://activemq.apache.org/components/classic/download/)
+>
+>解压      tar -zxvf apache-activemq-5.16.1-bin.tar.gz
+>
+>设置 java  jdk   ，修改安装目录下的bin文件夹下的env文件，在<font color=red>JAVACMD="auto"</font> 上添加  <font color=red>JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"</font>
+>
+>启动   ./activemq start
+>
+>打开 管理台    http://localhost:8161/admin/
+>
+>登陆密码  保存在   conf/jetty-realm.properties 中
+>
+><img src="./images/2021-03-15.jpg" alt="示例" style="zoom: 50%;" />
+
+
+
 ## rocketmq
 
 
@@ -3282,7 +3308,9 @@ db.password.0=root
 
 ## java  jdk
 
-### 安装
+### 安装  
+
+<font color=red>默认安装路径  `/usr/lib/jvm/java-8-openjdk-amd64` </font>
 
 > apt-get install openjdk-8-jdk  
 >
@@ -3445,3 +3473,39 @@ JSONObject jsonObject=new JSONObject(res);
 >mvn install -Dmaven.test.skip=true   // 跳过test 打包
 >
 >mvn -q clean install   //隐藏 打印  info 的相关信息
+
+
+
+# JAVA
+
+##  spring 路径匹配规则
+
++ `？` 匹配一个字符
++ `*` 匹配零个或多个字符
++ `**` 匹配路径中的零个或多个目录
++ `{spring:[az]+}` 与正则表达式   `[az]+` 匹配，并将其作为名为 `spring` 的路径变量
+
+
+
+## 注解使用
+
+### 后端用map接收前端请求
+
+`@RequsetParam`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

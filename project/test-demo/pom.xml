@@ -22,6 +22,7 @@
 		<module>jedis-demo</module>
 		<module>curltest</module>
 		<module>useall</module>
+		<module>callback</module>
 	</modules>
 
 	<properties>

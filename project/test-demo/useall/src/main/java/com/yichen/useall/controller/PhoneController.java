@@ -3,6 +3,7 @@ package com.yichen.useall.controller;
 import com.yichen.useall.dao.PhoneLocationDao;
 import com.yichen.useall.service.BaseService;
 import com.yichen.useall.service.impl.PhoneServiceImpl;
+import com.yichen.useall.utils.IPUtils;
 import org.nutz.ssdb4j.spi.SSDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,11 @@ public class PhoneController {
     public String getLocationByPhone(String phone){
         System.out.println("-----getLocationByPhone----");
         return phoneService.getLocationByPhone(phone);
+    }
+
+    @GetMapping("/getip")
+    public String getLocalIP(){
+        return IPUtils.getLocalIp();
     }
 
 }
