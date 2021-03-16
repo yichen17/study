@@ -2,6 +2,10 @@ package com.yichen;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * @author Qiuxinchao
  * @version 1.0
@@ -22,6 +26,12 @@ public class Test {
 
         JSONObject object=JSONObject.parseObject("{\"name\":\"yichen\"}");
         System.out.println(object.get("name"));
+
+        System.out.println(TimeZone.getTimeZone("GMT-11:00"));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date=sdf.format(new Date());
+        System.out.println(date);
 
     }
 }

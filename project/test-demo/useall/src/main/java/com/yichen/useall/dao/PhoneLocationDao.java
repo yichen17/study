@@ -1,7 +1,6 @@
 package com.yichen.useall.dao;
 
-import com.yichen.useall.bean.Phone;
-import org.apache.ibatis.annotations.Mapper;
+import com.yichen.useall.bean.PhoneLocation;
 
 /**
  * @author Qiuxinchao
@@ -10,5 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 //@Mapper
 public interface PhoneLocationDao {
-    Phone selectByPhone(String phone);
+    PhoneLocation selectByPhone(String phone);
 }

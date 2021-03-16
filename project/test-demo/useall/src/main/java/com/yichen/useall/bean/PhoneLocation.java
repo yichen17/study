@@ -6,8 +6,9 @@ import java.io.Serializable;
  * @author Qiuxinchao
  * @version 1.0
  * @date 2021/3/11 14:31
+ * @describe 手机号查询返回结果集
  */
-public class Phone implements Serializable {
+public class PhoneLocation implements Serializable {
     private String pref;
     private String phone;
     private String province;
@@ -79,5 +80,19 @@ public class Phone implements Serializable {
 
     public void setAreaCode(String areaCode) {
         this.areaCode = areaCode;
+    }
+
+    @Override
+    public String toString() {
+        return "PhoneLocation{" +
+                "pref='" + pref + '\'' +
+                ", phone='" + phone + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", isp='" + isp + '\'' +
+                ", postCode='" + postCode + '\'' +
+                ", cityCode='" + cityCode + '\'' +
+                ", areaCode='" + areaCode + '\'' +
+                '}';
     }
 }
