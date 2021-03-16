@@ -1,5 +1,7 @@
 package com.yichen;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @author Qiuxinchao
  * @version 1.0
@@ -17,6 +19,9 @@ public class Test {
         System.out.println(Long.MIN_VALUE);
         System.out.println(Long.MAX_VALUE);
         System.out.println(-Long.MAX_VALUE);
+
+        JSONObject object=JSONObject.parseObject("{\"name\":\"yichen\"}");
+        System.out.println(object.get("name"));
 
     }
 }

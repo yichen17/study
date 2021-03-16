@@ -1,2 +1,2 @@
 # study
-recorde the learning process 
+record the learning process 

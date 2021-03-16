@@ -749,44 +749,21 @@ shutdown.sh
 
 
 
-# 问题
+# 开发问题记录
 
-## nginx 反向代理报错404
+## mybatis dao 接口和 mapper.xml 无法匹配
 
-### nginx 运行时  error.log 错误提示   request: "GET /favicon.ico HTTP/1.1",referrer: "http://192.168.175.130:9001/banyu/"
-
-```
-// 网站图标问题，添加如下内容
-location /favicon.ico {
-			log_not_found off;
-			access_log off;
-		}
-```
-
-### 无法访问 反向代理配置的url
+错误内容如下
 
 ```
-location  /banyu/ {
-	proxy_pass  http://192.168.175.128:8080/;
-}
-location /shanliang/ {
-	proxy_pass http://192.168.175.130:8080/;
-}
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
 ```
 
-## postman 请求无 返回值
+解决方法有两种：
 
-[参考链接](https://blog.csdn.net/qqxyy99/article/details/93876124)
+1、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，通过`mybatis.mapper-locations=classpath:com/yichen/useall/dao/*.xml` 指定对应的  xml 文件存放位置
 
-修改postman中的setting，将其中的 SSL certificate verfication 改为off
-
-##  如何下载指定版本 的openjdk
-
-[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
-
-> http://hg.openjdk.java.net/
->
-> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+2、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，同时创建对应的xml文件，<font color=red>这里对xml的放置位置以及文件名称有要求：文件位置需要同dao接口位置一致，只不过是放置在类路径下，文件名同dao接口一致，不过文件后缀有dao  的  `.java` 改为  `.xml`</font>
 
 
 
@@ -840,7 +817,9 @@ location /shanliang/ {
 
 
 
+### vi下 关键字查询
 
+按下`/` ，然后输入关键字，最后按下回车即可，之后按 `n`  下一个，按`N` 上一个
 
 
 
@@ -862,6 +841,12 @@ lsb_release -a
 
 getcong LONG_BIT
 
+### 查看linux  磁盘空间占用情况
+
+df -h
+
+
+
 
 
 ### 缩小 vim 窗口
@@ -874,6 +859,40 @@ getcong LONG_BIT
 ###  !pwd
 
 退出vim窗口   执行pwd命令
+
+
+
+### crul
+
+[学习链接](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
+
+#### 参数介绍
+
+> -A      // 用于设置   指定客户端的用户代理标头    即 User-Agent用于发送 POST 请求的数据体。
+>
+> curl -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"  http://127.0.0.1:8080/getResult
+
+> -b    // 用于设置向服务端发送的cookie
+>
+> curl -b 'name=yichen'  http://127.0.0.1:8080/getResult
+
+> -c  将服务器设置的 Cookie 写入一个文件
+>
+> curl -c /test/cookie.txt http:/127.0.0.1:8080/getResult
+
+> -d 用于发送 POST 请求的数据体
+>
+> curl -d 'name=yichen' http://127.0.0.1:8080/post     // -d 会自动将请求转为 post方式
+>
+> curl -d '@data.txt'  http://127.0.0.1:8080/post     // 读取文件中的信息
+
+> -k  跳过 SSL 检测。
+>
+> curl -k http://www.baidu.com
+
+
+
+
 
 
 
@@ -901,7 +920,40 @@ getcong LONG_BIT
 + v   =》   verbose   显示执行细节
 + i   =》 information   执行前通知
 
+### 默认颜色代表的含义
 
++ 蓝色  =》  目录
++ 绿色  =》 可执行文件
++ 红色  =》  压缩文件
++ 浅蓝  =》  链接文件
++ 白色  =》 其他文件
++ 黄色  =》 设备文件，包括block、char、fifo
+
+### 单双引号的区别
+
+> 单引号与双引号的最大不同在于双引号仍然可以保有变量的内容，但单引号内仅能是
+> 一般字符 ，而不会有特殊符号。
+>
+> 例子
+>
+> [root@linux ~]# name=VBird 
+> [root@linux ~]# echo $name 
+> VBird 
+> [root@linux ~]# myname="$name its me" 
+> [root@linux ~]# echo $myname 
+> VBird its me 
+> [root@linux ~]# myname='$name its me' 
+> [root@linux ~]# echo $myname 
+> $name its me 
+
+# window相关问题记录
+
+## window 查看端口以及对应的进程名称
+
++ netstat -ano  // 展示端口列表
+
++ netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
++ tasklist | findstr "上一步最后一列查询出来的  pid "
 
 # git 常用命令
 
@@ -918,6 +970,12 @@ git clone 地址
 ```
 // 初始化 本地仓库
 git init
+
+// 将文件添加到暂存区
+git add 文件名
+
+// 查看暂存区中的文件信息，包含已提交，未提交
+git ls-files --stage
 
 // 查看暂存区（即本地仓库）内的文件信息
 git status 
@@ -1006,6 +1064,65 @@ git log
 > git reset  --hard  origin/master
 >
 > git pull
+
+##  合并分支  git merge
+
+[参考链接](https://www.jianshu.com/p/ff1877c5864e)
+
+
+
+## 版本回退
+
+[版本回退](https://yijiebuyi.com/blog/8f985d539566d0bf3b804df6be4e0c90.html)
+
+[index理解](https://www.jianshu.com/p/6bb76450d763)
+
++ --mixed  会保留源码,只是将git commit和index 信息回退到了某个版本.
+
+  > git reset --mixed 版本号
+
++ --soft  保留源码,只回退到commit 信息到某个版本.不涉及index的回退,如果还需要提交,直接commit即可
+
+  > git reset --soft 版本号
+
++ --hard  源码也会回退到某个版本,commit和index 都回回退到某个版本.(注意,这种方式是改变本地代码仓库源码)
+
+  > git reset --hard 版本号
+
+<font color=red>此处所说的index是指对暂存区文件的版本标识，如果index回退，即`--mixed`，此时即使有新文件，它也无法识别。因为旧的   index 中不存在</font>
+
+## 能快速访问github.com 以及 加速下载
+
+> 在 hosts中配置 github.com  的ip 映射关系   
+>
+>  //  window 下 hosts所在位置  C:\Windows\System32\drivers\etc
+>
+> // 添加内容如下
+>
+> 140.82.114.4 github.com
+> 199.232.69.194 github.global.ssl.fastly.net
+> 185.199.108.153 assets-cdn.github.com
+> 151.101.88.249       github.global.ssl.fastly.net
+> 151.101.73.194       github.global.ssl.fastly.net
+> 151.101.229.194       github.global.ssl.fastly.net
+> 151.101.184.133    assets-cdn.github.com
+> 151.101.184.133    raw.githubusercontent.com
+> 151.101.184.133    gist.githubusercontent.com
+> 151.101.184.133    cloud.githubusercontent.com
+> 151.101.184.133    camo.githubusercontent.com
+> 151.101.184.133    avatars0.githubusercontent.com
+> 151.101.184.133    avatars1.githubusercontent.com
+> 151.101.184.133    avatars2.githubusercontent.com
+> 151.101.184.133    avatars3.githubusercontent.com
+> 151.101.184.133    avatars4.githubusercontent.com
+> 151.101.184.133    avatars5.githubusercontent.com
+> 151.101.184.133    avatars6.githubusercontent.com
+> 151.101.184.133    avatars7.githubusercontent.com
+> 151.101.184.133    avatars8.githubusercontent.com
+>
+> 
+
+
 
 ## 优化
 
@@ -1520,7 +1637,40 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 从git上下载的项目中，pom显示被划掉
+
+[参考链接](https://blog.csdn.net/xufengzhu/article/details/114496727)
+
+### 新建的 配置文件  bootstrap.properties 输入没有提示
+
++ 先打开项目架构
+
+![第一步](./images/2021-03-11-1.jpg)
+
++ 点击 自定化配置图标
+
+![第二部](./images/2021-03-11-2.jpg)
+
++ 输入配置文件的名称，加入即可
+
+<img src="./images/2021-03-11-3.jpg" alt="第三部" style="zoom:50%;" />
+
++ 成功后，配置文件的图标颜色变化
+
+![第四步](C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210311141658004.png)
+
+
+
+### pom.xml 没有划掉，但是也无法将 bootstrap文件设置为配置文件
+
+> 删除该项目模块，重新加入。
+
+
+
+
+
 ### mevan  pom.xml中包没有自动导入
+
 1）看maven（%MAVEN_HOME%\bin） 是否加入环境变量中   mvn -V可以查看
 2)查看idea中maven的配置：file>setting>build,Execution,deployment>build tools>maven 中最后三项，一般是最后两项没有匹配（自己设置安装目录）
 默认：  User setting file:    C:\Users\wine_light\.m2\settings.xml
@@ -2260,6 +2410,47 @@ public class StreamDemo {
 
 
 
+## nginx 反向代理报错404
+
+### nginx 运行时  error.log 错误提示   request: "GET /favicon.ico HTTP/1.1",referrer: "http://192.168.175.130:9001/banyu/"
+
+```
+// 网站图标问题，添加如下内容
+location /favicon.ico {
+			log_not_found off;
+			access_log off;
+		}
+```
+
+### 无法访问 反向代理配置的url
+
+```
+location  /banyu/ {
+	proxy_pass  http://192.168.175.128:8080/;
+}
+location /shanliang/ {
+	proxy_pass http://192.168.175.130:8080/;
+}
+```
+
+## postman 请求无 返回值
+
+[参考链接](https://blog.csdn.net/qqxyy99/article/details/93876124)
+
+修改postman中的setting，将其中的 SSL certificate verfication 改为off
+
+##  如何下载指定版本 的openjdk
+
+[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
+
+> http://hg.openjdk.java.net/
+>
+> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+
+
+
+
+
 # 基础知识
 
 ## java 中四种引用
@@ -2296,9 +2487,8 @@ public class StreamDemo {
 &gt;    =》  >
 &#060;   =》  <
 &#062;  =>    >
+&quot;   =>  "
 ```
-
-
 
 
 
@@ -2373,65 +2563,6 @@ public class StreamDemo {
 
 
 
-## java 中相关功能对应的依赖关系
-
-### @RestController
-
-```
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-```
-
-### JSONObject 
-
-```
-<dependency>
-    <groupId>com.alibaba</groupId>
-    <artifactId>fastjson</artifactId>
-    <version>1.2.69</version>
-</dependency>
-```
-
-####  常用操作
-
-```
-// 将字符串转为  JSONObject
-String result=nulll;
-JSONObject jsonResult=JSONObject.parseObject(result);
-
-// 将 对象转为 JSONObject
-Person body=new Person():
-JSONObject.toJSONString(body)
-
-//将map转为json对象
-Map<String,Object> res=new LinkedHashMap<>();
-res.put("code-describe","解码失败");
-JSONObject jsonObject=new JSONObject(res);
-```
-
-
-
-### 判空工具类
-
-```
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
-</dependency>
-```
-
-### hutool 
-
-```
-<dependency>
-    <groupId>cn.hutool</groupId>
-    <artifactId>hutool-all</artifactId>
-    <version>5.5.7</version>
-</dependency>
-```
-
 
 
 
@@ -2481,7 +2612,7 @@ JSONObject jsonObject=new JSONObject(res);
 |                            `\\`                             |   代表`\`本身    |
 | `\^`,`\$`,`\(`,`\)`,`\{`,`\}`,`\?`,`\+`,`\*`,`\|`,`\[`,`\]` | 匹配这些字符本身 |
 
-### 标准字符集
+### 
 
 | 符号 |                             含义                             |
 | :--: | :----------------------------------------------------------: |
@@ -2815,6 +2946,48 @@ unicode ，占据2个字节，可以表示65535 个字符。
 
 <img src="./images/2021-02-23-2.jpg" alt="unicode与utf-8转换表" style="zoom:67%;" />
 
+## java 中对象比较
+
+###  == 比较对象
+
+> == 比较的是两个对象的 地址值，只有两个对象的地址一样才返回true
+
+### 非基本类型
+
+> 备注，基本类型有如下8种
+>
+> byte,short,char,int ,long,float,double,boolean  <font color=red>都被final修饰，不可重写</font>
+
+<font color=red> 非基本类型对象比较，与基本类型类似，但是它们有一个优势，即虽然通过`==`判断的仍然是两者的地址值，但是，如果使用`eqauls`方法去判断，那么此时我们可以通过重写该方法来实现我们自定义的对象比较规则</font>
+
+### map中的key 值比对
+
+```
+if (p.hash == hash &&
+                ((k = p.key) == key || (key != null && key.equals(k))))
+```
+
+> 比较逻辑如上，首先比较的是原有key和插入key的hash值，这里调用了对象的hashcode方法
+>
+> 之后则 有两种方法核实是否为同一个key：
+>
+> 1、直接通过  两个key的地址值比对
+>
+> 2、通过equals方法比较两个key
+
+
+
+## 数据库
+
+### 将 `.sql` 文件中的数据插入到数据库中
+
+> source /tmp/phone202103-mysql.sql     // 后面是对应的sql 文件位置
+> <font color=red>这里需要在cmd命令行执行，而不能用三方工具，如navicat premiun</font>
+
+### java jdbc数据库报错  closing inbound before receiving peer's close_notify
+
+> 在数据库的url 加上    &useSSL=false
+
 
 
 
@@ -2885,4 +3058,454 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >net stop mongodb  // 关闭mongodb服务
 >
 >use admin   // 如果没有对应的数据库，则默认自动创建
+
+
+
+
+
+# unbutu 
+
+## 查看磁盘信息
+
+> df -h 
+
+## redis
+
+### redis  安装
+
++ 执行命令  `sudo apt-get install redis-server` 安装
+
+### redis 运行命令
+
+>redis-cli   接入redis  客户端
+>
+>quit 退出redis 客户端
+>
+>shutdown  关闭redis
+
+### 操作命令
+
+>keys *   // 查看所有的key
+>
+>select 6 使用6号数据库  <font color=red> 在jedis中如果设置了    redis_database=6 ，如果数字大于六，到时候查询数据的时候可能存在查不到的情况，原因是保存在不同的数据库中，可以用该命令切换数据库</font>
+>
+>
+
+### 设置redis  访问 auth 密码
+
+[参考文章](https://blog.csdn.net/u013829518/article/details/82621694)
+
+#### 临时设置 重启后失效
+
+> config get requirepass    //  查看有没有设置密码
+>
+> config set requirepass  yichen   // 设置密码为yichen
+>
+> auth yichen    // 连接redis 客户端后 需要认证才能  查询数据信息
+>
+> redis-cli -a yichen shutdown   // 关闭redis 是也需要该密码
+
+#### 永久设置
+
+> 修改  redis.conf   中的 requirepass 的值为你想要设置的密码
+
+### 问题记录
+
+#### apt-get安装软件Unable to locate package错误解决办法
+
+> 这个错误一般是因为软件源未更新造成的，于是采用命令：sudo apt-get update 来更新软件源。
+
+#### 安装好 redis 后无法启动
+
+[参考链接](https://blog.csdn.net/weixin_43968936/article/details/102809536)
+
+>ps agx|grep redis      查看redis 启动状态
+>
+><font color=red> 启动失败的原因是：默认主机上禁用了IPv6，而Ubuntu的redis-server软件包（版本5：4.0.9-1）附带了：绑定127.0.0.1 :: 1
+>所以，通过在配置文件中注释掉绑定127.0.0.1::1</font>
+>
+>sudo vim /etc/redis/redis.conf   将其中的127.0.0.1::1 注销掉。
+>
+>sudo service redis-server start  启动redis  需要使用root 权限账号
+>
+>sudo service redis-server status  查看redis 状态
+>
+>ps agx|grep redis  查看redis 进程
+>
+>netstat -ntpl|grep 6379  查看redis 的端口是否在监听。
+
+#### 启动redis-server 报错  Fatal error, can't open config file '/etc/redis/redis.conf'
+failed
+
+> whereis redis-server   // 找到redis-server 所在文件夹，到该文件夹
+>
+> redis-server  /etc/redis/redis.conf    //  以指定地方的配置文件运行  redis-server
+>
+> service redis-server status    // 查看启动状态
+
+
+
+
+
+## ssdb 
+
+### 步骤
+
+[参考文章](https://blog.csdn.net/zwjyyy1203/article/details/89386301)
+
+
+
+>wget --no-check-certificate https://github.com/ideawu/ssdb/archive/master.zip  // 下载
+>
+>unzip master    // 解压
+>
+>cd ssdb-master  //进入目录
+>
+>make //编译
+>
+>sudo make install  //  默认安装在  /usr/local
+>
+>sudo make install PREFIX=/your/directory     // 指定安装位置
+
+### 常用命令
+
+> ./ssdb-server ssdb.conf     // 启动
+>
+> ./ssdb-server ssdb.conf -s stop    //关闭
+
+### 问题
+
+#### make 报错 autoconf required! install autoconf first
+
+`apt install autoconf` 因为没有  `autoconf` 而报错
+
+#### cannot stat 'ssdb-server': No such file or directory
+
+> 确认上面是不是还有错误如下
+>
+> configure: error: no acceptable C compiler found in $PATH
+
+如果有，则表示需要安装 c的编译器，执行如下命令
+
+> apt install gcc
+
+#### 如果一直安装不了，尝试安装就版本
+
+>wget --no-check-certificate https://github.com/ideawu/ssdb/archive/stable-1.9.5.zip
+
+
+
+## mysql
+
+### 安装
+
++ apt-cache search mysql | grep mysql-server    // 查看可以安装的版本
++ sudo apt-get install mysql-server-查询到的版本    // 安装mysql
++ service mysql start   // 启动mysql服务
++ sudo cat /etc/mysql/debian.cnf   // 第一次登陆查看账号密码
++ mysql -u  账号  -p密码    // 登陆mysql
+
+### 第一次 修改root 密码
+
+>ALTER USER 'root'@'localhost'  IDENTIFIED WITH mysql_native_password  BY 'root';
+>
+><font color=red> mysql 8后修改密码的方式</font>
+
+
+
+>update mysql.user set authentication_string=password('root') where user='root' and Host ='localhost';
+>update user set plugin="mysql_native_password"; 
+>flush privileges;
+>
+><font color=red> mysql 8之前修改密码的方式</font>
+
+### 遇到的问题
+
+#### apt 安装后无法通过  service mysql start 启动
+
+<font color=red> 子系统和主系统公用端口号，需要把主系统的mysql关闭。
+
+## nacos
+
+### 安装步骤
+
+[参考链接](https://blog.csdn.net/weixin_41317520/article/details/90027449)
+
+> 下载 nacos 的zip，解压
+>
+> 在conf 中修改配置文件
+>
+> sh start.sh -m standalone    // 启动 nacos
+>
+> http://127.0.0.1:8848/nacos/index.html   // 登陆nacos 后台界面
+
+虽然nacos有内置mysql数据库，这里一般使用自己的数据库。其中数据库表定义在`nacos/distribution/conf` 路径下的 `nacos-mysql.sql`。同时修改该路径下的`application.properties`，修改其中如下参数
+
+```
+spring.datasource.platform=mysql
+db.num=1
+db.url.0=jdbc:mysql://ip:port/data_name?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true
+db.user.0=root
+db.password.0=root
+```
+
+### 问题记录
+
+#### 启动 nacos 执行  sh start.sh -m standalone  后仍以集群模式启动，而不是单例
+
+[参考链接](https://blog.csdn.net/wgc0802402/article/details/88171755)
+
+执行  `bash start.sh -m standalone` 以代替
+
+
+
+## activemq
+
+### 安装
+
+>下载jar包，地址如下      [下载地址](https://activemq.apache.org/components/classic/download/)
+>
+>解压      tar -zxvf apache-activemq-5.16.1-bin.tar.gz
+>
+>设置 java  jdk   ，修改安装目录下的bin文件夹下的env文件，在<font color=red>JAVACMD="auto"</font> 上添加  <font color=red>JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"</font>
+>
+>启动   ./activemq start
+>
+>打开 管理台    http://localhost:8161/admin/
+>
+>登陆密码  保存在   conf/jetty-realm.properties 中
+>
+><img src="./images/2021-03-15.jpg" alt="示例" style="zoom: 50%;" />
+
+
+
+## rocketmq
+
+
+
+## maven
+
+[下载地址](https://maven.apache.org/download.cgi)
+
+> //将下载的zip 文件解压。
+>
+> //配置 全局配置文件，添加如下内容
+>
+> export M2_HOME=/usr/local/apache-maven-3.5.3
+> export PATH=${M2_HOME}/bin:$PATH
+>
+> //使修改的配置生效
+>
+> source /etc/profile
+>
+> // 查看是否配置成功
+>
+> mvn -v
+
+### 简单方法
+
+> apt install maven
+
+## java  jdk
+
+### 安装  
+
+<font color=red>默认安装路径  `/usr/lib/jvm/java-8-openjdk-amd64` </font>
+
+> apt-get install openjdk-8-jdk  
+>
+> java -version
+
+### 卸载
+
+[参考链接](https://www.cnblogs.com/dengtang/p/11644751.html)
+
+> apt-get remove openjdk*
+
+## 安装openjdk 7u4 所依赖的东西
+
+>sudo apt-get install build-essential gawk m4 openjdk-6-jdk libasound2-dev libcups2-dev libxrender-dev xorg-dev xutils-dev xllproto-print-dev binutils libmotif3 libmotif-dev ant
+
+# 数学知识
+
+## 概率论
+
+### 二项分布
+
+比如你向 3 家公司投递简历，会被其中一家录用的概率分布就是二项分布，也就是说二项分布解决的是发生次数固定、求成功次数概率的事件，但是要保证这些事件的结果只有两种结果，也就是非 A 即 B。
+
+更形象的例子就是抛硬币，抛出 10 次硬币，求不同正面朝上的次数概率就符合二项分布，而想要求出具体的数值，就要用到二项分布的公式：
+
+![公式](./images/2021-03-03-2.jpg)
+
+其中，p 表示概率，C 表示排列组合，n 表示试验次数，x 表示成功次数。
+
+### 几何分布
+
+几何分布与二项分布非常相似，唯一的区别就是几何分布是求试验几次才能获得第一次成功的概率，比如扔硬币扔到第几次才能第一次抛出正面的概率分布，即为几何分布。
+
+因为二项分布是固定了试验次数，而几何分布是固定了成功次数，因此几何分布就是相当于二项分布成功累计 N 次的结果。
+
+比如我在网上投递简历，失败一次就去另一家投递，求第几次投递时我才能第一次通过简历的概率，就符合几何分布，其计算公式为：
+
+![计算公式](./images/2021-03-03-1.jpg)
+
+### 泊松分布
+
+与几何分布和二项分布不同的是，泊松分布是在一定的时间内，某个事件发生 N 次的概率分布，比如我一个月内闯红灯 30 次的概率、半年内旅游 10 次的概率。
+
+### 正态分布
+
+<img src="./images/2021-03-03-3.jpg" alt="正态分布图" style="zoom:67%;" />
+
+正态分布是指越靠近中间取值的值越多，而越远离中间取值出现的次数越少，如全校同学的身高、平均每个月的开销等。
+
+正态分布的平均值叫作 μ，它决定了中心点的位置，标准差 σ 决定数据的集中度。那么正态分布有什么用呢？
+
+这时候就要涉及正态分布一个非常重要的性质：中心极限定理。也就是说，如果统计对象是大量独立的随机变量，那么这些变量的平均值分布就会趋向于正态分布，不管原来它们的概率分布是什么类型！
+
+比如统计某地区人的身高，每个人的身高都是独立的随机事件，但是当统计量足够大的时候，这些数据的平均值分布就会呈现出正态分布的特点。这就是中心极限定理的魅力所在，它几乎适用于自然界中任何的随机变量分布。
+
+
+
+## 相关性分析
+
+相关性分析其实是进行回归分析的必要前提工作。通俗地讲，相关性分析是定性、回归分析是定量。我们在确定衡量某个变量时一定要遵循“先定性、再定量”，所以要先进行相关性分析，再做回归分析。
+
+<img src="C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210305094311204.png" alt="步骤" style="zoom: 50%;" />
+
+### 过程
+
+分析两个因素是否有关联，一般通过因素拆解，拆解到有相关性因素时，用AB测试（即控制变量法），改变该因素发现是否发生相关的变动，如果发现没有相关性，则可以用前面拆解出来的因素，然后进行再次验证。
+
+## 回归分析
+
+### 建立回归模型的步骤
+
+> 分析目的 =》 确定变量  =》 建立回归模型   =》回归方程检验  =》  建立回归公式
+
+
+
+# meven 
+
+## 常用注解以及对应的maven依赖
+
+### @RestController
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+### @ConfigurationProperties(prefix = "user")
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+
+一般在该注解上还要添加  @Component  ，将该类加入bean 或者
+
+### JSONObject 
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.69</version>
+</dependency>
+```
+
+####  常用操作
+
+```
+// 将字符串转为  JSONObject
+String result=nulll;
+JSONObject jsonResult=JSONObject.parseObject(result);
+
+// 将 对象转为 JSONObject
+Person body=new Person():
+JSONObject.toJSONString(body)
+
+//将map转为json对象
+Map<String,Object> res=new LinkedHashMap<>();
+res.put("code-describe","解码失败");
+JSONObject jsonObject=new JSONObject(res);
+```
+
+### 判空工具类
+
+```
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+</dependency>
+```
+
+### hutool 
+
+```
+<dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
+    <version>5.5.7</version>
+</dependency>
+```
+
+
+
+### 加密工具    DigestUtils.md5Hex("shanliang28");
+
+```
+<dependency>
+    <groupId>commons-codec</groupId>
+    <artifactId>commons-codec</artifactId>
+</dependency>
+```
+
+## 打包常用命令
+
+>mvn install -Dmaven.test.skip=true   // 跳过test 打包
+>
+>mvn -q clean install   //隐藏 打印  info 的相关信息
+
+
+
+# JAVA
+
+##  spring 路径匹配规则
+
++ `？` 匹配一个字符
++ `*` 匹配零个或多个字符
++ `**` 匹配路径中的零个或多个目录
++ `{spring:[az]+}` 与正则表达式   `[az]+` 匹配，并将其作为名为 `spring` 的路径变量
+
+
+
+## 注解使用
+
+### 后端用map接收前端请求
+
+`@RequsetParam`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

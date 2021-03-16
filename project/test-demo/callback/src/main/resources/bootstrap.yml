@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: callback-cloud-dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 101.201.75.13:8848
+        group: com.jf.crawl
+        file-extension: properties
+        namespace: 071e57e6-4ff1-4eb7-b065-f8180eaae046
+      discovery:
+        server-addr: 101.201.75.13:8848
+        register-enabled: true
+    gateway:
+      httpclient:
+        connect-timeout: 15000
