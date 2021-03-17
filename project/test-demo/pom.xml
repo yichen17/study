@@ -23,6 +23,7 @@
 		<module>curltest</module>
 		<module>useall</module>
 		<module>callback</module>
+		<module>gateway</module>
 	</modules>
 
 	<properties>

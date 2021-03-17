@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jf.pre.third.gateway.dao.TenantAuthDao" >
+
+  <resultMap id="BaseResultMap" type="com.jf.pre.third.gateway.entity.GatewayAuthEntity" >
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="product" property="product" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="WhiteIpResultMap" type="com.jf.pre.third.gateway.entity.GatewayWhiteIpEntity" >
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="product" property="product" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    app_id, `token`, status, product, remark
+  </sql>
+
+  <select id="hasValidTenantByAppIdAndToken" resultType="java.lang.Integer" >
+    select count(1) from t_tenant_auth where app_id = #{appId, jdbcType=VARCHAR} and product = #{product, jdbcType=VARCHAR} and status = 0
+  </select>
+
+  <select id="selectNetworkPermissionRegexByAppId" resultType="java.lang.String" >
+    select ip from t_tenant_white_ip where app_id = #{appId, jdbcType=VARCHAR} and product = #{product, jdbcType=VARCHAR}
+                                       and ip = #{ip, jdbcType=VARCHAR} and status = 0
+  </select>
+  
+  <select id="selectAllValidTenant" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from t_tenant_auth where status = 0
+  </select>
+
+  <select id="selectAllTenantWhiteIps" resultMap="WhiteIpResultMap">
+    select app_id, ip, status, product from t_tenant_white_ip where status = 0
+  </select>
+
+</mapper>
