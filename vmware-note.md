@@ -767,6 +767,22 @@ org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
 
 
 
+## spring cloud gateway 报错   chunkedTransfer
+
+### 报错具体内容
+
+```
+java.lang.NoSuchMethodError: reactor.netty.http.client.HttpClient.chunkedTransfer(Z)Lreactor/netty/http/client/HttpClient;
+```
+
+### 解决
+
+> 由于 springboot 和 springcloud 版本不一致，本机均设为了  2.2.2.RELEASE
+
+
+
+
+
 # linux 命令
 
 ##  /目录下的文件夹介绍
@@ -2392,7 +2408,7 @@ public class StreamDemo {
 
 # 问题记录
 
-## 接口中的已经复制的变量可以直接使用吗
+## 接口中的已经赋值的变量可以直接使用吗
 
 两种方式 一种通过接口.变量，另一种通过import引入
 

@@ -22,8 +22,10 @@
 		<module>jedis-demo</module>
 		<module>curltest</module>
 		<module>useall</module>
+		<module>gateway-test</module>
 		<module>callback</module>
 		<module>gateway</module>
+
 	</modules>
 
 	<properties>
