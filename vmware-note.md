@@ -839,6 +839,14 @@ java.lang.NoSuchMethodError: reactor.netty.http.client.HttpClient.chunkedTransfe
 
 
 
+## vim 常用命令
+
+> yy      // 复制当前光标所在行
+>
+> p   //   粘贴到下一行，原来的往下顺移
+
+
+
 ##  系统命令
 
 ### 切换用户 
@@ -860,6 +868,66 @@ getcong LONG_BIT
 ### 查看linux  磁盘空间占用情况
 
 df -h
+
+### top命令 介绍
+
+[参考文章](https://blog.csdn.net/dxl342/article/details/53507673)
+
+#### 第一行
+
+> 10:01:23 — 当前系统时间
+> 126 days, 14:29 — 系统已经运行了126天14小时29分钟（在这期间没有重启过）
+> 2 users — 当前有2个用户登录系统
+> load average: 1.15, 1.42, 1.44 — load average后面的三个数分别是1分钟、5分钟、15分钟的负载情况。
+>
+> <font color=red>load average数据是每隔5秒钟检查一次活跃的进程数，然后按特定算法计算出的数值。如果这个数除以逻辑CPU的数量，结果高于5的时候就表明系统在超负荷运转了。</font>
+
+#### 第二行
+
+> Tasks — 任务（进程），系统现在共有183个进程，其中处于运行中的有1个，182个在休眠（sleep），stoped状态的有0个，zombie状态（僵尸）的有0个。
+
+#### 第三行
+
+> 6.7% us — 用户空间占用CPU的百分比。  user
+> 0.4% sy — 内核空间占用CPU的百分比。    system
+> 0.0% ni — 改变过优先级的进程占用CPU的百分比   
+> 92.9% id — 空闲CPU百分比     idle
+> 0.0% wa — IO等待占用CPU的百分比   wait
+> 0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比
+> 0.0% si — 软中断（Software Interrupts）占用CPU的百分比
+
+#### 第四行
+
+> 8306544k total — 物理内存总量（8GB）
+> 7775876k used — 使用中的内存总量（7.7GB）
+> 530668k free — 空闲内存总量（530M）
+> 79236k buffers — 缓存的内存量 （79M）
+
+#### 第五行
+
+> 2031608k total — 交换区总量（2GB）
+> 2556k used — 使用的交换区总量（2.5M）
+> 2029052k free — 空闲交换区总量（2GB）
+> 4231276k cached — 缓冲的交换区总量（4GB）
+
+#### 第七行
+
+> PID — 进程id
+> USER — 进程所有者
+> PR — 进程优先级
+> NI — nice值。负值表示高优先级，正值表示低优先级
+> VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES
+> RES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA
+> SHR — 共享内存大小，单位kb
+> S — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程
+> %CPU — 上次更新到现在的CPU时间占用百分比
+> %MEM — 进程使用的物理内存百分比
+> TIME+ — 进程使用的CPU时间总计，单位1/100秒
+> COMMAND — 进程名称（命令名/命令行）
+
+### htop
+
+[入门操作](https://linux.cn/article-3141-1.html)
 
 
 
@@ -1632,6 +1700,7 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 + Maven Helper
 + SequenceDiagram
 + jclasslib  用于查看字节码的工具，   功能类似  javap
++ Git Commit Template     git  提交的commit 模板
 
 
 
@@ -2463,7 +2532,9 @@ location /shanliang/ {
 >
 > 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
 
+## notepadding 中取消网址自动链接
 
+> 通过  设置 =》 首选项 =》 其他 =》 右侧 超链接设置不启用
 
 
 
@@ -3035,6 +3106,17 @@ if (p.hash == hash &&
 跟上面一样的步骤调整位置画出正圆，然后鼠标右击该选框，选择描边，设定指定的宽度即可
 
 
+
+## window   自定义屏保
+
+[参考链接](https://www.maxiaobang.com/5885.html)
+
+### 步骤
+
++ 下载  `PotPlayer播放器`   播放器
++ 打开，按 `F5`   进入选项配置界面，点击屏保、安装屏保
++ 自动打开屏幕保护程序设置界面，**选择PotScreenSaver屏保程序 -> 设置**
++ 设置屏保视频即可
 
 
 
