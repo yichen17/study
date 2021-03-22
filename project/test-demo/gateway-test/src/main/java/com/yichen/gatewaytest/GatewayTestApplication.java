@@ -17,8 +17,14 @@ public class GatewayTestApplication {
 //	  编程式  实现
 	@Bean
 	public RouteLocator redirectRouteLocator(RouteLocatorBuilder builder){
-		return builder.routes().route("path_router",r->r.path("/get")
-		.uri("http://localhost:8080/api-gateway/get")).build();
+//		return builder.routes().route("path_router",r->r.path("/get")
+//		.uri("http://127.0.0.1:8080/api-gateway/get")).build();
+		return builder.routes()
+				.route(p -> p
+						.path("/")
+						.filters(f -> f.addRequestHeader("Hello", "World"))
+						.uri("https://www.baidu.com/s?ie=UTF-8&wd=66"))
+				.build();
 	}
 
 }
