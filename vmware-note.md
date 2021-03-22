@@ -3163,6 +3163,14 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 # unbutu 
 
+## 设置root账户的密码
+
+> sudo passwd root
+>
+> // 输入当前用户的密码
+>
+> // 输入两次root账户的密码
+
 ## 查看磁盘信息
 
 > df -h 
