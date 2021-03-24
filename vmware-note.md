@@ -845,6 +845,17 @@ java.lang.NoSuchMethodError: reactor.netty.http.client.HttpClient.chunkedTransfe
 >
 > p   //   粘贴到下一行，原来的往下顺移
 
+###  !pwd
+
+退出vim窗口   执行pwd命令
+
+
+
+### 缩小 vim 窗口
+
++ ​    :sh    缩小当前vim  窗口
++ ctrl+d  返回vim窗口
+
 
 
 ##  系统命令
@@ -931,18 +942,50 @@ df -h
 
 
 
+## tar 命令
+
+[参考链接](https://blog.51cto.com/11934539/2058466)
+
+###  命令语法
+tar [选项...] [FILE]...
+
+### 选项详解
+#### 主要选项:
+-A, --catenate, --concatenate 追加 tar 文件至归档
+-c, --create 创建一个新归档
+-d, --diff, --compare 找出归档和文件系统的差异
+--delete 从归档(非磁带！)中删除
+-r, --append 追加文件至归档结尾
+-t, --list 列出归档内容
+--test-label 测试归档卷标并退出
+-u, --update 仅追加比归档中副本更新的文件
+-x, --extract, --get 从归档中解出文件
+#### 压缩选项
+-a, --auto-compress 使用归档后缀名来决定压缩程序
+-I, --use-compress-program=PROG ，通过 PROG 过滤(必须是能接受 -d 选项的程序)
+-j, --bzip2 通过 bzip2 压缩归档
+-J, --xz 通过 xz 压缩归档
+-z, --gzip, --gunzip, --ungzip 通过 gzip 压缩归档
+-Z, --compress, --uncompress 通过 compress 压缩归档
+#### 辅助选项
+-v, --verbose 详细地列出处理的文件
+-f, --file=ARCHIVE 使用归档文件或 ARCHIVE 设备，**该选项后必须接*打包的.tar**
 
 
-### 缩小 vim 窗口
 
-+ ​    :sh    缩小当前vim  窗口
-+ ctrl+d  返回vim窗口
+### 参考示例
+
+>  tar -cvf  total.tar --exclude test/user.txt  test   // 将test 文件夹打包，排除其中的hello.txt ，打包的产生的文件名叫  total.tar.gz
+>
+>  tar -tf total.tar   //  查看tar包中的内容
+>
+> tar -xvf total.tar  // 解压  -cvf 加压的文件，<font color=red>注意，这里解压会覆盖原始文件并且没有提示</font>
+>
+> 
 
 
 
-###  !pwd
 
-退出vim窗口   执行pwd命令
 
 
 
