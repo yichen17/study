@@ -1868,6 +1868,44 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 
 
+# 响应式编程
+
+## 异步请求的三种实现
+
+### 回调函数
+
+#### 流程
+
+<img src="./images/2021-03-26-1.jpg" alt="流程图" style="zoom: 80%;" />
+
+如上图所示，服务A需要调用服务B，正常的同步请求是阻塞服务A直至服务B处理完毕，而回调则不会在服务B处理期间阻塞，可以在期间执行其他操作，当服务B执行完毕后，服务B会主动调用服务A的callback()方法，来继续执行操作
+
+#### 分析
+
+<font color=red>缺点：回调的最大问题是复杂性，一旦在执行流程中包含了多层的异步执行和回调，那么就会形成一种嵌套结构，给代码的开发和调试带来很大的挑战。所以回调很难大规模地组合起来使用，因为很快就会导致代码难以理解和维护，从而造成所谓的“回调地狱”问题。</font>
+
+### Future
+
+### 概念
+
+我们有一个需要处理的任务，然后把这个任务提交到 Future，Future 就会在一定时间内完成这个任务，而在这段时间内我们可以去做其他事情。
+
+本质是一种多线程技术。多线程假设一些线程可以共享一个 CPU，而 CPU 时间能在多个线程之间共享，这一点就引入了“上下文切换”的概念。
+
+如果想要恢复线程，就需要涉及加载和保存寄存器等一系列计算密集型的操作。因此，大量线程之间的相互协作同样会导致资源利用效率低下。
+
+
+
+### 响应式编程
+
+### 概念
+
+与同步请求逆向思维，基于发布/订阅模式，从同步的拉改为推送。<font color=red>即从原来的消费者向生产者请求改为生产者推送消息给消费者。</font>
+
+
+
+
+
 # 网络编程
 
 ## jdk  NIO 存在的问题
@@ -3188,18 +3226,6 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 
 
-# mongodb
-
-[安装步骤](https://blog.csdn.net/dandanfengyun/article/details/95497728)
-
-## 常用命令
-
->net start mongodb   // 开启mongodb 服务
->
->net stop mongodb  // 关闭mongodb服务
->
->use admin   // 如果没有对应的数据库，则默认自动创建
-
 
 
 
@@ -3476,6 +3502,28 @@ db.password.0=root
 [参考链接](https://www.cnblogs.com/dengtang/p/11644751.html)
 
 > apt-get remove openjdk*
+
+
+
+## mongodb
+
+### window 安装
+
+[安装步骤](https://blog.csdn.net/dandanfengyun/article/details/95497728)
+
+#### 常用命令
+
+>net start mongodb   // 开启mongodb 服务
+>
+>net stop mongodb  // 关闭mongodb服务
+>
+>use admin   // 如果没有对应的数据库，则默认自动创建
+
+### unbutu 安装
+
+
+
+
 
 ## 安装openjdk 7u4 所依赖的东西
 
