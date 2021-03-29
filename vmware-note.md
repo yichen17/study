@@ -880,6 +880,10 @@ getcong LONG_BIT
 
 df -h
 
+###  查看服务列表
+
+> service --status-all
+
 ### top命令 介绍
 
 [参考文章](https://blog.csdn.net/dxl342/article/details/53507673)
@@ -3404,7 +3408,19 @@ failed
 
 #### apt 安装后无法通过  service mysql start 启动
 
-<font color=red> 子系统和主系统公用端口号，需要把主系统的mysql关闭。
+<font color=red> 子系统和主系统公用端口号，需要把主系统的mysql关闭。</font>
+
+####  赋权问题
+
+##### mysql 5.x
+
+> GRANT ALL ON zabbix.* TO 'zabbix'@'localhost' IDENTIFIED BY 'change-with-strong-password';
+
+##### 8.x
+
+> create user 'zabbix'@'localhost' identified by 'change-with-strong-password';
+>
+> grant all on zabbix.* to 'zabbix'@'localhost';
 
 ## nacos
 
@@ -3521,9 +3537,113 @@ db.password.0=root
 
 ### unbutu 安装
 
+[参考链接](https://linux.cn/article-11175-1.html)
 
+> apt install mongodb   // 安装  mongodb
+>
+> mongo  // 查看相关信息
 
+#### 不能使用  systemctl  不支持
 
+> systemctl status mongodb    // 查看 状态
+>
+> systemctl stop mongodb
+>
+> systemctl start mongodb
+>
+> systemctl restart mongodb
+>
+> systemctl disable mongodb   // 关闭开机启动
+>
+> systemctl enable mongodb   //  打开开机启动
+
+#### 问题记录
+
+##### mongod 错误 data directory  /data/db not found
+
+> mkdir -p /data/db      //  -p  只递归创建目录
+
+#### 启动失败
+
+> // 查看错误日志
+>
+> cat   /var/log/mongodb/mongodb.log
+
+## Zabbix 
+
+[参考链接](https://www.linuxidc.com/Linux/2020-04/162818.htm)
+
+### 问题记录
+
+#### sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-agent  报错    The following packages have unmet dependencies
+
+[参考链接](https://blog.csdn.net/GanSir_Auto/article/details/103655984)
+
+> apt install aptitidu
+>
+> aptitude install  zabbix-server-mysql zabbix-frontend-php zabbix-agent
+
+#### zabbix-server 表面启动成功，实际未成功
+
+> service zabbix-service restart   // 执行后显示两个ok
+>
+> ps -ef | grep zabbix-service   // 查看显示未启动
+>
+> cat /etc/zabbix/zabbix_server.conf   // 查看启动文件中的日志存储位置
+>
+>  cat /var/log/zabbix-server/zabbix_server.log    // 查看启动日志
+>
+> <font color=red>**报错如下：**query failed: [1146] Table 'zabbix.users' doesn't exist [select userid from users limit 1]</font>
+>
+>  cd   /usr/share/doc/zabbix-server-mysql/create.sql.gz  // sql 存放的位置
+
+#### 没有 /usr/share/doc/zabbix-server-mysql/create.sql.gz
+
+[参考链接](https://www.lanqiao.cn/questions/174591/)
+
+> //apt 更新指定为  阿里云
+>
+> vim /etc/apt/sources.list.d/zabbix.list
+>
+> //  更改为如下
+>
+> deb http://mirrors.aliyun.com/zabbix/zabbix/4.0/ubuntu xenial main 
+>
+> deb-src http://mirrors.aliyun.com/zabbix/zabbix/4.0/ubuntu xenial main
+>
+> // 获取
+>
+> apt update
+
+#### Could not resolve 'mirrors.cloud.aliyuncs.com'
+
+[参考链接](https://my.oschina.net/u/4339825/blog/3318996)
+
+> vi  /etc/resolv.conf
+>
+> // 增加下面两个配置
+>
+> nameserver  119.29.29.29
+>
+> nameserver  8.8.8.8
+>
+> // 重启  网络
+>
+> service network-manager restart
+>
+>  // 如果无法  识别 network-manager
+>
+> apt intall network-manager
+
+#### Failed to enable APR_TCP_DEFER_ACCEPT
+
+[参考链接](https://blog.csdn.net/Allen_xiaofei/article/details/79839719)
+
+> vi /etc/apache2/apache2.conf 
+>
+> // 底下新加一条配置
+>
+> AcceptFilter http none
 
 ## 安装openjdk 7u4 所依赖的东西
 
