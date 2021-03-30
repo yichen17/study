@@ -884,7 +884,14 @@ df -h
 
 > service --status-all
 
-### top命令 介绍
+### 查看系统使用的  init system  类型
+
+> ps --no-headers -o comm 1
+
+- `systemd` - select the **systemd (systemctl)** tab below.
+- `init` - select the **System V Init (service)** tab below.
+
+## top命令 介绍
 
 [参考文章](https://blog.csdn.net/dxl342/article/details/53507673)
 
@@ -993,7 +1000,7 @@ tar [选项...] [FILE]...
 
 
 
-### crul
+## crul命令
 
 [学习链接](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
 
@@ -1890,7 +1897,7 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 ### Future
 
-### 概念
+#### 概念
 
 我们有一个需要处理的任务，然后把这个任务提交到 Future，Future 就会在一定时间内完成这个任务，而在这段时间内我们可以去做其他事情。
 
@@ -1902,7 +1909,7 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 ### 响应式编程
 
-### 概念
+#### 概念
 
 与同步请求逆向思维，基于发布/订阅模式，从同步的拉改为推送。<font color=red>即从原来的消费者向生产者请求改为生产者推送消息给消费者。</font>
 
@@ -3236,6 +3243,22 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 # unbutu 
 
+## windows 中子系统  20.04版本命令对比
+
+[参考链接](https://blog.csdn.net/qq_43685040/article/details/112056242)
+
+> service service_name start     //  开启
+>
+> service service_name stop  //   关闭
+>
+> service service_name restart  //  重启
+>
+> service service_name status  //  状态
+>
+> checonfig service_name on  //  开机启动
+>
+> checonfig service_name off //  关闭开机启动
+
 ## 设置root账户的密码
 
 > sudo passwd root
@@ -3535,13 +3558,25 @@ db.password.0=root
 >
 >use admin   // 如果没有对应的数据库，则默认自动创建
 
-### unbutu 安装
+### unbutu 安装   20.04版
 
-[参考链接](https://linux.cn/article-11175-1.html)
+<font color=red>**window下的子系统 unbutu 无法安装mongodb，因为不支持 fsync**</font>
 
-> apt install mongodb   // 安装  mongodb
+[官网安装参考链接](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
+
+> wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -    //导入公共key 通过包管理系统
 >
-> mongo  // 查看相关信息
+> echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list    // 创建文件目录   /etc/apt/sources.list.d/mongodb-org-4.4.list
+>
+> sudo apt-get update   // 重新加载本地包数据库
+>
+> sudo apt-get install -y mongodb-org   // 安装mongodb 包
+>
+> ps --no-headers -o comm 1   // 查看 init system 类型
+>
+> sudo service mongodb start   // 启动服务
+>
+> 
 
 #### 不能使用  systemctl  不支持
 
@@ -3563,11 +3598,19 @@ db.password.0=root
 
 > mkdir -p /data/db      //  -p  只递归创建目录
 
-#### 启动失败
+##### 启动失败
 
 > // 查看错误日志
 >
 > cat   /var/log/mongodb/mongodb.log
+
+##### E: Sub-process /usr/bin/dpkg returned an error code (1)   
+
+[参考链接](https://blog.csdn.net/stickmangod/article/details/85316142)
+
+##### Failed to unlink socket file /tmp/mongodb-27017.sock errno:1 Operation not permitted
+
+将 该文件删除即可
 
 ## Zabbix 
 
