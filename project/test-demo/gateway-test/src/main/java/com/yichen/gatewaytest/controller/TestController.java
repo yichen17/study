@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @RequestMapping("/api-gateway/get")
+    @RequestMapping("/get")
     public String testGateway(){
         return "test gateway";
     }

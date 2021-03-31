@@ -1,4 +1,4 @@
-package com.yichen.yichen;
+package com.yichen.reactor;
 
 import reactor.core.publisher.Flux;
 
@@ -9,13 +9,14 @@ import java.time.Duration;
  * @version 1.0
  * @date 2021/3/30 9:32
  */
-public class test {
+public class TestFlux {
     public static void main(String[] args) {
 //        静态创建
         Flux.just("Hello", "World").subscribe(System.out::println);
         Flux.fromArray(new Integer[] {1, 2, 3}).subscribe(System.out::println);
         Flux.range(2020,5).subscribe(System.out::println);
         Flux.interval(Duration.ofSeconds(2), Duration.ofMillis(200)).subscribe(System.out::println);
+
         Flux.empty().subscribe(System.out::println);
 //        动态创建
 //        generate  需要 synchronousSink组件

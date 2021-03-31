@@ -779,7 +779,18 @@ java.lang.NoSuchMethodError: reactor.netty.http.client.HttpClient.chunkedTransfe
 
 > 由于 springboot 和 springcloud 版本不一致，本机均设为了  2.2.2.RELEASE
 
+##  A bean with that name has already been defined in class path resource and overriding is disabled.
 
+### 详情
+
+```
+The bean 'dataSource', defined in BeanDefinition defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class], could not be registered. A bean with that name has already been defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class] and overriding is disabled.
+
+```
+
+### 解决
+
+springboot 和  springcloud  版本不一致
 
 
 
@@ -1913,9 +1924,119 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 与同步请求逆向思维，基于发布/订阅模式，从同步的拉改为推送。<font color=red>即从原来的消费者向生产者请求改为生产者推送消息给消费者。</font>
 
+## 创建  Flux 和  Mono
 
+### 静态创建
 
+> // just  方式
+>
+> Flux.just("Hello", "World").subscribe(System.out::println);
+>
+> // fromxxx()  
+>
+> Flux.fromArray(new Integer[] {1, 2, 3}).subscribe(System.out::println);
+>
+> //  range()  范围创建，以第一个为初始值，第二个参数为个数。
+>
+> Flux.range(2020, 5).subscribe(System.out::println);
+>
+> //  interval()  间隔创建，第一个参数为间隔时间，第二个参数为延迟
+>
+> Flux.interval(Duration.ofSeconds(2), Duration.ofMillis(200)).subscribe(System.out::println);
 
+### 动态创建
+
+> //  通过  generate()方法创建
+>
+> Flux.generate(sink -> {
+>     sink.next("Jianxiang");
+>     sink.complete();
+> }).subscribe(System.out::println);
+>
+> 
+>
+> Flux.generate(() -> 1, (i, sink) -> {
+>             sink.next(i);
+>             if (i == 5) {
+>                 sink.complete();
+>             }
+>             return ++i;
+> }).subscribe(System.out::println);
+>
+> // create() 方法创建
+>
+> Flux.create(sink -> {
+>             for (int i = 0; i < 5; i++) {
+>                 sink.next("jianxiang" + i);
+>             }
+>             sink.complete();
+> }).subscribe(System.out::println);
+
+## reactor 操作符
+
+### 分类
+
++ 转换（Transforming）操作符，负责将序列中的元素转变成另一种元素。
++ 过滤（Filtering）操作符，符合将不需要的数据从序列中剔除出去。
++ 组合（Combining）操作符，符合将序列中的元素进行合并，连接和集成。
++ 条件（Conditional）操作符，负责根据特定条件对序列中的元素进行处理。
++ 裁剪（Reducing）操作符，符合对序列中的元素执行各种自定义的裁剪操作。
++ 工具（Utility）操作符，负责一些针对流式处理的辅助性操作。
+
+### 介绍
+
+#### 转换操作符
+
+> //buffer 操作符   把当前流中的元素统一收集到一个集合中，并把这个集合对象作为新的数据流。
+>
+> Flux.range(1, 25).buffer(10).subscribe(System.out::println);
+>
+> //window 操作符   把当前流中的元素收集到另外的 Flux 序列中
+>
+> Flux.range(1, 5).window(2).toIterable().forEach(w -> {
+>         w.subscribe(System.out::println);
+>         System.out.println("-------");
+> });
+>
+> // map 操作符   对流中的每个元素应用一个映射函数从而达到转换效果
+>
+> Flux.just(1, 2).map(i -> "number-" + i).subscribe(System.out::println);
+>
+> // flatMap 操作符  会把流中的每个元素映射成一个流而不是一个元素，然后再把得到的所有流中的元素进行合并
+>
+> Flux.just(1, 5)
+>      .flatMap(x -> Mono.just(x * x))
+>      .subscribe(System.out::println);
+
+#### 过滤操作符
+
+> //  filter 操作符
+>
+> Flux.range(1, 10).filter(i -> i % 2 == 0)
+> 	.subscribe(System.out::println);
+>
+> //  first/last 操作符     skip/skipLast      take/takeLast
+
+#### 组合操作符
+
+> //then  操作符    等到上一个操作完成再进行下一个
+>
+> // when 操作符  等到多个操作一起完成
+>
+> //  merge 操作符   把多个 Flux 流合并成一个 Flux 序列，而合并的规则就是按照流中元素的实际生成的顺序进行
+>
+> // mergeSequential 操作符   按照所有流被订阅的顺序，以流为单位进行合并。
+>
+> //  zip 操作符   zip 操作符的合并规则比较特别，是将当前流中的元素与另外一个流中的元素按照一对一的方式进行合并
+>
+> Flux flux1 = Flux.just(1, 2);
+> Flux flux2 = Flux.just(3, 4);
+> Flux.zip(flux1, flux2).subscribe(System.out::println);
+>
+> // 结果  
+>
+> [1,3]
+> [2,4]
 
 # 网络编程
 
@@ -3839,6 +3960,8 @@ JSONObject jsonObject=new JSONObject(res);
 >mvn install -Dmaven.test.skip=true   // 跳过test 打包
 >
 >mvn -q clean install   //隐藏 打印  info 的相关信息
+
+## 父子工程版本控制
 
 
 

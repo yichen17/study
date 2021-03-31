@@ -23,7 +23,8 @@ public class GatewayTestApplication {
 				.route(p -> p
 						.path("/")
 						.filters(f -> f.addRequestHeader("Hello", "World"))
-						.uri("https://www.baidu.com/s?ie=UTF-8&wd=66"))
+						.uri("http://localhost:8891/get"))
+//						.uri("https://www.baidu.com/s?ie=UTF-8&wd=66"))
 				.build();
 	}
 
