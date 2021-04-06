@@ -1716,7 +1716,11 @@ shift+alt+鼠标左键点击选取   同步填充 光标信息
 
 [参考链接](https://blog.csdn.net/wenyuan65/article/details/82634118)
 
++ 快速删除代码中的空行
 
+> ctrl+ r 进行代码替换，用正则表达式`^\s*\n` 替换为空即可
+
+![操作图片](./images/2021-04-02-1.jpg)
 
 ## 常用设置
 
@@ -2038,6 +2042,94 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 > [1,3]
 > [2,4]
 
+#### 条件操作符
+
+> defaultEmpty 操作符   用来返回来自原始数据流的元素，如果原始数据流中没有元素，则返回一个默认元素。
+>
+> takeUntil 操作符   获取直到条件不满足元素
+>
+> takeWhile 操作符   当条件满足是获取元素
+
+#### 裁剪操作符
+
+> // any 操作符    检查是否至少有一个元素具有所指定的属性
+>
+> Flux.just(3, 5, 7, 9, 11, 15, 16, 17).any(e -> e % 2 == 0).subscribe(isExisted -> System.out.println(isExisted));
+>
+> // all操作符   是否所有元素都满足条件
+>
+> Flux.just("abc", "ela", "ade", "pqa", "kang").all(a -> a.contains("a")).subscribe(isAllContained -> System.out.println(isAllContained));
+>
+> //  concat 操作符   合并来自不同 Flux 的数据，根据流的先后顺序进行复制
+>
+> Flux.concat(Flux.range(1, 3),Flux.range(4, 2),Flux.range(6, 5)).subscribe(System.out::println);
+>
+> //  reduce 操作符  ，对元素进行累加操作
+>
+> Flux.range(1, 10).reduce((x, y) -> x + y).subscribe(System.out::println);
+>
+> // reduceWith 操作符，对元素进行累加操作，可以设定初值
+>
+> Flux.range(1, 10).reduceWith(() -> 5, (x, y) -> x + y).subscribe(System.out::println);
+
+#### 工具操作符
+
+> //  subscribe 操作符
+>
+> ```
+> //  不常用的自定义  subscriber
+> Subscriber<String> subscriber = new Subscriber<String>() {
+>     volatile Subscription subscription;
+>     @Override
+>     public void onSubscribe(Subscription s) {
+>         subscription = s;
+>         System.out.println("initialization");
+>         subscription.request(1);
+>     }
+>     @Override
+>     public void onNext(String s) {
+>         System.out.println("onNext:" + s);
+>         subscription.request(1);
+>     }
+>     @Override
+>     public void onComplete() {
+>         System.out.println("onComplete");
+>     }
+>     @Override
+>     public void onError(Throwable t) {
+>         System.out.println("onError:" + t.getMessage());
+>     }
+> };
+> // 推荐使用
+> class MySubscriber<T> extends BaseSubscriber<T> {
+>     @Override
+>     public void hookOnSubscribe(Subscription subscription) {
+>         System.out.println("initialization");
+>         request(1);
+>     }
+> 
+>     @Override
+>     public void hookOnNext(T value) {
+>         System.out.println("onNext:" + value);
+>         request(1);
+>     }
+> }
+> ```
+>
+> //  block 操作符  在接收到下一个元素之前会一直阻塞。block 操作符常用来把响应式数据流转换为传统数据流
+>
+> //  log 操作符  针对日志的工具操作符 log，它会观察所有的数据并使用日志工具进行跟踪
+>
+> //  debug 操作符   这是全局的，需要添加在程序启动的地方
+>
+> Hooks.onOperator(providedHook ->providedHook.operatorStacktrace())
+>
+> //  checkpoint  操作符   观察特定流，`debug` 只输出错误日志
+>
+> Mono.just(1).map(x -> 1 / x).checkpoint("debug").subscribe(System.out::println);
+
+
+
 # 网络编程
 
 ## jdk  NIO 存在的问题
@@ -2197,6 +2289,68 @@ BEFORE DECODE (16 bytes)                       AFTER DECODE (13 byte
 - lengthFieldLength = 2，协议设计的固定长度。
 - lengthAdjustment = -3，Length 字段值（16 字节）需要减去 HDR1（1 字节） 和 Length 自身所占字节长度（2 字节）才能得到 HDR2 和 Content 的内容（1 + 12 = 13 字节）。
 - initialBytesToStrip = 3，解码后跳过 HDR1 和 Length 字段，共占用 3 字节。
+
+## 内存分配算法
+
+常用的内存分配器算法有三个：动态内存分配、伙伴算法和Slab 算法
+
+### 动态内存分配
+
+**动态内存分配（Dynamic memory allocation）又称为堆内存分配，后面简称 DMA**，操作系统根据程序运行过程中的需求即时分配内存，且分配的内存大小就是程序需求的大小。在大部分场景下，只有在程序运行的时候才知道所需要分配的内存大小，如果提前分配可能会分配的大小无法把控，分配太大会浪费空间，分配太小会无法使用。
+
+DMA 是从一整块内存中按需分配，对于分配出的内存会记录元数据，同时还会使用空闲分区链维护空闲内存，便于在内存分配时查找可用的空闲分区，常用的有三种查找策略：
+
+#### ⾸次适应算法（first fit）
+
+空闲分区链以地址递增的顺序将空闲分区以双向链表的形式连接在一起，从空闲分区链中找到第一个满足分配条件的空闲分区，然后从空闲分区中划分出一块可用内存给请求进程，剩余的空闲分区仍然保留在空闲分区链中。该算法**每次都从低地址开始查找，造成低地址部分会不断被分配，同时也会产生很多小的空闲分区。**
+
+#### 循环首次适应算法（next fit）
+
+该算法是由首次适应算法的变种，循环首次适应算法不再是每次从链表的开始进行查找，而是从上次找到的空闲分区的下⼀个空闲分区开始查找。该算法相比⾸次适应算法空闲分区的**分布更加均匀，而且查找的效率有所提升，但是正因为如此会造成空闲分区链中大的空闲分区会越来越少。**
+
+#### 最佳适应算法（best fit）
+
+空闲分区链以空闲分区大小递增的顺序将空闲分区以双向链表的形式连接在一起，每次从空闲分区链的开头进行查找，这样第一个满足分配条件的空间分区就是最优解。**该算法的空间利用率更高，但同样也会留下很多较难利用的小空闲分区，由于每次分配完需要重新排序，所以会有造成性能损耗。**
+
+### 伙伴算法
+
+伙伴算法是一种非常经典的内存分配算法，它采用了分离适配的设计思想，将物理内存按照 2 的次幂进行划分，内存分配时也是按照 2 的次幂大小进行按需分配，例如 4KB、 8KB、16KB 等。假设我们请求分配的内存大小为 10KB，那么会按照 16KB 分配。
+
+伙伴算法把内存划分为 11 组不同的 2 次幂大小的内存块集合，每组内存块集合都用双向链表连接。链表中每个节点的内存块大小分别为 1、2、4、8、16、32、64、128、256、512 和 1024 个连续的 Page，例如第一组链表的节点为 2^0 个连续 Page，第二组链表的节点为 2^1 个连续 Page，以此类推。
+
+假设我们需要分配 10K 大小的内存块，看下**伙伴算法的具体分配过程**：
+
++ 首先需要找到存储 2^4 连续 Page 所对应的链表，即数组下标为 4；
+
++ 查找 2^4 链表中是否有空闲的内存块，如果有则分配成功；
+
++ 如果 2^4 链表不存在空闲的内存块，则继续沿数组向上查找，即定位到数组下标为 5 的链表，链表中每个节点存储 2^5 的连续 Page；
+
++ 如果 2^5 链表中存在空闲的内存块，则取出该内存块并将它分割为 2 个 2^4 大小的内存块，其中一块分配给进程使用，剩余的一块链接到 2^4 链表中。
+
+以上是伙伴算法的分配过程，那么释放内存时候伙伴算法又会发生什么行为呢？当进程使用完内存归还时，需要检查其伙伴块的内存是否释放，所谓伙伴块是不仅大小相同，而且两个块的地址是连续的，其中低地址的内存块起始地址必须为 2 的整数次幂。如果伙伴块是空闲的，那么就会将两个内存块合并成更大的块，然后重复执行上述伙伴块的检查机制。直至伙伴块是非空闲状态，那么就会将该内存块按照实际大小归还到对应的链表中。频繁的合并会造成 CPU 浪费，所以并不是每次释放都会触发合并操作，当链表中的内存块个数小于某个阈值时，并不会触发合并操作。
+
+**由此可见，伙伴算法有效地减少了外部碎片，但是有可能会造成非常严重的内部碎片，最严重的情况会带来 50% 的内存碎片。**
+
+### Slab算法
+
+因为伙伴算法都是以 Page 为最小管理单位，在小内存的分配场景，伙伴算法并不适用，如果每次都分配一个 Page 岂不是非常浪费内存，因此 Slab 算法应运而生了。Slab 算法在伙伴算法的基础上，对小内存的场景专门做了优化，采用了内存池的方案，解决内部碎片问题。
+
+Linux 内核使用的就是 Slab 算法，因为内核需要频繁地分配小内存，所以 Slab 算法提供了一种高速缓存机制，使用缓存存储内核对象，当内核需要分配内存时，基本上可以通过缓存中获取。此外 Slab 算法还可以支持通用对象的初始化操作，避免对象重复初始化的开销。下图是 Slab 算法的结构图，Slab 算法实现起来非常复杂，本文只做一个简单的了解
+
+<img src="./images/2021-04-02-2.jpg" alt="图解" style="zoom:67%;" />
+
+在 Slab 算法中维护着大小不同的 Slab 集合，在最顶层是 cache_chain，cache_chain 中维护着一组 kmem_cache 引用，kmem_cache 负责管理一块固定大小的对象池。通常会提前分配一块内存，然后将这块内存划分为大小相同的 slot，不会对内存块再进行合并，同时使用位图 bitmap 记录每个 slot 的使用情况。
+
+kmem_cache 中包含三个 Slab 链表：完全分配使用 slab_full、部分分配使用 slab_partial和完全空闲 slabs_empty，这三个链表负责内存的分配和释放。每个链表中维护的 Slab 都是一个或多个连续 Page，每个 Slab 被分配多个对象进行存储。Slab 算法是基于对象进行内存管理的，它把相同类型的对象分为一类。当分配内存时，从 Slab 链表中划分相应的内存单元；当释放内存时，Slab 算法并不会丢弃已经分配的对象，而是将它保存在缓存中，当下次再为对象分配内存时，直接会使用最近释放的内存块。
+
+**单个 Slab 可以在不同的链表之间移动，例如当一个 Slab 被分配完，就会从 slab_partial 移动到 slabs_full，当一个 Slab 中有对象被释放后，就会从 slab_full 再次回到 slab_partial，所有对象都被释放完的话，就会从 slab_partial 移动到 slab_empty。**
+
+
+
+
+
+
 
 ## 传统   BIO
 
@@ -2371,7 +2525,7 @@ Netty 首先会向系统申请一整块连续内存，称为 Chunk（默认大�
 
 ![图片理解](./images/CgqCHl9IlteANQ8lAADm9qN5mgE993.png)
 
-#### 1. 内存分配&释放
+##### 1. 内存分配&释放
 
 当服务向内存池请求内存时，Netty 会将请求分配的内存数向上取整到最接近的分组大小，然后在该分组的相应层级中从左至右寻找空闲分组。例如，服务请求分配 3 * PageSize 的内存，向上取整得到的分组大小为 4 * PageSize，在该层分组中找到完全空闲的一组内存进行分配即可，如下图：
 
@@ -2383,7 +2537,7 @@ Netty 使用**完全平衡树的结构**实现了上述算法，这个完全平�
 
 <img src="./images/Ciqc1F9IlvKACdYpAAF2w22m4sQ981.png" alt="fds" style="zoom:50%;" />
 
-#### 2. 大对象&小对象的处理
+##### 2. 大对象&小对象的处理
 
 当申请分配的对象是超过 Chunk 容量的大型对象，Netty 就不再使用池化管理方式了，在每次请求分配内存时单独创建特殊的非池化 PoolChunk 对象进行管理，当对象内存释放时整个PoolChunk 内存释放。
 
@@ -2414,13 +2568,23 @@ PoolArena 内部持有 2 个 PoolSubpage 数组，分别存储微型 Buffer 和�
 
 <img src="./images/Ciqc1F9IlxSAWAuXAADUtE1ddhw421.png" alt="dsf" style="zoom:33%;" />
 
-#### 3. 并发处理
+##### 3. 并发处理
 
 内存分配释放不可避免地会遇到多线程并发场景，PoolChunk 的完全平衡树标记以及 PoolSubpage 的 bitmap 标记都是多线程不安全的，都是需要加锁同步的。为了减少线程间的竞争，Netty 会提前创建多个 PoolArena（默认数量为 2 * CPU 核心数），当线程首次请求池化内存分配，会找被最少线程持有的 PoolArena，并保存线程局部变量 PoolThreadCache 中，实现线程与 PoolArena 的关联绑定。
 
 Netty 还提供了延迟释放的功能，来提升并发性能。当内存释放时，PoolArena 并没有马上释放，而是先尝试将该内存关联的 PoolChunk 和 Chunk 中的偏移位置等信息存入 ThreadLocal 的固定大小缓存队列中，如果该缓存队列满了，则马上释放内存。当有新的分配请求时，PoolArena 会优先访问线程本地的缓存队列，查询是否有缓存可用，如果有，则直接分配，提高分配效率。
 
+## 内存管理
 
+### 堆外内存和堆内内存差异
+
++ 堆内内存由 JVM GC 自动回收内存，降低了 Java 用户的使用心智，但是 GC 是需要时间开销成本的，堆外内存由于不受 JVM 管理，所以在一定程度上可以降低 GC 对应用运行时带来的影响。
+
++ 堆外内存需要手动释放，这一点跟 C/C++ 很像，稍有不慎就会造成应用程序内存泄漏，当出现内存泄漏问题时排查起来会相对困难。
+
++ 当进行网络 I/O 操作、文件读写时，堆内内存都需要转换为堆外内存，然后再与底层设备进行交互，，所以直接使用堆外内存可以减少一次内存拷贝。
+
++ 堆外内存可以实现进程之间、JVM 多实例之间的数据共享。
 
 
 
@@ -4159,6 +4323,8 @@ JSONObject jsonObject=new JSONObject(res);
 + `W` ： 表示有效工作日（周一至周五），只能出现在 `DayofMonth` 域，系统将在离指定日期最近的有效工作日触发事件。例如在`DayofMonth` 使用 5W  ，如果5日是星期六，则将在最近的工作日：星期五，即四日触发。如果5日是星期天，则在6日（周一触发）。如果5日在星期一到星期五中的一天，则就在5日触发。**另外一点，W的最近寻找不会跨过月份**。
 + `LW` ：这连个字符可以连用，表示在某个月最后一个工作日
 + `#` : 用于确定每个月第几个星期几，只能出现在  `DayofMonth` 域，例如在 `4#2` 表示某月的第二个星期三
+
+
 
 
 
