@@ -1,0 +1,22 @@
+spring:
+  application:
+#    name: GATEWAY-BATCH
+    name: gateway
+  cloud:
+    nacos:
+      config:
+#        server-addr: 101.201.75.13:8848
+        server-addr: 127.0.0.1:8848
+#        group: com.jf.crawl
+        group: com.yichen
+        file-extension: properties
+        namespace: 301f01c3-1528-4e95-ba79-02ea7ba51f14
+      discovery:
+#        server-addr: 101.201.75.13:8848
+        server-addr: 127.0.0.1:8848
+        register-enabled: true
+    gateway:
+      httpclient:
+        connect-timeout: 5000
+server:
+  port: 8899
