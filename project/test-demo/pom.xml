@@ -26,6 +26,8 @@
 		<module>callback</module>
 		<module>gateway</module>
 		<module>netty-demo</module>
+		<module>algorithm-demo</module>
+		<module>web-flux-demo</module>
 	</modules>
 
 	<properties>
