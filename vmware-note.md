@@ -4326,6 +4326,10 @@ JSONObject jsonObject=new JSONObject(res);
 
 
 
+# 设计模式
+
+**设计模式解决的是“可复用”的设计问题**
+
 
 
 
