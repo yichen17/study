@@ -1106,6 +1106,49 @@ tar [选项...] [FILE]...
 
 # git 常用命令
 
+## 配置  ssh key
+
+```
+git config --list     //查看用户信息
+// 设置登陆名以及邮箱信息
+git config --global user.name "qiuxinchao"
+git config --global user.email qiuxinchao@9fbank.com.cn
+//  生成公钥，默认存放在  C:\Users\E480\.ssh\    该目录下
+ssh-keygen -t rsa  -C  "qiuxinchao@9fbank.com.cn"
+//  获取公钥  
+cat /c/Users/E480/.ssh/id_rsa.pub  
+// 将显示出来的信息配置到github 上的 ssh keys中即可
+
+```
+
+## 本地配置多个ssh key
+
+[参考链接](https://www.jianshu.com/p/8a55e023425e)
+
+```
+git config --global user.name "yichen17"
+git config --global user.email q07218396@163.com
+//  生成公钥， 指定文件名字，是指不与之前的冲突
+ssh-keygen -t rsa -f /c/Users/E480/.ssh/id_rsa.personal  -C  "q07218396@163.com"
+// 在 .ssh 文件夹下创建配置文件
+touch config
+// 填写配置信息
+Host github.com
+        IdentityFile ~/.ssh/id_rsa.personal
+        User yichen17
+Host https://gerrit.9f.cn
+        IdentityFile ~/.ssh/id_rsa
+        User qiuxinchao
+//  获取公钥  
+cat /c/Users/E480/.ssh/id_rsa.pub  
+// 将显示出来的信息配置到github 上的 ssh keys中
+// 测试是否成功
+ssh -T git@github.com 
+// 如果返回 Hi yichen17! You've successfully authenticated, but GitHub does not # provide shell access  表示成功
+```
+
+
+
 ## 从github 上下载内容
 
 ```java
@@ -1166,6 +1209,8 @@ git push master(需要合并的分支名称)
 3.1 如果远程没有改分支，需要通过 --set-upstream 进行创建
 git push --set-upstream master(需要合并的分支名称)
 
+// 清楚之前登陆的错误信息
+git config --system --unset credential.helper
 
 // 查看书对象存储内容
 git cat-file -p b5erb5c(SHA-1值，取前七位)
@@ -4330,11 +4375,36 @@ JSONObject jsonObject=new JSONObject(res);
 
 **设计模式解决的是“可复用”的设计问题**
 
+## 分层架构
 
+### 优势
 
+总结来说，代码分层架构设计主要为了实现责任分离、解耦、组件复用和标准制定
 
++ 只用关注整个结构中的某一层的具体实现
++ 降低层与层之间的依赖
++ 很容易用新的实现来替换原有层次的实现
++ 有利于标准化的统一
++ 各层逻辑方便复用
 
+### 劣势
 
++ **开发成本变高**：因为不同层分别承担各自的责任，如果是高层次新增功能，则需要多个低层增加代码，这样难免会增加开发成本
++ **性能降低**：请求数据因为经过多层代码的处理，执行时间变长，性能会有所消耗
++ **代码复杂度增加**：因为层与层之间存在强耦合，所以对于一些组合功能的调用，则需要增加很多层之间的调用
+
+### 总结
+
+代码分层架构的核心作用有两个：
+
++ 对于功能性需求(使一个程序能为用户做些什么，比如文件上传、数据查询等)，将复杂问题分解为多个容易解决的子层问题
++ 对于非功能性需求(指功能性需求以外的其他必要需求，如性能、安全性、容错与恢复、本地化、国际化等)，可以提升代码可扩展性
+
+**复杂的设计概念和简单的代码之间存在一种平衡，这就是分层架构**。
+
++ 代码分层架构设计的思维模型是简化思维，本质是抽象和拆解
++ 代码分层架构设计的目的是将复杂问题拆分为更容易解决的小问题，降低实现难度
++ 代码分层架构设计的原则和方法是通用方法，可以应用到其他需要分层设计的地方
 
 
 
