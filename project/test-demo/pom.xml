@@ -28,6 +28,7 @@
 		<module>netty-demo</module>
 		<module>algorithm-demo</module>
 		<module>web-flux-demo</module>
+		<module>app-mvc</module>
 	</modules>
 
 	<properties>

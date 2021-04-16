@@ -4406,7 +4406,23 @@ JSONObject jsonObject=new JSONObject(res);
 + 代码分层架构设计的目的是将复杂问题拆分为更容易解决的小问题，降低实现难度
 + 代码分层架构设计的原则和方法是通用方法，可以应用到其他需要分层设计的地方
 
+# 数据库
 
+## mysql
+
+### 问题记录
+
+#### mysql 5.8无法将timestamp 设为 0000-00-00 00:00:00
+
+> 该问题与mysql 的sql_mode 有关，可以查询它的默认值
+>
+> SHOW VARIABLES LIKE 'sql_mode%';    //方法一
+>
+> SELECT @@sql_mode;    // 方法二
+>
+> // 查询结果中有如下两个  参数 NO_ZERO_IN_DATE,NO_ZERO_DATE	。修改mysql 的启动文件删除重启即可
+
+<font color=red>apt 安装的mysql 的配置文件目录     /etc/mysql/mysql.conf.d/mysqld.cnf</font>
 
 
 
