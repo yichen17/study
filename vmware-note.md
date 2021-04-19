@@ -4083,6 +4083,79 @@ db.password.0=root
 
 将 该文件删除即可
 
+## tomcat 安装
+
+apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
+
+>  //  安装目录
+>
+> /etc/tomcat9 /usr/libexec/tomcat9 /usr/share/tomcat9
+>
+> //  复制启动文件
+>
+> cp /usr/share/tomcat9/etc/server.xml  /usr/share/tomcat9/conf/server.xml
+>
+> 
+
+### 问题记录
+
+####   Package 'tomcat8' has no installation candidate
+
+<font color=red>unbutu子系统版本 Ubuntu 20.04.2 LTS</font>
+
+>apt update
+>
+>apt upgrade
+>
+>apt install tomcat8
+>
+>// 如果不能解决问题
+>
+>[参考步骤](https://blog.csdn.net/qq_42824983/article/details/110236257)
+>
+>// 切换软件源
+>
+>sudo  cp   /etc/apt/sources.list   /etc/apt/sources.list.bak
+>
+>sudo vim /etc/apt/sources.list
+>
+>// 将其中内容替换，写成如下内容
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy main restricted universe multiverse
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy-security main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy-security main restricted universe multiverse
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy-updates main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy-updates main restricted universe multiverse
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy-backports main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy-backports main restricted universe multiverse
+>
+>\# 预发布软件源，不建议启用
+>
+>#deb http://mirrors.aliyun.com/ubuntu/ groovy-proposed main restricted universe multiverse
+>#deb-src http://mirrors.aliyun.com/ubuntu/ groovy-proposed main restricted universe multiverse
+
+## 防火墙
+
+> // 安装模块
+>
+> apt install firewalld 
+>
+> // 查看防火墙状态
+>
+> firewall-cmd --state
+>
+> //  启动  dbus
+>
+> /etc/init.d/dbus start
+>
+> //  启动守护线程
+>
+> dbus-daemon --system
+
 ## Zabbix 
 
 [参考链接](https://www.linuxidc.com/Linux/2020-04/162818.htm)
@@ -4312,6 +4385,30 @@ JSONObject jsonObject=new JSONObject(res);
 >mvn -q clean install   //隐藏 打印  info 的相关信息
 
 ## 父子工程版本控制
+
+查看自己的博客
+
+##  通过javax.servlet-api  无法访问web-inf下的jsp，已经指定了jsp的前后缀
+
+如下图所示，运行`spring-boot:run`
+
+<img src="./images/2021-04-19-1.jpg" alt="解决办法" style="zoom:67%;" />
+
+
+
+## 运行上面的spring-boot:run 保存无法 process terminated 且 报错为乱码
+
++ 乱码解决方案：  `Setting->maven->runner`   修改编码格式  `VMoptions` 改为 `-Dfile.encoding=GB2312`
+
+##  maven 运行报错  Cannot resolve plugin
+
+[参考链接](https://blog.csdn.net/qq_38287890/article/details/101628637)
+
+查看一下maven home 目录以及本地仓库，路径 `setting>build,execution,deployment>maven 
+
+## Maven 报错 Could not transfer artifact 和 501 HTTPS Required.
+
+[参考链接](https://blog.csdn.net/u010565545/article/details/105135180)
 
 
 
