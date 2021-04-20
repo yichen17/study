@@ -4168,6 +4168,34 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 >
 > dbus-daemon --system
 
+## ElasticSearch
+
+[参考安装步骤](https://blog.csdn.net/weixin_44596128/article/details/103970665)
+
+### 问题
+
+#### Caused by: java.lang.RuntimeException: can not run elasticsearch as root
+
+> 不能使用root账户，用其他账户，不过要给该账户对应的目录所有权
+
+#### java.lang.UnsupportedOperationException: seccomp unavailable: CONFIG_SECCOMP not compiled into kernel, CONFIG_SECCOMP and CONFIG_SECCOMP_FILTER are needed
+
+>  修改 安装目录下的   /config/elasticsearch.yml ，添加如下内容
+>
+> bootstrap.memory_lock: false
+>
+> bootstrap.system_call_filter: false
+
+#### java.nio.file.NoSuchFileException: /proc/sys/vm/max_map_count
+
+> 没有设置  /proc/sys/vm/max_map_count
+>
+> // 尝试执行如下命令 
+>
+> sysctl -w vm.max_map_count=262144
+>
+> // 如果失败直接 vi创建对应文件，然后写入数值即可
+
 ## Zabbix 
 
 [参考链接](https://www.linuxidc.com/Linux/2020-04/162818.htm)
@@ -4533,7 +4561,11 @@ JSONObject jsonObject=new JSONObject(res);
 
 <font color=red>apt 安装的mysql 的配置文件目录     /etc/mysql/mysql.conf.d/mysqld.cnf</font>
 
+添加如下内容
 
+> [mysqld]   // 未进行测试，不确定
+>
+> sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
 
 
 
