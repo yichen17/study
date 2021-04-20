@@ -1740,32 +1740,38 @@ shift+alt+鼠标左键点击选取   同步填充 光标信息
 
 ## 便捷方法
 
-+ 打印有关  sql 的执行语句  
-  logging.level.dao对应的位置=debug
-  例子：   logging.level.com.tianyilan.shardingsphere.demo.repository=debug
+### 打印有关  sql 的执行语句  
+logging.level.dao对应的位置=debug
+例子：   logging.level.com.tianyilan.shardingsphere.demo.repository=debug
 
-+ 将项目与  github  隔离
+### 将项目与  github  隔离
 
 选中项目   点击 file 》setting 》 version control 》选中目录 ，右侧插掉即可
 
-+ 项目中隐藏  `.idea` 文件 
-  + 打开file--》settings--》editor---->file types
-  + 选择 `*.gitignore`    在底下已有的很多类文件中追加   `.idea;`
-+ <font color=red>查看  class 文件的字节码内容</font>
+### 项目中隐藏  `.idea` 文件 
+
++ 打开file--》settings--》editor---->file types
++ 选择 `*.gitignore`    在底下已有的很多类文件中追加   `.idea;`
+
+### <font color=red>查看  class 文件的字节码内容</font>
 
 > 通过 `javac`命令 编译指定的  	`.java`文件，例如  `javac hello.java`  此时会在同一目录下生成对应的`.class`文件，此时在idea中打开该文件是反编译优化后的内容，如果想查看原始的   字节码文件，可以cd到对应的`.class`文件目录，然后执行 `javap -c xxx`，例如，`javap -c hello.class`,此时，控制台就会显示对应的指令信息。  `javap -v xxx` 命令则是显示具体内容
 
 [参考文章](https://blog.csdn.net/weixin_41276238/article/details/103769956)
 
-+ 快速查看java动态生成class内容的方法
+### 快速查看java动态生成class内容的方法
 
 [参考链接](https://blog.csdn.net/wenyuan65/article/details/82634118)
 
-+ 快速删除代码中的空行
+### 快速删除代码中的空行
 
 > ctrl+ r 进行代码替换，用正则表达式`^\s*\n` 替换为空即可
 
 ![操作图片](./images/2021-04-02-1.jpg)
+
+### idea 显示内存使用
+
+> view  >  Appearance  > status bar widges  > memory indicator
 
 ## 常用设置
 
@@ -1796,6 +1802,12 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 > 以上为8g内存的配置，如果是16g的，则改为 1g、2g、1g
 
 [参考链接](https://blog.csdn.net/qq_27093465/article/details/81947933?utm_source=blogxgwz7)
+
+[jvm 内存大小修改方法](https://blog.csdn.net/weixin_35781693/article/details/114506311)
+
+<font color=red size=5dp>以上都不行，可用版本</font>
+
+> help > edit custom vm options 
 
 ## 推荐插件
 
