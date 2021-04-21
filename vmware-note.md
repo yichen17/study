@@ -3695,6 +3695,14 @@ if (p.hash == hash &&
 
 
 
+## excel
+
+### 首行 固定不滚动
+
+> 视图  》  冻结窗口   》 冻结首行
+
+<img src="./images/2021-04-21-1.jpg" alt="操作示意图" style="zoom:50%;" />
+
 
 
 # 知识盲区
@@ -4171,6 +4179,31 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 ## ElasticSearch
 
 [参考安装步骤](https://blog.csdn.net/weixin_44596128/article/details/103970665)
+
+> #下载压缩包
+> wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.0.tar.gz
+> #解压
+> tar -zxvf elasticsearch-6.4.0.tar.gz -C /usr/local/
+>
+> #给非root用户赋予权限
+>
+> chown -R yichen /software/elasticsearch-6.4.0
+>
+> #更改内存大小
+>
+> sysctl -w vm.max_map_count=262144
+>
+> #修改jvm内存大小
+>
+> vi /usr/local/elasticsearch-6.4.0/config/jvm.option 
+>
+> -Xms512m
+>
+> -Xmx512m
+>
+> #启动命令
+>
+> /software/elasticsearch-6.4.0/bin/elasticsearch
 
 ### 问题
 
