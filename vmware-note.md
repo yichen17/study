@@ -855,6 +855,8 @@ springboot 和  springcloud  版本不一致
 > yy      // 复制当前光标所在行
 >
 > p   //   粘贴到下一行，原来的往下顺移
+>
+> u  // 撤回操作
 
 ###  !pwd
 
@@ -1258,6 +1260,16 @@ git log
 > git reset  --hard  origin/master
 >
 > git pull
+
++ 查看提交历史
+
+> //   -p  每次提交差异  -2 显示日志条数(这里表示两条)
+>
+> git log -p -2
+>
+> // --stat  提交的简略统计
+>
+> git log --stat
 
 ##  合并分支  git merge
 
@@ -1785,7 +1797,11 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 3、 code  =》  identifier under caret（write） 设置为  `BA4040`
 
+### 本地多版本jdk 设置默认打开jdk
 
+>  file  > new projects settings structure for new projects
+>
+> 指定你想设定的jdk 即可
 
 ## idea 跑项目  cpu 狂响
 
@@ -3703,6 +3719,18 @@ if (p.hash == hash &&
 
 <img src="./images/2021-04-21-1.jpg" alt="操作示意图" style="zoom:50%;" />
 
+## notepading++
+
+### 调整字体大小
+
+![图示](./images/2021-04-22-1.jpg)
+
+
+
+
+
+
+
 
 
 # 知识盲区
@@ -4229,6 +4257,139 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 >
 > // 如果失败直接 vi创建对应文件，然后写入数值即可
 
+## hbase
+
+[安装步骤参考](https://blog.csdn.net/hhy1107786871/article/details/88551234)
+
+> wget https://mirrors.tuna.tsinghua.edu.cn/apache/hbase/2.2.7/hbase-2.2.7-bin.tar.gz
+>
+> // 修改pom.xml 中的zookeeper 和 hadoop 的版本
+>
+> //  打包  完成后会在 /target/ 目录下生成jar 包
+>
+> mvn clean package -DskipTests assembly:single
+>
+> // 修改  /conf/hbase-env.sh
+>
+> export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+>
+> #true为单机，false 为集群                                                                                              
+>
+> export HBASE_MANAGES_ZK=true                                                                                           
+>
+> export HADOOP_HOME=/software/hadoop-3.2.2                                                                               
+>
+> export HBASE_HOME=/software/hbase-2.2.7  
+
+### 问题记录
+
+#### Error: Could not find or load main class org.apache.hadoop.hbase.util.GetJavaProperty
+
+<font color=red> 可能问题，下载的是src 文件，没有进行编译</font>
+
+[参考文章](https://blog.csdn.net/pycrossover/article/details/102627807)
+
+## hadoop
+
+[参考文章1](https://www.cnblogs.com/tanrong/p/10645467.html)
+
+[参考文章2](https://blog.csdn.net/weixin_42001089/article/details/81865101)
+
+> // hadoop 默认就是单机版
+>
+> wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz
+>
+> // 配置 JAVA_HOME的环境变量
+>
+> sudo vi /etc/profile
+>
+> export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+> export PATH=${JAVA_HOME}/bin:$PATH
+>
+> export HADOOP_HOME=/software/hadoop-2.7.7
+> export PATH=${HADOOP_HOME}/bin:$PATH
+>
+> // 查看是否安装成功
+>
+> 安装目录/bin/hadoop version
+>
+> 
+
+## zookeeper 
+
+[参考安装步骤](https://www.cnblogs.com/tyoutetu/p/11115357.html)
+
+> wget https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz
+>
+> // 解压文件目录
+>
+> tar -zxvf apache-zookeeper-3.7.0
+>
+> // 修改配置文件
+>
+> cd apache-zookeeper-3.7.0
+>
+> cd conf
+>
+> cp zoo-sample.cfg zoo.cfg
+>
+> vi zoo.cfg
+>
+> // 更改内容如下
+>
+> dataDir=../data
+>
+>    // 需要 修改启动端口，如2181,2182,2183等
+>
+> server.1=localhost:2287:3387
+> server.2=localhost:2288:3388
+> server.3=localhost:2289:3389
+>
+> //  表示主机编号, 创建数据目录
+>
+> cd ..
+>
+> mkdir data
+>
+> vi data/myid
+>
+> // 输入 对应的主机编号，即1、2、3
+>
+> // 启动
+>
+> bin/zkServer.sh start
+>
+> // 查看启动状态
+>
+> bin/zkServer.sh start
+
+## nginx
+
+[参考安装步骤](https://blog.csdn.net/qq_23832313/article/details/83578836)
+
+> apt install nginx
+>
+> // 查看nginx 版本号
+>
+> nginx -v
+>
+> // 启动
+>
+> service nginx start
+
+### 常用文件的位置
+
+- /usr/sbin/nginx：主程序
+- /etc/nginx：存放配置文件
+- /usr/share/nginx：存放静态文件
+- /var/log/nginx：存放日志
+
+
+
+
+
+
+
 ## Zabbix 
 
 [参考链接](https://www.linuxidc.com/Linux/2020-04/162818.htm)
@@ -4600,5 +4761,18 @@ JSONObject jsonObject=new JSONObject(res);
 >
 > sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
 
+#### Could not retrieve transation read-only status server
 
+> //查看 mysql 事务隔离级别   默认为 REPEATABLE-READ
+>
+> SHOW VARIABLES LIKE '%iso%';
+>
+> // 修改事务隔离级别
+>
+> set global transaction isolation level read committed
+>
+> <font color=red>配置永久生效   修改 my.cnf  [mysqld]下添加  transaction_isolation=READ-COMMITTED</font>
 
+<font color=purple size=10dp solid>以上都是瞎扯，以下才是正确的姿势</font>
+
+> 更改 mysql-connector-java 的版本，mysql版本为5.8的话用8.x.x即可
