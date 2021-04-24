@@ -1803,6 +1803,10 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 >
 > 指定你想设定的jdk 即可
 
+### 关闭文件后目录跳转到前一个文件的位置
+
+<img src="./images/2021-4-24-1.jpg" alt="图示" style="zoom: 67%;" />
+
 ## idea 跑项目  cpu 狂响
 
 > 修改 idea安装目录下的 idea.exe.vmoptions    位置是  安装位置/bin/idea.exe.vmoptions
