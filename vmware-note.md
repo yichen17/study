@@ -4321,6 +4321,14 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 
 ## zookeeper 
 
+### 本机伪集群启动
+
+> cd /software/apache-zookeeper-3.7.0-bin/bin        ./zkServer.sh start 
+>
+> cd /software/zookeeper-1/bin                ./zkServer.sh start 
+>
+> cd /software/zookeeper-2/bin          ./zkServer.sh start 
+
 [参考安装步骤](https://www.cnblogs.com/tyoutetu/p/11115357.html)
 
 > wget https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz
