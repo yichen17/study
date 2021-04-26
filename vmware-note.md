@@ -1969,6 +1969,20 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 在打开的  outer-interface-parent 项目中通过mevan 引入依赖的项目即可，最后通过重新导入maven 依赖就可以了
 
+### Method threw 'java.lang.NullPointerException' exception. Cannot evaluate xxx.toString()
+
+> // 产生条件
+>
+> //  new对象是 调用了空构造函数，debug 运行时标红显示
+
+<img src="./images/2021-04-26-1.jpg" alt="图示" style="zoom:80%;" />
+
+<font color=red> 解决方法</font>
+
+> 选中 异常的变量  》 右键  》 view as  》 由原来的 toString 改为 Object
+
+<img src="./images/2021-04-26-2.jpg" alt="具体执行流程" style="zoom:50%;" />
+
 
 
 # 响应式编程
