@@ -4155,13 +4155,15 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 
 >  //  安装目录
 >
-> /etc/tomcat9 /usr/libexec/tomcat9 /usr/share/tomcat9
+>  /etc/tomcat9 /usr/libexec/tomcat9 /usr/share/tomcat9
 >
-> //  复制启动文件
+>  //  复制启动文件
 >
-> cp /usr/share/tomcat9/etc/server.xml  /usr/share/tomcat9/conf/server.xml
+>  cp /usr/share/tomcat9/etc/server.xml  /usr/share/tomcat9/conf/server.xml 
 >
-> 
+>  //  复制 web.xml
+>
+>  cp /etc/tomcat9/web.xml    /usr/share/tomcat9/conf/
 
 ### 问题记录
 
@@ -4203,6 +4205,14 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 >
 >#deb http://mirrors.aliyun.com/ubuntu/ groovy-proposed main restricted universe multiverse
 >#deb-src http://mirrors.aliyun.com/ubuntu/ groovy-proposed main restricted universe multiverse
+
+#### 使用 shutdown.bat 报错 No shutdown port configured. Shut down server through OS signal. Server not shut down.
+
+> 修改启动文件  /conf/server.xml 中   shutdown  的端口，默认值是-1(当前版本  tomcat  9)，改为  8005。再次重启后使用  shutdown 可以成功，当前关闭需要调用  kill 命令来关闭
+
+### zookeeper 和  tomcat 端口冲突，都使用 8080端口
+
+[参考解决方案](https://blog.csdn.net/liujian8654562/article/details/100860002)
 
 ## 防火墙
 
@@ -4410,11 +4420,65 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 - /usr/share/nginx：存放静态文件
 - /var/log/nginx：存放日志
 
+## CAS server
+
+### 安装步骤
+
+[参考步骤](https://blog.csdn.net/u011872945/article/details/81044124)
+
+> https://github.com/apereo/cas/releases/tag/v4.0.0  // 下载 release 版本
+>
+> //  unzip 解压
+>
+>  // 将  modules/cas-server-webapp-4.0.0.jar  移动到 tomcat 安装目录下的webapp 目录
+>
+> cp cas-server-webapp-4.0.0.war  /usr/share/tomcat9/webapps/cas-server.war
+>
+>  // 启动tomcat     bin/start.sh
+>
+> //登陆  cas   
+>
+> http://localhsot:8080/cas(webapp下的文件夹名称)/login     
+>
+> //   用户名  casuser      密码  Mellon
+
+### 更改认证方式  由https 改为 http
+
+> webapps\cas\WEB-INF\spring-configuration\warnCookieGenerator.xml  
+>
+> bean-id=warnCookieGenerator
+>
+> p:cookieSecure  true => false
+>
+>  
+>
+> webapps\cas\WEB-INF\spring-configuration\ticketGrantingTicketCookieGenerator.xml 
+>
+> bean-id  ticketGrantingTicketCookieGenerator
+>
+> p:cookieSecure  true => false
+>
+>  
+>
+> webapps\cas\WEB-INF\deployerConfigContext.xml
+>
+> bean-id proxyAuthenticationHandler
+>
+> 增加  p:requireSecure="false"
 
 
 
+### 错误
 
+#### 访问报错 404 org.eclipse.jetty.servlet.ServletHandler$Default404Servlet-145eaa29
 
+本机的  zookeeper 导致的   可能 zookeeper  内置了jetty
+
+#### 访问登陆页面报错  org.springframework.web.util.NestedServletException: Request processing failed; nested exception is org.springframework.webflow.execution.FlowExecutionException
+
+[参考文章](https://www.it1352.com/1513832.html)
+
+> 在 tomcat 安装目录    /usr/share/tomcat9/conf/  缺少 web.xml ，可从   /etc/tomcat9下面复制
 
 ## Zabbix 
 
