@@ -1,0 +1,33 @@
+cas 项目  和  cas-client 项目是用来 建议 cas client 用来测试 cas server 的单点认证
+single sign on  (sso)
+
+
+测试请求路径
+http://cas-app1.com:8081/
+http://cas-app2.com:8082/
+
+登陆账号  casuser
+密码 Mellon
+
+cas server 在本机 unbutu 子系统下的  tomcat 下部署，路径为  /usr/share/tomcat9/webapp/cas-server
+
+127.0.0.1 ui.zhangshuzheng.cn
+127.0.0.1 upms.zhangshuzheng.cn
+127.0.0.1 cms.zhangshuzheng.cn
+127.0.0.1 pay.zhangshuzheng.cn
+127.0.0.1 ucenter.zhangshuzheng.cn
+127.0.0.1 ccms.zhangshuzheng.cn
+127.0.0.1 wechat.zhangshuzheng.cn
+127.0.0.1 api.zhangshuzheng.cn
+127.0.0.1 oss.zhangshuzheng.cn
+127.0.0.1 config.zhangshuzheng.cn
+127.0.0.1 zkserver
+127.0.0.1 rdserver
+127.0.0.1 dbserver
+127.0.0.1 mqserver
+127.0.0.1 jcmd.sms.zhangshuzheng.cn
+
+
+127.0.0.1 cas-app1.com
+127.0.0.1 cas-app2.com
+127.0.0.1 cas-server.com

@@ -1983,6 +1983,32 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 <img src="./images/2021-04-26-2.jpg" alt="具体执行流程" style="zoom:50%;" />
 
+###  在 idea 中通过tomcat 运行war包 报错  由于之前的错误，Context[/cas_client1_war_exploded]启动失败
+
+<font color=red size=10px>这里的错误是前后空格的问题</font>
+
+> //  查过错误日志如下
+>
+> org.apache.catalina.core.StandardContext.filterStart 启动过滤器异常
+> 	java.lang.ClassNotFoundException: org.jasig.cas.client.validation.
+>             Cas20ProxyReceivingTicketValidationFilter
+
+<font color=red>解决方法（本质问题是缺少jar包）</font>
+
+步骤一：  进行 project structure  》 找到左边的 artifacts  》 中间找到对应的项目 》 右边将 WEB-INF下的lib 文件夹删除
+
+![步骤一](./images/2021-04-28-1.jpg)
+
+步骤二   然后在创建一个  lib文件夹，选中文件夹 add copy of ，选择 library files ，然后 ctrl+a全选，即可。
+
+![步骤二](./images/2021-04-28-2.jpg)
+
+### idea 下启动tomcat 设置启动路径
+
+![方法](./images/2021-04-28-3.jpg)
+
+
+
 
 
 # 响应式编程
@@ -3822,9 +3848,13 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >
 >shutdown  关闭redis
 >
-> 
+>
 >
 >redis-server  /etc/redis/redis.conf    // 启动redis 服务器
+>
+>auth yichen  // 登陆
+>
+>flushall   //清空所有数据
 
 
 
@@ -4479,6 +4509,16 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 [参考文章](https://www.it1352.com/1513832.html)
 
 > 在 tomcat 安装目录    /usr/share/tomcat9/conf/  缺少 web.xml ，可从   /etc/tomcat9下面复制
+
+### 执行验证报错 未能识别出目标票根
+
+[参考解决方案](https://blog.csdn.net/weixin_30810583/article/details/95836229)
+
+>  // 修改  WEB-INF/spring-configuration/ticketExpirationPolicies.xml
+>
+> 找到 bean-id = serviceTicketExpirationPolicy    c:timeToKill 属性
+>
+> 由  c:timeToKill="${st.timeToKillInSeconds:10}"  改为   c:timeToKill="1800000"
 
 ## Zabbix 
 

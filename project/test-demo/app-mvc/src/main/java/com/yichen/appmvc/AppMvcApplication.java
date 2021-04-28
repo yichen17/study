@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ServletComponentScan("com.yichen")
+@Servle	tComponentScan("com.yichen")
 @ComponentScan(value = "com.yichen")
 public class AppMvcApplication {
 
