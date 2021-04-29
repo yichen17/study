@@ -1671,7 +1671,15 @@ AbstractRegistry 中还有另外两个需要关注的方法：recover() 方法�
 
 [参考文章](https://mp.weixin.qq.com/s/Cvq51psUQaNFThL0HJy11g)
 
+## 常用命令
 
+> select 2   // 切换到2号数据库
+>
+> dbzise  //  当前库的key数量
+>
+> keys * // 显示所有key，数量少可行，数量多容易卡死
+>
+> 
 
 # 代理
 
