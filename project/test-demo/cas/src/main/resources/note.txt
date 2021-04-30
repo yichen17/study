@@ -1,6 +1,6 @@
 cas 项目  和  cas-client 项目是用来 建议 cas client 用来测试 cas server 的单点认证
 single sign on  (sso)
-
+Central Authentication Service(cas)
 
 测试请求路径
 http://cas-app1.com:8081/
