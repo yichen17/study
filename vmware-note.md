@@ -2015,6 +2015,27 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 
 ![方法](./images/2021-04-28-3.jpg)
 
+###  项目运行报错  no log4j-web module available
+
+具体内容如下
+
+```java
+Log4j appears to be running in a Servlet environment, but there's no log4j-web module available. If you want better web container support, please add the log4j-web JAR to your web archive or server lib directory.
+```
+
+解决办法
+
+```java
+ // 添加如下maven 依赖
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-web</artifactId>
+	<version>2.10.0</version>
+</dependency>
+```
+
+
+
 
 
 
@@ -3750,11 +3771,47 @@ if (p.hash == hash &&
 
 
 
-## window   自定义屏保
+## window   
+
+### 安装子系统 (WSL)
+
+#### 简便方法
+
+> 通过 Microsoft store  搜索  unbutu  进行安装
+>
+> 默认安装路径   C:\Users\wine_light\AppData\Local\Packages\CanonicalGroupLimited.Unbutu\
+
+#### 通过安装包安装
+
+> // 下载安装包
+>
+> https://docs.microsoft.com/zh-cn/windows/wsl/install-manual
+>
+> // 将下载的文件 由后缀  .Appx  改为  .zip  并进行解压
+>
+> // 进入解压目录，运行  .exe文件即可
+
+### 节省 启动盘 占用空间
+
+#### 将应用数据移出
+
+> 例如 qq 微信之类的聊天记录可以通过手动设置，将它们放到其他盘，而不是c盘
+
+#### 设置 新文件安装位置，例如通过 Microsoft store 安装的软件默认装到  c盘
+
+> 查看下一条步骤
+
+### 设置 microsoft store 下载默认安装路径
+
+[参考步骤](https://jingyan.baidu.com/article/2c8c281d78b0580008252abb.html)
+
+>  设置  》  系统  》  存储  》 选择中间的  <font color=red>更改新内容的保存位置</font>
+
+### 自定义屏保
 
 [参考链接](https://www.maxiaobang.com/5885.html)
 
-### 步骤
+#### 步骤
 
 + 下载  `PotPlayer播放器`   播放器
 + 打开，按 `F5`   进入选项配置界面，点击屏保、安装屏保
@@ -3770,6 +3827,16 @@ if (p.hash == hash &&
 > 视图  》  冻结窗口   》 冻结首行
 
 <img src="./images/2021-04-21-1.jpg" alt="操作示意图" style="zoom:50%;" />
+
+### 移动行或者列
+
+> 选中所要移动的行，按住shift ，将鼠标放置行(列)号上直至出现黑色十字(需要靠近列名或者行数)，然后移动到目标位置即可。注意。如果移动的区域内有合并单元格的，则会导致移动失败  
+
+
+
+
+
+
 
 ## notepading++
 
@@ -4668,7 +4735,7 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 
 
 
-# meven 
+# maven 
 
 ## 常用注解以及对应的maven依赖
 
