@@ -2034,7 +2034,11 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 </dependency>
 ```
 
+### 本机maven仓库有 jar包 ，但是打包失败，报错找不到jar包
 
+[参考链接](https://blog.csdn.net/huqiankunlol/article/details/100277702)
+
+> 到仓库的对应目录，将 `_remote.repositories` 文件删除，然后重新加载maven依赖即可
 
 
 
@@ -4848,6 +4852,10 @@ JSONObject jsonObject=new JSONObject(res);
 ## Maven 报错 Could not transfer artifact 和 501 HTTPS Required.
 
 [参考链接](https://blog.csdn.net/u010565545/article/details/105135180)
+
+
+
+
 
 
 
