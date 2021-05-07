@@ -1102,9 +1102,12 @@ tar [选项...] [FILE]...
 ## window 查看端口以及对应的进程名称
 
 + netstat -ano  // 展示端口列表
-
 + netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
 + tasklist | findstr "上一步最后一列查询出来的  pid "
+
+## 安装多个数据库
+
+
 
 # git 常用命令
 
@@ -1749,6 +1752,8 @@ ctrl+h 显示依赖关系
 alt+7 显示当前类下的架构图，即有哪些成员方法和变量
 alt+f7  查看当前方法被哪些类引用
 shift+alt+鼠标左键点击选取   同步填充 光标信息
+
+ctrl+shift+F    全局搜索  <font color=red>如果失效，则是搜狗输入法-繁简切换占了键位</font>    [参考链接](https://blog.csdn.net/c15158032319/article/details/79498540)
 
 折叠代码块：
 1、所有   ctrl+shift+  -
@@ -3200,9 +3205,7 @@ location /shanliang/ {
 >
 > 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
 
-## notepadding 中取消网址自动链接
 
-> 通过  设置 =》 首选项 =》 其他 =》 右侧 超链接设置不启用
 
 
 
@@ -3850,7 +3853,9 @@ if (p.hash == hash &&
 
 
 
+### notepadding 中取消网址自动链接
 
+> 通过  设置 =》 首选项 =》 其他 =》 右侧 超链接设置不启用
 
 
 
