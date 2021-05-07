@@ -3735,17 +3735,6 @@ if (p.hash == hash &&
 
 
 
-## 数据库
-
-### 将 `.sql` 文件中的数据插入到数据库中
-
-> source /tmp/phone202103-mysql.sql     // 后面是对应的sql 文件位置
-> <font color=red>这里需要在cmd命令行执行，而不能用三方工具，如navicat premiun</font>
-
-### java jdbc数据库报错  closing inbound before receiving peer's close_notify
-
-> 在数据库的url 加上    &useSSL=false
-
 
 
 
@@ -4873,6 +4862,13 @@ JSONObject jsonObject=new JSONObject(res);
 + `**` 匹配路径中的零个或多个目录
 + `{spring:[az]+}` 与正则表达式   `[az]+` 匹配，并将其作为名为 `spring` 的路径变量
 
+### 以上规则 可用于 git 的 `.gitignore`文件
+
+```java
+**/target/*.*      => 代表忽略target目录下的所有文件
+**/*.iml    => 表示忽略 idea 项目的配置文件  .iml
+```
+
 
 
 ## 注解使用
@@ -4959,6 +4955,15 @@ JSONObject jsonObject=new JSONObject(res);
 
 ## mysql
 
+###  相关操作
+
+#### 将 `.sql` 文件中的数据插入到数据库中
+
+> source /tmp/phone202103-mysql.sql     // 后面是对应的sql 文件位置
+> <font color=red>这里需要在cmd命令行执行，而不能用三方工具，如navicat premiun</font>
+
+
+
 ### 问题记录
 
 #### mysql 5.8无法将timestamp 设为 0000-00-00 00:00:00
@@ -4994,3 +4999,7 @@ JSONObject jsonObject=new JSONObject(res);
 <font color=purple size=10dp solid>以上都是瞎扯，以下才是正确的姿势</font>
 
 > 更改 mysql-connector-java 的版本，mysql版本为5.8的话用8.x.x即可
+
+#### java jdbc数据库报错  closing inbound before receiving peer's close_notify
+
+> 在数据库的url 加上    &useSSL=false
