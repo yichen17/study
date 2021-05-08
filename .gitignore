@@ -1,0 +1,11 @@
+**/target/*.*
+**/target/**
+**/*.iml
+**/.idea/*.*
+**/.idea/**
+.gitignore.bak
+.git-credentials
+svn/*.*
+svn/**
+**/logs/**
+**/logs/*.*
