@@ -1105,8 +1105,6 @@ tar [选项...] [FILE]...
 + netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
 + tasklist | findstr "上一步最后一列查询出来的  pid "
 
-## 安装多个数据库
-
 
 
 # git 常用命令
@@ -1152,7 +1150,9 @@ ssh -T git@github.com
 // 如果返回 Hi yichen17! You've successfully authenticated, but GitHub does not # provide shell access  表示成功
 ```
 
+## 配置  .gitignore 文件
 
+[编写规范](#以上规则 可用于 git 的 `.gitignore`文件)
 
 ## 从github 上下载内容
 
@@ -3846,6 +3846,14 @@ if (p.hash == hash &&
 
 > 通过  设置 =》 首选项 =》 其他 =》 右侧 超链接设置不启用
 
+## typora 
+
+### 页内跳转
+
+定义：通过点击链接跳转到页面内的某个标签
+
+![方法](./images/2021-05-08-1.jpg)
+
 
 
 
@@ -4956,6 +4964,97 @@ JSONObject jsonObject=new JSONObject(res);
 ## mysql
 
 ###  相关操作
+
+#### windows下安装多个数据库
+
+[本地安装多个mysql 参考步骤](https://blog.csdn.net/wudinaniya/article/details/82455431)
+
++ 下载 mysql zip安装包   [下载地址](https://downloads.mysql.com/archives/community/)。本地解压
+
++ 在安装目录下修改 `my.ini`，如果没有则手动创建，内容修改如下
+
+```java
+[mysqld]
+# 设置3307端口(原先的mysql5已经占用3306)
+port=3308
+# 设置mysql的安装目录(你自己的目录)
+basedir="D:/mysql-5.7/mysql-5.7.34-winx64"
+# 设置mysql数据库的数据的存放目录
+datadir="D:/mysql-5.7/mysql-5.7.34-winx64/data"
+# 允许最大连接数
+max_connections=200
+# 允许连接失败的次数。
+max_connect_errors=10
+# 服务端使用的字符集默认为UTF8
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+# 默认使用“mysql_native_password”插件认证
+#mysql_native_password
+default_authentication_plugin=mysql_native_password
+#处理日期不能 赋值  0000-00-00 00:00:00
+sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+#设置事务隔离级别
+transaction_isolation=READ-COMMITTED
+[mysql]
+# 设置mysql客户端默认字符集
+default-character-set=utf8
+[client]
+# 设置mysql客户端连接服务端时默认使用的端口
+port=3307
+default-character-set=utf8
+[WinMySQLadmin]
+Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
+```
+
++ 进入安装目录，安装mysql服务,<font color=red>记得以管理员方式启动cmd，服务名最好不要叫 MySQL 避免与 通多 exe安装时 的冲突</font>
+
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>  mysqld install mysql7 --default-file="D:/mysql-5.7/mysql-5.7.34-winx64\my.ini"
+>
+> 成功安装后会提示：
+> Service successfully installed.
+
++ 修改注册表
+
+> //  win+r    regedit  打开注册表
+>
+> //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mysql7  修改ImagePath参数
+>
+> 修改为 mysql 安装目录 bin 下的mysqld  =>   D:\mysql-5.7\mysql-5.7.34-winx64\bin\mysqld mysql7
+
++ 在bin 目录下  初始化数据库
+
+> //  数据库 初始化会根据 my.ini 的配置信息生成  data文件目录并初始化必要数据库
+>
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>   mysqld --initialize  
+
++ 启动mysql D:\mysql-5.7\mysql-5.7.34-winx64\bin>mysql -P3308 -uroot -p
+  Enter password: ************
+
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>net start mysql7
+> mysql7 服务正在启动 ..
+> mysql7 服务已经启动成功。
+>
+>  
+>
+> //  去data/xxx.err文件(gs中文件名  DESKTOP-RR3GOJS.err )中找到临时密码(查找关键字 temporary)，进行登录
+>
+> 2021-05-08T01:23:56.385718Z 1 [Note] A temporary password is generated for root@localhost: e#ez)<f8ef:T
+>
+>  
+>
+> // 登陆 数据库
+>
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>mysql -P3308 -uroot -p
+> Enter password: 输入密码
+>
+> // 修改密码，退出重进即可
+>
+> set password for root@localhost=password('123');
+
+
+
+ 
 
 #### 将 `.sql` 文件中的数据插入到数据库中
 
