@@ -28,7 +28,12 @@
 		<module>netty-demo</module>
 		<module>algorithm-demo</module>
 		<module>web-flux-demo</module>
-	</modules>
+		<module>app-mvc</module>
+        <module>tomcat-test</module>
+        <module>cas-client</module>
+		<module>cas-client1</module>
+        <module>cas</module>
+    </modules>
 
 	<properties>
 		<java.version>1.8</java.version>

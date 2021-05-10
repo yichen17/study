@@ -855,6 +855,8 @@ springboot 和  springcloud  版本不一致
 > yy      // 复制当前光标所在行
 >
 > p   //   粘贴到下一行，原来的往下顺移
+>
+> u  // 撤回操作
 
 ###  !pwd
 
@@ -1100,11 +1102,57 @@ tar [选项...] [FILE]...
 ## window 查看端口以及对应的进程名称
 
 + netstat -ano  // 展示端口列表
-
 + netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
 + tasklist | findstr "上一步最后一列查询出来的  pid "
 
+
+
 # git 常用命令
+
+## 配置  ssh key
+
+```
+git config --list     //查看用户信息
+// 设置登陆名以及邮箱信息
+git config --global user.name "qiuxinchao"
+git config --global user.email qiuxinchao@9fbank.com.cn
+//  生成公钥，默认存放在  C:\Users\E480\.ssh\    该目录下
+ssh-keygen -t rsa  -C  "qiuxinchao@9fbank.com.cn"
+//  获取公钥  
+cat /c/Users/E480/.ssh/id_rsa.pub  
+// 将显示出来的信息配置到github 上的 ssh keys中即可
+
+```
+
+## 本地配置多个ssh key
+
+[参考链接](https://www.jianshu.com/p/8a55e023425e)
+
+```
+git config --global user.name "yichen17"
+git config --global user.email q07218396@163.com
+//  生成公钥， 指定文件名字，是指不与之前的冲突
+ssh-keygen -t rsa -f /c/Users/E480/.ssh/id_rsa.personal  -C  "q07218396@163.com"
+// 在 .ssh 文件夹下创建配置文件
+touch config
+// 填写配置信息
+Host github.com
+        IdentityFile ~/.ssh/id_rsa.personal
+        User yichen17
+Host https://gerrit.9f.cn
+        IdentityFile ~/.ssh/id_rsa
+        User qiuxinchao
+//  获取公钥  
+cat /c/Users/E480/.ssh/id_rsa.pub  
+// 将显示出来的信息配置到github 上的 ssh keys中
+// 测试是否成功
+ssh -T git@github.com 
+// 如果返回 Hi yichen17! You've successfully authenticated, but GitHub does not # provide shell access  表示成功
+```
+
+## 配置  .gitignore 文件
+
+[编写规范](#以上规则 可用于 git 的 `.gitignore`文件)
 
 ## 从github 上下载内容
 
@@ -1166,6 +1214,8 @@ git push master(需要合并的分支名称)
 3.1 如果远程没有改分支，需要通过 --set-upstream 进行创建
 git push --set-upstream master(需要合并的分支名称)
 
+// 清楚之前登陆的错误信息
+git config --system --unset credential.helper
 
 // 查看书对象存储内容
 git cat-file -p b5erb5c(SHA-1值，取前七位)
@@ -1213,6 +1263,16 @@ git log
 > git reset  --hard  origin/master
 >
 > git pull
+
++ 查看提交历史
+
+> //   -p  每次提交差异  -2 显示日志条数(这里表示两条)
+>
+> git log -p -2
+>
+> // --stat  提交的简略统计
+>
+> git log --stat
 
 ##  合并分支  git merge
 
@@ -1614,7 +1674,15 @@ AbstractRegistry 中还有另外两个需要关注的方法：recover() 方法�
 
 [参考文章](https://mp.weixin.qq.com/s/Cvq51psUQaNFThL0HJy11g)
 
+## 常用命令
 
+> select 2   // 切换到2号数据库
+>
+> dbzise  //  当前库的key数量
+>
+> keys * // 显示所有key，数量少可行，数量多容易卡死
+>
+> 
 
 # 代理
 
@@ -1685,6 +1753,8 @@ alt+7 显示当前类下的架构图，即有哪些成员方法和变量
 alt+f7  查看当前方法被哪些类引用
 shift+alt+鼠标左键点击选取   同步填充 光标信息
 
+ctrl+shift+F    全局搜索  <font color=red>如果失效，则是搜狗输入法-繁简切换占了键位</font>    [参考链接](https://blog.csdn.net/c15158032319/article/details/79498540)
+
 折叠代码块：
 1、所有   ctrl+shift+  -
 2、选中内容  ctrl+  -
@@ -1695,32 +1765,38 @@ shift+alt+鼠标左键点击选取   同步填充 光标信息
 
 ## 便捷方法
 
-+ 打印有关  sql 的执行语句  
-  logging.level.dao对应的位置=debug
-  例子：   logging.level.com.tianyilan.shardingsphere.demo.repository=debug
+### 打印有关  sql 的执行语句  
+logging.level.dao对应的位置=debug
+例子：   logging.level.com.tianyilan.shardingsphere.demo.repository=debug
 
-+ 将项目与  github  隔离
+### 将项目与  github  隔离
 
 选中项目   点击 file 》setting 》 version control 》选中目录 ，右侧插掉即可
 
-+ 项目中隐藏  `.idea` 文件 
-  + 打开file--》settings--》editor---->file types
-  + 选择 `*.gitignore`    在底下已有的很多类文件中追加   `.idea;`
-+ <font color=red>查看  class 文件的字节码内容</font>
+### 项目中隐藏  `.idea` 文件 
+
++ 打开file--》settings--》editor---->file types
++ 选择 `*.gitignore`    在底下已有的很多类文件中追加   `.idea;`
+
+### <font color=red>查看  class 文件的字节码内容</font>
 
 > 通过 `javac`命令 编译指定的  	`.java`文件，例如  `javac hello.java`  此时会在同一目录下生成对应的`.class`文件，此时在idea中打开该文件是反编译优化后的内容，如果想查看原始的   字节码文件，可以cd到对应的`.class`文件目录，然后执行 `javap -c xxx`，例如，`javap -c hello.class`,此时，控制台就会显示对应的指令信息。  `javap -v xxx` 命令则是显示具体内容
 
 [参考文章](https://blog.csdn.net/weixin_41276238/article/details/103769956)
 
-+ 快速查看java动态生成class内容的方法
+### 快速查看java动态生成class内容的方法
 
 [参考链接](https://blog.csdn.net/wenyuan65/article/details/82634118)
 
-+ 快速删除代码中的空行
+### 快速删除代码中的空行
 
 > ctrl+ r 进行代码替换，用正则表达式`^\s*\n` 替换为空即可
 
 ![操作图片](./images/2021-04-02-1.jpg)
+
+### idea 显示内存使用
+
+> view  >  Appearance  > status bar widges  > memory indicator
 
 ## 常用设置
 
@@ -1734,7 +1810,15 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 3、 code  =》  identifier under caret（write） 设置为  `BA4040`
 
+### 本地多版本jdk 设置默认打开jdk
 
+>  file  > new projects settings structure for new projects
+>
+> 指定你想设定的jdk 即可
+
+### 关闭文件后目录跳转到前一个文件的位置
+
+<img src="./images/2021-4-24-1.jpg" alt="图示" style="zoom: 67%;" />
 
 ## idea 跑项目  cpu 狂响
 
@@ -1751,6 +1835,12 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 > 以上为8g内存的配置，如果是16g的，则改为 1g、2g、1g
 
 [参考链接](https://blog.csdn.net/qq_27093465/article/details/81947933?utm_source=blogxgwz7)
+
+[jvm 内存大小修改方法](https://blog.csdn.net/weixin_35781693/article/details/114506311)
+
+<font color=red size=5dp>以上都不行，可用版本</font>
+
+> help > edit custom vm options 
 
 ## 推荐插件
 
@@ -1891,6 +1981,71 @@ Run - Edit Configurations - Before launch 里面，把 Build 换成 Build, no er
 <img src="./images/2021-02-24-2.jpg" alt="解决方法" style="zoom:50%;" />
 
 在打开的  outer-interface-parent 项目中通过mevan 引入依赖的项目即可，最后通过重新导入maven 依赖就可以了
+
+### Method threw 'java.lang.NullPointerException' exception. Cannot evaluate xxx.toString()
+
+> // 产生条件
+>
+> //  new对象是 调用了空构造函数，debug 运行时标红显示
+
+<img src="./images/2021-04-26-1.jpg" alt="图示" style="zoom:80%;" />
+
+<font color=red> 解决方法</font>
+
+> 选中 异常的变量  》 右键  》 view as  》 由原来的 toString 改为 Object
+
+<img src="./images/2021-04-26-2.jpg" alt="具体执行流程" style="zoom:50%;" />
+
+###  在 idea 中通过tomcat 运行war包 报错  由于之前的错误，Context[/cas_client1_war_exploded]启动失败
+
+<font color=red size=10px>这里的错误是前后空格的问题</font>
+
+> //  查过错误日志如下
+>
+> org.apache.catalina.core.StandardContext.filterStart 启动过滤器异常
+> 	java.lang.ClassNotFoundException: org.jasig.cas.client.validation.
+>             Cas20ProxyReceivingTicketValidationFilter
+
+<font color=red>解决方法（本质问题是缺少jar包）</font>
+
+步骤一：  进行 project structure  》 找到左边的 artifacts  》 中间找到对应的项目 》 右边将 WEB-INF下的lib 文件夹删除
+
+![步骤一](./images/2021-04-28-1.jpg)
+
+步骤二   然后在创建一个  lib文件夹，选中文件夹 add copy of ，选择 library files ，然后 ctrl+a全选，即可。
+
+![步骤二](./images/2021-04-28-2.jpg)
+
+### idea 下启动tomcat 设置启动路径
+
+![方法](./images/2021-04-28-3.jpg)
+
+###  项目运行报错  no log4j-web module available
+
+具体内容如下
+
+```java
+Log4j appears to be running in a Servlet environment, but there's no log4j-web module available. If you want better web container support, please add the log4j-web JAR to your web archive or server lib directory.
+```
+
+解决办法
+
+```java
+ // 添加如下maven 依赖
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-web</artifactId>
+	<version>2.10.0</version>
+</dependency>
+```
+
+### 本机maven仓库有 jar包 ，但是打包失败，报错找不到jar包
+
+[参考链接](https://blog.csdn.net/huqiankunlol/article/details/100277702)
+
+> 到仓库的对应目录，将 `_remote.repositories` 文件删除，然后重新加载maven依赖即可
+
+
 
 
 
@@ -3050,9 +3205,7 @@ location /shanliang/ {
 >
 > 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
 
-## notepadding 中取消网址自动链接
 
-> 通过  设置 =》 首选项 =》 其他 =》 右侧 超链接设置不启用
 
 
 
@@ -3582,17 +3735,6 @@ if (p.hash == hash &&
 
 
 
-## 数据库
-
-### 将 `.sql` 文件中的数据插入到数据库中
-
-> source /tmp/phone202103-mysql.sql     // 后面是对应的sql 文件位置
-> <font color=red>这里需要在cmd命令行执行，而不能用三方工具，如navicat premiun</font>
-
-### java jdbc数据库报错  closing inbound before receiving peer's close_notify
-
-> 在数据库的url 加上    &useSSL=false
-
 
 
 
@@ -3625,16 +3767,92 @@ if (p.hash == hash &&
 
 
 
-## window   自定义屏保
+## window   
+
+### 安装子系统 (WSL)
+
+#### 简便方法
+
+> 通过 Microsoft store  搜索  unbutu  进行安装
+>
+> 默认安装路径   C:\Users\wine_light\AppData\Local\Packages\CanonicalGroupLimited.Unbutu\
+
+#### 通过安装包安装
+
+> // 下载安装包
+>
+> https://docs.microsoft.com/zh-cn/windows/wsl/install-manual
+>
+> // 将下载的文件 由后缀  .Appx  改为  .zip  并进行解压
+>
+> // 进入解压目录，运行  .exe文件即可
+
+### 节省 启动盘 占用空间
+
+#### 将应用数据移出
+
+> 例如 qq 微信之类的聊天记录可以通过手动设置，将它们放到其他盘，而不是c盘
+
+#### 设置 新文件安装位置，例如通过 Microsoft store 安装的软件默认装到  c盘
+
+> 查看下一条步骤
+
+### 设置 microsoft store 下载默认安装路径
+
+[参考步骤](https://jingyan.baidu.com/article/2c8c281d78b0580008252abb.html)
+
+>  设置  》  系统  》  存储  》 选择中间的  <font color=red>更改新内容的保存位置</font>
+
+### 自定义屏保
 
 [参考链接](https://www.maxiaobang.com/5885.html)
 
-### 步骤
+#### 步骤
 
 + 下载  `PotPlayer播放器`   播放器
 + 打开，按 `F5`   进入选项配置界面，点击屏保、安装屏保
 + 自动打开屏幕保护程序设置界面，**选择PotScreenSaver屏保程序 -> 设置**
 + 设置屏保视频即可
+
+
+
+## excel
+
+### 首行 固定不滚动
+
+> 视图  》  冻结窗口   》 冻结首行
+
+<img src="./images/2021-04-21-1.jpg" alt="操作示意图" style="zoom:50%;" />
+
+### 移动行或者列
+
+> 选中所要移动的行，按住shift ，将鼠标放置行(列)号上直至出现黑色十字(需要靠近列名或者行数)，然后移动到目标位置即可。注意。如果移动的区域内有合并单元格的，则会导致移动失败  
+
+
+
+
+
+
+
+## notepading++
+
+### 调整字体大小
+
+![图示](./images/2021-04-22-1.jpg)
+
+
+
+### notepadding 中取消网址自动链接
+
+> 通过  设置 =》 首选项 =》 其他 =》 右侧 超链接设置不启用
+
+## typora 
+
+### 页内跳转
+
+定义：通过点击链接跳转到页面内的某个标签
+
+![方法](./images/2021-05-08-1.jpg)
 
 
 
@@ -3711,9 +3929,13 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >
 >shutdown  关闭redis
 >
-> 
+>
 >
 >redis-server  /etc/redis/redis.conf    // 启动redis 服务器
+>
+>auth yichen  // 登陆
+>
+>flushall   //清空所有数据
 
 
 
@@ -4038,6 +4260,347 @@ db.password.0=root
 
 将 该文件删除即可
 
+## tomcat 安装
+
+apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
+
+>  //  安装目录
+>
+>  /etc/tomcat9 /usr/libexec/tomcat9 /usr/share/tomcat9
+>
+>  //  复制启动文件
+>
+>  cp /usr/share/tomcat9/etc/server.xml  /usr/share/tomcat9/conf/server.xml 
+>
+>  //  复制 web.xml
+>
+>  cp /etc/tomcat9/web.xml    /usr/share/tomcat9/conf/
+
+### 问题记录
+
+####   Package 'tomcat8' has no installation candidate
+
+<font color=red>unbutu子系统版本 Ubuntu 20.04.2 LTS</font>
+
+>apt update
+>
+>apt upgrade
+>
+>apt install tomcat8
+>
+>// 如果不能解决问题
+>
+>[参考步骤](https://blog.csdn.net/qq_42824983/article/details/110236257)
+>
+>// 切换软件源
+>
+>sudo  cp   /etc/apt/sources.list   /etc/apt/sources.list.bak
+>
+>sudo vim /etc/apt/sources.list
+>
+>// 将其中内容替换，写成如下内容
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy main restricted universe multiverse
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy-security main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy-security main restricted universe multiverse
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy-updates main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy-updates main restricted universe multiverse
+>
+>deb http://mirrors.aliyun.com/ubuntu/ groovy-backports main restricted universe multiverse
+>deb-src http://mirrors.aliyun.com/ubuntu/ groovy-backports main restricted universe multiverse
+>
+>\# 预发布软件源，不建议启用
+>
+>#deb http://mirrors.aliyun.com/ubuntu/ groovy-proposed main restricted universe multiverse
+>#deb-src http://mirrors.aliyun.com/ubuntu/ groovy-proposed main restricted universe multiverse
+
+#### 使用 shutdown.bat 报错 No shutdown port configured. Shut down server through OS signal. Server not shut down.
+
+> 修改启动文件  /conf/server.xml 中   shutdown  的端口，默认值是-1(当前版本  tomcat  9)，改为  8005。再次重启后使用  shutdown 可以成功，当前关闭需要调用  kill 命令来关闭
+
+### zookeeper 和  tomcat 端口冲突，都使用 8080端口
+
+[参考解决方案](https://blog.csdn.net/liujian8654562/article/details/100860002)
+
+## 防火墙
+
+> // 安装模块
+>
+> apt install firewalld 
+>
+> // 查看防火墙状态
+>
+> firewall-cmd --state
+>
+> //  启动  dbus
+>
+> /etc/init.d/dbus start
+>
+> //  启动守护线程
+>
+> dbus-daemon --system
+
+## ElasticSearch
+
+[参考安装步骤](https://blog.csdn.net/weixin_44596128/article/details/103970665)
+
+> #下载压缩包
+> wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.0.tar.gz
+> #解压
+> tar -zxvf elasticsearch-6.4.0.tar.gz -C /usr/local/
+>
+> #给非root用户赋予权限
+>
+> chown -R yichen /software/elasticsearch-6.4.0
+>
+> #更改内存大小
+>
+> sysctl -w vm.max_map_count=262144
+>
+> #修改jvm内存大小
+>
+> vi /usr/local/elasticsearch-6.4.0/config/jvm.option 
+>
+> -Xms512m
+>
+> -Xmx512m
+>
+> #启动命令
+>
+> /software/elasticsearch-6.4.0/bin/elasticsearch
+
+### 问题
+
+#### Caused by: java.lang.RuntimeException: can not run elasticsearch as root
+
+> 不能使用root账户，用其他账户，不过要给该账户对应的目录所有权
+
+#### java.lang.UnsupportedOperationException: seccomp unavailable: CONFIG_SECCOMP not compiled into kernel, CONFIG_SECCOMP and CONFIG_SECCOMP_FILTER are needed
+
+>  修改 安装目录下的   /config/elasticsearch.yml ，添加如下内容
+>
+> bootstrap.memory_lock: false
+>
+> bootstrap.system_call_filter: false
+
+#### java.nio.file.NoSuchFileException: /proc/sys/vm/max_map_count
+
+> 没有设置  /proc/sys/vm/max_map_count
+>
+> // 尝试执行如下命令 
+>
+> sysctl -w vm.max_map_count=262144
+>
+> // 如果失败直接 vi创建对应文件，然后写入数值即可
+
+## hbase
+
+[安装步骤参考](https://blog.csdn.net/hhy1107786871/article/details/88551234)
+
+> wget https://mirrors.tuna.tsinghua.edu.cn/apache/hbase/2.2.7/hbase-2.2.7-bin.tar.gz
+>
+> // 修改pom.xml 中的zookeeper 和 hadoop 的版本
+>
+> //  打包  完成后会在 /target/ 目录下生成jar 包
+>
+> mvn clean package -DskipTests assembly:single
+>
+> // 修改  /conf/hbase-env.sh
+>
+> export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+>
+> #true为单机，false 为集群                                                                                              
+>
+> export HBASE_MANAGES_ZK=true                                                                                           
+>
+> export HADOOP_HOME=/software/hadoop-3.2.2                                                                               
+>
+> export HBASE_HOME=/software/hbase-2.2.7  
+
+### 问题记录
+
+#### Error: Could not find or load main class org.apache.hadoop.hbase.util.GetJavaProperty
+
+<font color=red> 可能问题，下载的是src 文件，没有进行编译</font>
+
+[参考文章](https://blog.csdn.net/pycrossover/article/details/102627807)
+
+## hadoop
+
+[参考文章1](https://www.cnblogs.com/tanrong/p/10645467.html)
+
+[参考文章2](https://blog.csdn.net/weixin_42001089/article/details/81865101)
+
+> // hadoop 默认就是单机版
+>
+> wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz
+>
+> // 配置 JAVA_HOME的环境变量
+>
+> sudo vi /etc/profile
+>
+> export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+> export PATH=${JAVA_HOME}/bin:$PATH
+>
+> export HADOOP_HOME=/software/hadoop-2.7.7
+> export PATH=${HADOOP_HOME}/bin:$PATH
+>
+> // 查看是否安装成功
+>
+> 安装目录/bin/hadoop version
+>
+> 
+
+## zookeeper 
+
+### 本机伪集群启动
+
+> cd /software/apache-zookeeper-3.7.0-bin/bin        ./zkServer.sh start 
+>
+> cd /software/zookeeper-1/bin                ./zkServer.sh start 
+>
+> cd /software/zookeeper-2/bin          ./zkServer.sh start 
+
+[参考安装步骤](https://www.cnblogs.com/tyoutetu/p/11115357.html)
+
+> wget https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz
+>
+> // 解压文件目录
+>
+> tar -zxvf apache-zookeeper-3.7.0
+>
+> // 修改配置文件
+>
+> cd apache-zookeeper-3.7.0
+>
+> cd conf
+>
+> cp zoo-sample.cfg zoo.cfg
+>
+> vi zoo.cfg
+>
+> // 更改内容如下
+>
+> dataDir=../data
+>
+>    // 需要 修改启动端口，如2181,2182,2183等
+>
+> server.1=localhost:2287:3387
+> server.2=localhost:2288:3388
+> server.3=localhost:2289:3389
+>
+> //  表示主机编号, 创建数据目录
+>
+> cd ..
+>
+> mkdir data
+>
+> vi data/myid
+>
+> // 输入 对应的主机编号，即1、2、3
+>
+> // 启动
+>
+> bin/zkServer.sh start
+>
+> // 查看启动状态
+>
+> bin/zkServer.sh start
+
+## nginx
+
+[参考安装步骤](https://blog.csdn.net/qq_23832313/article/details/83578836)
+
+> apt install nginx
+>
+> // 查看nginx 版本号
+>
+> nginx -v
+>
+> // 启动
+>
+> service nginx start
+
+### 常用文件的位置
+
+- /usr/sbin/nginx：主程序
+- /etc/nginx：存放配置文件
+- /usr/share/nginx：存放静态文件
+- /var/log/nginx：存放日志
+
+## CAS server
+
+### 安装步骤
+
+[参考步骤](https://blog.csdn.net/u011872945/article/details/81044124)
+
+> https://github.com/apereo/cas/releases/tag/v4.0.0  // 下载 release 版本
+>
+> //  unzip 解压
+>
+>  // 将  modules/cas-server-webapp-4.0.0.jar  移动到 tomcat 安装目录下的webapp 目录
+>
+> cp cas-server-webapp-4.0.0.war  /usr/share/tomcat9/webapps/cas-server.war
+>
+>  // 启动tomcat     bin/start.sh
+>
+> //登陆  cas   
+>
+> http://localhsot:8080/cas(webapp下的文件夹名称)/login     
+>
+> //   用户名  casuser      密码  Mellon
+
+### 更改认证方式  由https 改为 http
+
+> webapps\cas\WEB-INF\spring-configuration\warnCookieGenerator.xml  
+>
+> bean-id=warnCookieGenerator
+>
+> p:cookieSecure  true => false
+>
+>  
+>
+> webapps\cas\WEB-INF\spring-configuration\ticketGrantingTicketCookieGenerator.xml 
+>
+> bean-id  ticketGrantingTicketCookieGenerator
+>
+> p:cookieSecure  true => false
+>
+>  
+>
+> webapps\cas\WEB-INF\deployerConfigContext.xml
+>
+> bean-id proxyAuthenticationHandler
+>
+> 增加  p:requireSecure="false"
+
+
+
+### 错误
+
+#### 访问报错 404 org.eclipse.jetty.servlet.ServletHandler$Default404Servlet-145eaa29
+
+本机的  zookeeper 导致的   可能 zookeeper  内置了jetty
+
+#### 访问登陆页面报错  org.springframework.web.util.NestedServletException: Request processing failed; nested exception is org.springframework.webflow.execution.FlowExecutionException
+
+[参考文章](https://www.it1352.com/1513832.html)
+
+> 在 tomcat 安装目录    /usr/share/tomcat9/conf/  缺少 web.xml ，可从   /etc/tomcat9下面复制
+
+### 执行验证报错 未能识别出目标票根
+
+[参考解决方案](https://blog.csdn.net/weixin_30810583/article/details/95836229)
+
+>  // 修改  WEB-INF/spring-configuration/ticketExpirationPolicies.xml
+>
+> 找到 bean-id = serviceTicketExpirationPolicy    c:timeToKill 属性
+>
+> 由  c:timeToKill="${st.timeToKillInSeconds:10}"  改为   c:timeToKill="1800000"
+
 ## Zabbix 
 
 [参考链接](https://www.linuxidc.com/Linux/2020-04/162818.htm)
@@ -4178,7 +4741,7 @@ db.password.0=root
 
 
 
-# meven 
+# maven 
 
 ## 常用注解以及对应的maven依赖
 
@@ -4268,6 +4831,34 @@ JSONObject jsonObject=new JSONObject(res);
 
 ## 父子工程版本控制
 
+查看自己的博客
+
+##  通过javax.servlet-api  无法访问web-inf下的jsp，已经指定了jsp的前后缀
+
+如下图所示，运行`spring-boot:run`
+
+<img src="./images/2021-04-19-1.jpg" alt="解决办法" style="zoom:67%;" />
+
+
+
+## 运行上面的spring-boot:run 保存无法 process terminated 且 报错为乱码
+
++ 乱码解决方案：  `Setting->maven->runner`   修改编码格式  `VMoptions` 改为 `-Dfile.encoding=GB2312`
+
+##  maven 运行报错  Cannot resolve plugin
+
+[参考链接](https://blog.csdn.net/qq_38287890/article/details/101628637)
+
+查看一下maven home 目录以及本地仓库，路径 `setting>build,execution,deployment>maven 
+
+## Maven 报错 Could not transfer artifact 和 501 HTTPS Required.
+
+[参考链接](https://blog.csdn.net/u010565545/article/details/105135180)
+
+
+
+
+
 
 
 # JAVA
@@ -4278,6 +4869,13 @@ JSONObject jsonObject=new JSONObject(res);
 + `*` 匹配零个或多个字符
 + `**` 匹配路径中的零个或多个目录
 + `{spring:[az]+}` 与正则表达式   `[az]+` 匹配，并将其作为名为 `spring` 的路径变量
+
+### 以上规则 可用于 git 的 `.gitignore`文件
+
+```java
+**/target/*.*      => 代表忽略target目录下的所有文件
+**/*.iml    => 表示忽略 idea 项目的配置文件  .iml
+```
 
 
 
@@ -4326,15 +4924,181 @@ JSONObject jsonObject=new JSONObject(res);
 
 
 
+# 设计模式
+
+**设计模式解决的是“可复用”的设计问题**
+
+## 分层架构
+
+### 优势
+
+总结来说，代码分层架构设计主要为了实现责任分离、解耦、组件复用和标准制定
+
++ 只用关注整个结构中的某一层的具体实现
++ 降低层与层之间的依赖
++ 很容易用新的实现来替换原有层次的实现
++ 有利于标准化的统一
++ 各层逻辑方便复用
+
+### 劣势
+
++ **开发成本变高**：因为不同层分别承担各自的责任，如果是高层次新增功能，则需要多个低层增加代码，这样难免会增加开发成本
++ **性能降低**：请求数据因为经过多层代码的处理，执行时间变长，性能会有所消耗
++ **代码复杂度增加**：因为层与层之间存在强耦合，所以对于一些组合功能的调用，则需要增加很多层之间的调用
+
+### 总结
+
+代码分层架构的核心作用有两个：
+
++ 对于功能性需求(使一个程序能为用户做些什么，比如文件上传、数据查询等)，将复杂问题分解为多个容易解决的子层问题
++ 对于非功能性需求(指功能性需求以外的其他必要需求，如性能、安全性、容错与恢复、本地化、国际化等)，可以提升代码可扩展性
+
+**复杂的设计概念和简单的代码之间存在一种平衡，这就是分层架构**。
+
++ 代码分层架构设计的思维模型是简化思维，本质是抽象和拆解
++ 代码分层架构设计的目的是将复杂问题拆分为更容易解决的小问题，降低实现难度
++ 代码分层架构设计的原则和方法是通用方法，可以应用到其他需要分层设计的地方
+
+# 数据库
+
+## mysql
+
+###  相关操作
+
+#### windows下安装多个数据库
+
+[本地安装多个mysql 参考步骤](https://blog.csdn.net/wudinaniya/article/details/82455431)
+
++ 下载 mysql zip安装包   [下载地址](https://downloads.mysql.com/archives/community/)。本地解压
+
++ 在安装目录下修改 `my.ini`，如果没有则手动创建，内容修改如下
+
+```java
+[mysqld]
+# 设置3307端口(原先的mysql5已经占用3306)
+port=3308
+# 设置mysql的安装目录(你自己的目录)
+basedir="D:/mysql-5.7/mysql-5.7.34-winx64"
+# 设置mysql数据库的数据的存放目录
+datadir="D:/mysql-5.7/mysql-5.7.34-winx64/data"
+# 允许最大连接数
+max_connections=200
+# 允许连接失败的次数。
+max_connect_errors=10
+# 服务端使用的字符集默认为UTF8
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+# 默认使用“mysql_native_password”插件认证
+#mysql_native_password
+default_authentication_plugin=mysql_native_password
+#处理日期不能 赋值  0000-00-00 00:00:00
+sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+#设置事务隔离级别
+transaction_isolation=READ-COMMITTED
+[mysql]
+# 设置mysql客户端默认字符集
+default-character-set=utf8
+[client]
+# 设置mysql客户端连接服务端时默认使用的端口
+port=3307
+default-character-set=utf8
+[WinMySQLadmin]
+Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
+```
+
++ 进入安装目录，安装mysql服务,<font color=red>记得以管理员方式启动cmd，服务名最好不要叫 MySQL 避免与 通多 exe安装时 的冲突</font>
+
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>  mysqld install mysql7 --default-file="D:/mysql-5.7/mysql-5.7.34-winx64\my.ini"
+>
+> 成功安装后会提示：
+> Service successfully installed.
+
++ 修改注册表
+
+> //  win+r    regedit  打开注册表
+>
+> //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mysql7  修改ImagePath参数
+>
+> 修改为 mysql 安装目录 bin 下的mysqld  =>   D:\mysql-5.7\mysql-5.7.34-winx64\bin\mysqld mysql7
+
++ 在bin 目录下  初始化数据库
+
+> //  数据库 初始化会根据 my.ini 的配置信息生成  data文件目录并初始化必要数据库
+>
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>   mysqld --initialize  
+
++ 启动mysql D:\mysql-5.7\mysql-5.7.34-winx64\bin>mysql -P3308 -uroot -p
+  Enter password: ************
+
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>net start mysql7
+> mysql7 服务正在启动 ..
+> mysql7 服务已经启动成功。
+>
+>  
+>
+> //  去data/xxx.err文件(gs中文件名  DESKTOP-RR3GOJS.err )中找到临时密码(查找关键字 temporary)，进行登录
+>
+> 2021-05-08T01:23:56.385718Z 1 [Note] A temporary password is generated for root@localhost: e#ez)<f8ef:T
+>
+>  
+>
+> // 登陆 数据库
+>
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>mysql -P3308 -uroot -p
+> Enter password: 输入密码
+>
+> // 修改密码，退出重进即可
+>
+> set password for root@localhost=password('123');
 
 
 
+ 
+
+#### 将 `.sql` 文件中的数据插入到数据库中
+
+> source /tmp/phone202103-mysql.sql     // 后面是对应的sql 文件位置
+> <font color=red>这里需要在cmd命令行执行，而不能用三方工具，如navicat premiun</font>
 
 
 
+### 问题记录
 
+#### mysql 5.8无法将timestamp 设为 0000-00-00 00:00:00
 
+> 该问题与mysql 的sql_mode 有关，可以查询它的默认值
+>
+> SHOW VARIABLES LIKE 'sql_mode%';    //方法一
+>
+> SELECT @@sql_mode;    // 方法二
+>
+> // 查询结果中有如下两个  参数 NO_ZERO_IN_DATE,NO_ZERO_DATE	。修改mysql 的启动文件删除重启即可
 
+<font color=red>apt 安装的mysql 的配置文件目录     /etc/mysql/mysql.conf.d/mysqld.cnf</font>
 
+添加如下内容
 
+> [mysqld]   // 未进行测试，不确定
+>
+> sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
 
+#### Could not retrieve transation read-only status server
+
+> //查看 mysql 事务隔离级别   默认为 REPEATABLE-READ
+>
+> SHOW VARIABLES LIKE '%iso%';
+>
+> // 修改事务隔离级别
+>
+> set global transaction isolation level read committed
+>
+> <font color=red>配置永久生效   修改 my.cnf  [mysqld]下添加  transaction_isolation=READ-COMMITTED</font>
+
+<font color=purple size=10dp solid>以上都是瞎扯，以下才是正确的姿势</font>
+
+> 更改 mysql-connector-java 的版本，mysql版本为5.8的话用8.x.x即可
+
+#### java jdbc数据库报错  closing inbound before receiving peer's close_notify
+
+> 在数据库的url 加上    &useSSL=false

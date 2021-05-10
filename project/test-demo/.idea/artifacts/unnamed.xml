@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="unnamed">
-    <output-path>$PROJECT_DIR$/out/artifacts/unnamed</output-path>
-    <root id="archive" name="unnamed.jar">
-      <element id="file-copy" path="$PROJECT_DIR$/jvm-test/src/main/java/com/yichen/jvmtest/Test/TestClass.java" />
-    </root>
-  </artifact>
-</component>
