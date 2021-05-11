@@ -1820,6 +1820,12 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 <img src="./images/2021-4-24-1.jpg" alt="图示" style="zoom: 67%;" />
 
+### 设置 打开的文件的个数上线
+
+> file > settings > editor  >general > editor tabs  > closing policy 下的 tab limit 修改数量即可
+
+<img src="./images/2021-05-11-2.jpg" alt="操作步骤参考" style="zoom: 67%;" />
+
 ## idea 跑项目  cpu 狂响
 
 > 修改 idea安装目录下的 idea.exe.vmoptions    位置是  安装位置/bin/idea.exe.vmoptions
