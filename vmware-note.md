@@ -1264,7 +1264,7 @@ git log
 >
 > git pull
 
-+ 查看提交历史
+## 查看提交历史  git log
 
 > //   -p  每次提交差异  -2 显示日志条数(这里表示两条)
 >
@@ -1273,6 +1273,14 @@ git log
 > // --stat  提交的简略统计
 >
 > git log --stat
+>
+> //  对比不同分支之间的差异(dev  master  两个分支提交的不同)
+>
+> git log dev...master
+>
+> // 具体指明 差异的归属   < 表示dev   > 表示master 
+>
+> git log --left-right dev...master
 
 ##  合并分支  git merge
 
@@ -4922,6 +4930,23 @@ JSONObject jsonObject=new JSONObject(res);
 
 
 # JAVA
+
+## 将结果内容输出到文件
+
+
+
+## 计算 程序运行时间
+
+### 方法一
+
+```java
+//  开始计算时间
+long start=System.currentTimeMillis();
+//  结束计算时间
+long stop=System.currentTimeMillis();
+```
+
+
 
 ##  spring 路径匹配规则
 
