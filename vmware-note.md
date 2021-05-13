@@ -2065,6 +2065,8 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 # 响应式编程
 
+<font color=red size=5px ><b>全栈式响应式编程，指的是响应式开发方式的有效性取决于整个请求链路的各个环节是否都采用了响应式编程模型。</b><br/><b>响应式系统的价值在于提供了即时响应性、可维护性和扩展性，表现的形式是回弹性和弹性，而实现的手段则是消息驱动。</b></font>
+
 ## 组件
 
 ```java
@@ -2346,6 +2348,124 @@ Subscription 对象是确保生产者和消费者针对数据处理速度达成�
 > //  checkpoint  操作符   观察特定流，`debug` 只输出错误日志
 >
 > Mono.just(1).map(x -> 1 / x).checkpoint("debug").subscribe(System.out::println);
+
+## webclient
+
+### 构建方法
+
+```java
+WebClient webClient=WebClient.create();
+WebClient webClient=WebClient.builder().build();
+```
+
+### 访问服务
+
+```java
+// retrieve()  方法是获取响应主体并对其进行解码的最简单方法
+WebClient webClient = WebClient.create("http://localhost:8081");
+Mono<Account> result = webClient.get()
+        .uri("/accounts/{id}", id)
+	    .accept(MediaType.APPLICATION_JSON)
+        .retrieve()
+        .bodyToMono(Account.class);
+//exchange() 可以对响应拥有更多的控制权。它可以访问整个响应结果，该响应结果是一个 ClientResponse 对象，包含了响应的状态码、Cookie 等信息。
+Mono<Account> result = webClient.get()
+ .uri("/accounts/{id}", id)
+ .accept(MediaType.APPLICATION_JSON)
+ .exchange() 
+ .flatMap(response -> response.bodyToMono(Account.class));
+```
+
+### 添加请求体
+
+#### 如果请求体是 Mono 或者 Flux 类型  可用Body()方法
+
+```java
+Mono<Account> accountMono = ... ;
+Mono<Void> result = webClient.post()
+            .uri("/accounts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(accountMono, Account.class)
+            .retrieve()
+            .bodyToMono(Void.class);
+```
+
+#### 如果是普通的pojo 对象，则用 asynBody()方法
+
+```java
+Account account = ... ;
+Mono<Void> result = webClient.post()
+            .uri("/accounts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .syncBody(account)
+            .retrieve()
+            .bodyToMono(Void.class);
+```
+
+### 表单和文件提交
+
+> 表单可以通过  asynBody()  传递 MultiValueMap  对象，而文件则 通过构建 MultipartBodyBuilder 对象，然后通过 build()  方法构建 MultiValueMap  对象
+
+## RSocket 协议
+
+RSocket 是一种新的第 7 层语言无关的应用网络协议，用来解决单一的请求-响应模式以及现有网络传输协议所存在的问题，提供 Java、JavaScript、C++ 和 Kotlin 等多种语言的实现版本。
+
+RSocket 是一个二进制的协议，以异步消息的方式提供 4 种交互模式：
+
++ 请求-响应模式(request/response):这是最典型也是最常见的模式。发送方在发送消息给接收方之后，等待与之对应的相应消息。
++ 请求-响应流模式(request/stream):发送方的每个请求消息，都对应于接收方的一个消息流作响应。
++ 即发-即忘模式(fire-and-forget):发送方的请求消息没有与之对应的响应。
++ 通道模式(channel):在发送方和接收方之间建立一个双向传输的通道。
+
+## R2DBC 
+
+它使得关系型数据库具有响应性
+
+![对比图](./images/2021-05-13-1.png)
+
+### 核心组件
+
++ R2DBC SPI：定义了实现驱动程序的简约API。该API非常简洁，以便彻底减少驱动程序实现着必须遵守的API。SPI并不是面向业务开发人员的API，不适合在应用程序代码中直接使用；相反，它面向的是框架开发人员，用来设计并实现专用的客户端库。任何人都可以直接使用SPI或者通过R2DBC SPI 实现自己的客户端库。
++ R2DBC 客户端：提供了一个人性化的API 和帮助类，可将用户请求转换为SPI，也就是说面向业务开发人员提供了对底层SPI的访问入口。
++ R2DBC 驱动：截至目前，为 PostgreSQL、H2、Microsoft SQL Server、MariaDB 以及 MySQL 提供了 R2DBC 驱动程序。
+
+## Spring Cloud Stream
+
+Spring Cloud Streams 为异步跨服务消息通信提供了简化的编程模型。Spring Cloud Stream 能够构建具有高度伸缩性的应用程序，而无须处理过于复杂的配置，也无须深入了解特定的消息中间件。
+
+### 工作流程
+
+Spring Cloud Stream 中有三个角色，即消息的发布者、消费者以及消息通信系统本身，以消息通信系统为中心，整个工作流程表现为一种对称结构，如下图所示。
+
+![工作流程](./images/2021-05-13-2.png)
+
+在上图中，充当消息发布者的服务 A 根据业务需要产生消息发送的需求，Spring Cloud Stream 中的 Source 组件是真正生成消息的组件，然后消息通过 Channel 传送到 Binder，这里的 Binder 是一个抽象组件，通过 Binder，Channel 可以与特定的消息中间件进行通信。在 Spring Cloud Stream 中，目前已经内置集成的消息中间件实现工具包括 RabbitMQ 和 Kafka。
+
+另一方面，消息消费者则同样通过 Binder 从消息中间件中获取消息，消息将通过 Channel 流转到 Sink 组件。这里的 Sink 组件是服务级别的，即类似上图中服务 B 的不同服务可能会实现不同的 Sink 组件，分别对消息进行不同业务上的处理。
+
+### 核心组件
+
+- Binder
+
+Binder 是 Spring Cloud Stream 的一个核心概念，它充当了服务与消息中间件之间的桥梁。通过 Binder，我们可以很方便地连接 RabbitMQ、Kafka 等消息中间件。同时，Binder 组件也为我们提供了消费者分组和消息分区等特性，关于这些特性我会在“20 | 消息消费：如何选择可用的高级开发技巧？”中详细介绍。Binder 的核心价值就在于我们可以直接使用这些特性，而不需要了解其背后的各种消息中间件在实现上的差异。
+
+- Channel
+
+Channel 即通道，是对队列（Queue）的一种抽象。我们知道在消息中间件中，队列的作用就是实现存储转发的媒介，消息发布者所生成的消息都将保存在队列中并由消息消费者进行消费。通道的名称对应的就是队列的名称，但是作为一种抽象和封装，各个消息中间件所特有的队列概念并不会直接暴露在业务代码中，而是通过通道来对队列进行配置。
+
+- Source 和 Sink
+
+我们可以把 Source 和 Sink 简单理解为输出和输入，但还是要明确这里输入输出的参照对象是 Spring Cloud Stream 自身，即从 Spring Cloud Stream 发布消息的组件就是 Source，而通过 Spring Cloud Stream 接收消息的就是 Sink。
+
+在 Spring Cloud Stream 中，表面上 Source 组件是使用一个 POJO 对象来作为需要发布的消息，通过将该对象进行序列化（默认的序列化方式是 JSON）然后发布到通道中。另一方面，Sink 组件监听通道并等待消息的到来，一旦有可用消息，Sink 将该消息反序列化为一个 POJO 对象并用于处理业务逻辑。而在内部，Spring Cloud Stream 在实现这一过程中需要借助 Spring 家族中的底层消息处理机制。
+
+
+
+## 关键类
+
+### ServerRequest
+
+### ServerResponse
 
 
 
@@ -4879,6 +4999,111 @@ JSONObject jsonObject=new JSONObject(res);
     <version>5.5.7</version>
 </dependency>
 ```
+
+### RSocket 
+
+```java
+<dependency>
+    <groupId>io.rsocket</groupId>
+    <artifactId>rsocket-core</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.rsocket</groupId>
+    <artifactId>rsocket-transport-netty</artifactId>
+</dependency>
+```
+
+### RSocket 与 Spring 集成
+
+```java
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-rsocket</artifactId>
+</dependency>
+```
+
+### Reactive MongoDB
+
+```java
+<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+</dependency>
+```
+
+### Reactive Redis
+
+```java
+<dependency>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+</dependency>
+```
+
+### Spring Data R2DBC
+
+```java
+<!-- spring data r2dbc -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+</dependency>
+ 
+<!-- r2dbc 连接池 -->
+<dependency>
+     <groupId>io.r2dbc</groupId>
+     <artifactId>r2dbc-pool</artifactId>
+</dependency>
+ 
+<!--r2dbc mysql 库 -->
+<dependency>
+     <groupId>dev.miku</groupId>
+     <artifactId>r2dbc-mysql</artifactId>
+</dependency>
+```
+
+### spring-cloud-stream
+
+```java
+<dependency>
+     <groupId>org.springframework.cloud</groupId>
+     <artifactId>spring-cloud-stream</artifactId>
+</dependency>
+```
+
+### spring-cloud-stream-reactive
+
+```java
+<dependency>
+     <groupId>org.springframework.cloud</groupId>
+     <artifactId>spring-cloud-stream-reactive</artifactId>
+</dependency>
+```
+
+### spring-cloud-starter-stream-rabbit
+
+```java
+<dependency>
+     <groupId>org.springframework.cloud</groupId>
+     <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+</dependency>
+```
+
+### reactor-test 测试组件
+
+```java
+<dependency>
+        <groupId>io.projectreactor</groupId>
+        <artifactId>reactor-test</artifactId>
+        <scope>test</scope>
+</dependency>
+```
+
+
+
+
+
+
 
 
 
