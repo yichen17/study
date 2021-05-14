@@ -1834,6 +1834,18 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 <img src="./images/2021-05-11-2.jpg" alt="操作步骤参考" style="zoom: 67%;" />
 
+### idea 中 mybatis 的 xml配置文件 黄色波浪线
+
+[参考文章](https://blog.csdn.net/wsjzzcbq/article/details/89528252)
+
+>  file > settting > editor >inspections >右侧 SQL  
+>
+> 去掉 no data sources  configured 和
+>
+> ![操作步骤](./images/2021-05-14-2.jpg)
+>
+> 
+
 ## idea 跑项目  cpu 狂响
 
 > 修改 idea安装目录下的 idea.exe.vmoptions    位置是  安装位置/bin/idea.exe.vmoptions
@@ -2458,6 +2470,8 @@ Channel 即通道，是对队列（Queue）的一种抽象。我们知道在消�
 我们可以把 Source 和 Sink 简单理解为输出和输入，但还是要明确这里输入输出的参照对象是 Spring Cloud Stream 自身，即从 Spring Cloud Stream 发布消息的组件就是 Source，而通过 Spring Cloud Stream 接收消息的就是 Sink。
 
 在 Spring Cloud Stream 中，表面上 Source 组件是使用一个 POJO 对象来作为需要发布的消息，通过将该对象进行序列化（默认的序列化方式是 JSON）然后发布到通道中。另一方面，Sink 组件监听通道并等待消息的到来，一旦有可用消息，Sink 将该消息反序列化为一个 POJO 对象并用于处理业务逻辑。而在内部，Spring Cloud Stream 在实现这一过程中需要借助 Spring 家族中的底层消息处理机制。
+
+
 
 
 
@@ -4339,6 +4353,48 @@ db.password.0=root
 
 
 
+## rabbitMq
+
+### 常用命令
+
+>service rabbitmq-server start
+>service rabbitmq-server stop
+>service rabbitmq-server restart
+>service rabbitmqctl status
+
+```java
+// 由于rabbitMq需要erlang语言的支持，在安装rabbitMq之前需要安装erlang
+apt-get install erlang-nox
+//  安装
+apt-get install rabbitmq-server
+// 添加admin用户，密码设置为admin  下面的需要先启动 rabbitmq 服务
+rabbitmqctl add_user  admin  admin  
+// 赋予权限
+rabbitmqctl set_user_tags admin administrator
+//赋予virtual host中所有资源的配置、写、读权限以便管理其中的资源
+rabbitmqctl  set_permissions -p / admin '.*' '.*' '.*'
+//  RabbitMQ GUID  web页面 (官方提供的一个web管理工具（rabbitmq_management）,apt 安装的时候默认安装)
+rabbitmq-plugins enable rabbitmq_management
+//  关闭插件
+rabbitmq-plugins disable rabbitmq_management
+//  访问 web页面
+http://localhost:15672/
+```
+
+### 问题
+
+安装 rabbitmq-server 报错
+
+```java
+// 报错内容如下
+E:Unbale to fetch some archives,maybe run apt-get update or try with --fix-missing
+// 解决办法
+apt unpate
+apt install rabbitmq-server
+```
+
+
+
 ## maven
 
 [下载地址](https://maven.apache.org/download.cgi)
@@ -5148,7 +5204,19 @@ JSONObject jsonObject=new JSONObject(res);
 
 [参考链接](https://blog.csdn.net/u010565545/article/details/105135180)
 
+## 导出maven 项目依赖的jar包
 
+[参考文章](https://www.cnblogs.com/52liming/p/7750633.html)
+
+```java
+// 进入需要 导出的项目根目录(即 pom.xml所在目录)
+// 执行如下命令，生成的依赖 jar包会在  /target/dependency  下
+mvn dependency:copy-dependencies
+```
+
+## 引入导出的jar包
+
+<img src="./images/2021-05-14-1.jpg" alt="操作步骤" style="zoom:67%;" />
 
 
 
