@@ -1844,7 +1844,18 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 >
 > ![操作步骤](./images/2021-05-14-2.jpg)
 >
-> 
+
+### idea中 鼠标放置到 方法上显示内容
+
+>  file > settings > editor  >code editing > quick documentation  > show quick documentation on mouse move
+>
+> 也可以   file >settings > 搜索 mouse move
+
+![参考设置](./images/2021-05-15-1.jpg)
+
+<font color=red>如果设置之后是侧边栏 则做如下处理
+
+![处理变成侧边栏](./images/2021-05-15-2.jpg)
 
 ## idea 跑项目  cpu 狂响
 
