@@ -836,7 +836,7 @@ springboot 和  springcloud  版本不一致
 
 ## 使用到的命令
 
-#### 根据关键字过滤并且指定查看宽度
+### 根据关键字过滤并且指定查看宽度
 
 + 查看关键字上的几行   cat web.log | grep -B 4 one
 + 查看关键字下的几行   cat web.log | grep -A 4 one
@@ -872,6 +872,20 @@ springboot 和  springcloud  版本不一致
 
 
 ##  系统命令
+
+###  根据 command 批量删除进程
+
+[参考文章](https://my.oschina.net/u/4255280/blog/3781794)
+
+```java
+kill -9 `ps -ef |grep xxx|awk '{print $2}' `      // xxx 中输入 command 中公有的名词
+//  rabbitmq 中存在的 启动在关闭后 后台有很多 daemon
+// awk 用于输出某一列    {print $2} 表示输出第二列，即 PID列
+kill -9 `ps -ef | grep daemon | awk '{print $2}'`  
+//  多余选项  grep -v root  表示排除 root 字段
+```
+
+
 
 ### 切换用户 
 
