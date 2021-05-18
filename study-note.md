@@ -873,6 +873,15 @@ springboot 和  springcloud  版本不一致
 
 ##  系统命令
 
+### 查看unbutu端口开放情况
+
+```java
+// 查看指定端口开放情况    =>   unbutu 不可用
+lsof -i:5672   // 查看rabbitmq 端口开放情况
+```
+
+
+
 ###  根据 command 批量删除进程
 
 [参考文章](https://my.oschina.net/u/4255280/blog/3781794)
@@ -4379,6 +4388,43 @@ db.password.0=root
 
 
 ## rabbitMq
+
+<font color=red size=6px> unbutu下安装 java程序无法连接，window下安装则正常。</font>
+
+### window 下安装
+
+#### 快捷启动
+
+```java
+// 进入安装目录  cmd
+d:
+cd \rabbitmq\setup\rabbitmq_server-3.8.16\sbin
+rabbitmq-plugins enable rabbitmq_management  // 启动 web界面
+rabbitmq-plugins disable rabbitmq_management    // 关闭
+// 双击  rabbitmq-service.bat 启动
+```
+
+
+
+[参考步骤](https://blog.51cto.com/ccj168/2362486)
+
+> // 下载 erlang
+>
+> http://www.erlang.org/downloads
+>
+> // 配置环境变量   path 中添加安装目录，到 /bin
+>
+> // 下载rabbitmq
+>
+> http://www.rabbitmq.com/download.html
+>
+> // 到 安装目录下的  sbin，启动 插件
+>
+> rabbitmq-plugins enable rabbitmq-management
+>
+> // 启动服务，双击 sbin 下的rabbitmq-server.bat。
+
+
 
 ### 常用命令
 
