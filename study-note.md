@@ -4509,17 +4509,31 @@ apt install rabbitmq-server
 
 ## mongodb
 
-### window 安装
+### 常用命令
 
-[安装步骤](https://blog.csdn.net/dandanfengyun/article/details/95497728)
-
-#### 常用命令
+[参考链接](https://www.cnblogs.com/--smile/p/11055204.html)
 
 >net start mongodb   // 开启mongodb 服务
 >
 >net stop mongodb  // 关闭mongodb服务
 >
 >use admin   // 如果没有对应的数据库，则默认自动创建
+>
+>快捷连接 =》 配置环境变量的情况下  cmd =》 mongo
+>// 查看所有数据库
+>show dbs;
+>// 切换数据库(这里切换到test 数据库)
+>use test   
+>//获取当前数据库名称
+>db.getName();
+>// 查看创建的集合
+>db.getCollectionNames();
+>// 查看集合(order)中的内容
+>db.order.find();
+
+### window 安装
+
+[安装步骤](https://blog.csdn.net/dandanfengyun/article/details/95497728)
 
 ### unbutu 安装   20.04版
 
