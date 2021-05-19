@@ -2248,10 +2248,10 @@ Subscription 对象是确保生产者和消费者针对数据处理速度达成�
 ### 分类
 
 + 转换（Transforming）操作符，负责将序列中的元素转变成另一种元素。
-+ 过滤（Filtering）操作符，符合将不需要的数据从序列中剔除出去。
-+ 组合（Combining）操作符，符合将序列中的元素进行合并，连接和集成。
++ 过滤（Filtering）操作符，负责将不需要的数据从序列中剔除出去。
++ 组合（Combining）操作符，负责将序列中的元素进行合并，连接和集成。
 + 条件（Conditional）操作符，负责根据特定条件对序列中的元素进行处理。
-+ 裁剪（Reducing）操作符，符合对序列中的元素执行各种自定义的裁剪操作。
++ 裁剪（Reducing）操作符，负责对序列中的元素执行各种自定义的裁剪操作。
 + 工具（Utility）操作符，负责一些针对流式处理的辅助性操作。
 
 ### 介绍
@@ -2505,15 +2505,170 @@ Channel 即通道，是对队列（Queue）的一种抽象。我们知道在消�
 
 在 Spring Cloud Stream 中，表面上 Source 组件是使用一个 POJO 对象来作为需要发布的消息，通过将该对象进行序列化（默认的序列化方式是 JSON）然后发布到通道中。另一方面，Sink 组件监听通道并等待消息的到来，一旦有可用消息，Sink 将该消息反序列化为一个 POJO 对象并用于处理业务逻辑。而在内部，Spring Cloud Stream 在实现这一过程中需要借助 Spring 家族中的底层消息处理机制。
 
+## 响应流 测试
 
+### reactor-test 测试
 
+<font color=red>引入 reactor-test maven 依赖</font>
 
+```java
+@Test
+public void testStepVerifier() {
+        Flux<String> helloWorld = Flux.just("Hello", "World");
+ 
+        StepVerifier.create(helloWorld)  // 初始化
+           .expectNext("Hello")
+           .expectNext("World")  // 验证数据流中的内容
+           .expectComplete()   //完成数据流断言
+           .verify();     // 启动测试
+}
+```
 
-## 关键类
+###  spring boot 应用程序测试
 
-### ServerRequest
+<font color=red>spring-boot-starter-test maven 依赖引入</font>
 
-### ServerResponse
+```java
+@SpringBootTest
+@RunWith(SpringRunner.class)
+
+//  SpringBootTest 可以设置如下两个参数
+classes   //  springBoot 启动类，即被Application 修饰的
+webEnvironment  // 容器环境，有四个选项可供选择
+MOCK：加载 WebApplicationContext 并提供一个 Mock 的容器环境，内置的容器并没有真正启动。
+RANDOM_PORT：加载 EmbeddedWebApplicationContext 并提供一个真实的容器环境，也就是说会启动内置容器，并使用随机端口。
+DEFINED_PORT ：这个配置也是通过加载 EmbeddedWebApplicationContext 提供一个真实的容器环境，但使用的是默认的端口，如果没有配置端口就使用 8080。
+NONE：加载 ApplicationContext 但并不提供任何真实的容器环境。
+```
+
+### 测试 响应式 Repository 组件，mongodb
+
+<font color=red>引入 de.flapdoodle.embed.mongo maven 依赖</font>
+
+```java
+@RunWith(SpringRunner.class)
+@DataMongoTest  // 默认使用了内置 mongodb
+//  (excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class) 可以排除内置的
+public class EmbeddedAccountRepositoryTest {
+ 
+    @Autowired
+    ReactiveAccountRepository repository;
+ 
+    @Autowired
+    ReactiveMongoOperations operations;
+    
+    @Before
+    public void setUp() {
+        operations.dropCollection(Account.class);
+ 
+        operations.insert(new Account("Account1", "AccountCode1", "AccountName1"));
+        operations.insert(new Account("Account2", "AccountCode2", "AccountName2"));
+        
+        operations.findAll(Account.class).subscribe(
+               account -> {
+                   System.out.println(account.getId()
+               );}
+        );
+    }
+    
+    @Test
+    public void testGetAccountByAccountName() {
+        Mono<Account> account = repository.findAccountByAccountName("AccountName1");
+ 
+        StepVerifier.create(account)
+           .expectNextMatches(results -> {
+               assertThat(results.getAccountCode()).isEqualTo("AccountCode1");
+               assertThat(results.getAccountName()).isEqualTo("AccountName1");
+               return true;
+        });
+    }
+}
+```
+
+### 测试 响应式 service 组件
+
+测试 service 需要将 service与repository 隔离
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class AccountServiceTest {
+ 
+    @Autowired
+    AccountService service;
+    
+    @MockBean
+    ReactiveAccountRepository repository;
+ 
+    @Test
+    public void testGetAccountByAccountName() {
+        Account mockAccount = new Account("Account1", "AccountCode1", "AccountName1");
+        
+     given(repository.findAccountByAccountName("AccountName1")).willReturn(Mono.just(mockAccount));
+        
+        Mono<Account> account = service.getAccountByAccountName("AccountName1");
+        
+        StepVerifier.create(account).expectNextMatches(results -> {
+            assertThat(results.getAccountCode()).isEqualTo("AccountCode1");
+            assertThat(results.getAccountName()).isEqualTo("AccountName1");
+           return true;
+        }).verifyComplete();
+        
+    }   
+}
+```
+
+### 测试响应式 controller 组件
+
+```java
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+ 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.WebTestClient;
+ 
+import com.springcss.account.controller.AccountController;
+import com.springcss.account.domain.Account;
+import com.springcss.account.service.AccountService;
+ 
+import reactor.core.publisher.Mono;
+ 
+@RunWith(SpringRunner.class)
+@WebFluxTest(controllers = AccountController.class)
+public class AccountControllerTest {
+ 
+    @Autowired
+    WebTestClient webClient;
+ 
+    @MockBean
+    AccountService service;
+ 
+    @Test
+    public void testGetAccountById() {
+        Account mockAccount = new Account("Account1", "AccountCode1", "AccountName1");       
+ 
+     given(service.getAccountById("Account1")).willReturn(Mono.just(mockAccount));
+ 
+        EntityExchangeResult<Account> result = webClient.get()
+               .uri("http://localhost:8082/accounts/{accountId}", "Account1").exchange().expectStatus()
+               .isOk().expectBody(Account.class).returnResult();
+ 
+        verify(service).getAccountById("Account1");
+        verifyNoMoreInteractions(service);
+        
+     assertThat(result.getResponseBody().getId()).isEqualTo("Account1");
+     assertThat(result.getResponseBody().getAccountCode()).isEqualTo("AccountCode1");
+    }
+}
+```
 
 
 
