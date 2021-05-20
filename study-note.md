@@ -749,48 +749,7 @@ shutdown.sh
 
 
 
-# 开发问题记录
 
-## mybatis dao 接口和 mapper.xml 无法匹配
-
-错误内容如下
-
-```
-org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
-```
-
-解决方法有两种：
-
-1、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，通过`mybatis.mapper-locations=classpath:com/yichen/useall/dao/*.xml` 指定对应的  xml 文件存放位置
-
-2、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，同时创建对应的xml文件，<font color=red>这里对xml的放置位置以及文件名称有要求：文件位置需要同dao接口位置一致，只不过是放置在类路径下，文件名同dao接口一致，不过文件后缀有dao  的  `.java` 改为  `.xml`</font>
-
-
-
-## spring cloud gateway 报错   chunkedTransfer
-
-### 报错具体内容
-
-```
-java.lang.NoSuchMethodError: reactor.netty.http.client.HttpClient.chunkedTransfer(Z)Lreactor/netty/http/client/HttpClient;
-```
-
-### 解决
-
-> 由于 springboot 和 springcloud 版本不一致，本机均设为了  2.2.2.RELEASE
-
-##  A bean with that name has already been defined in class path resource and overriding is disabled.
-
-### 详情
-
-```
-The bean 'dataSource', defined in BeanDefinition defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class], could not be registered. A bean with that name has already been defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class] and overriding is disabled.
-
-```
-
-### 解决
-
-springboot 和  springcloud  版本不一致
 
 
 
@@ -5464,9 +5423,207 @@ mvn dependency:copy-dependencies
 
 # JAVA
 
-## 将结果内容输出到文件
+## 开发问题记录
+
+### mybatis dao 接口和 mapper.xml 无法匹配
+
+错误内容如下
+
+```
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
+```
+
+解决方法有两种：
+
+1、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，通过`mybatis.mapper-locations=classpath:com/yichen/useall/dao/*.xml` 指定对应的  xml 文件存放位置
+
+2、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，同时创建对应的xml文件，<font color=red>这里对xml的放置位置以及文件名称有要求：文件位置需要同dao接口位置一致，只不过是放置在类路径下，文件名同dao接口一致，不过文件后缀由dao  的  `.java` 改为  `.xml`</font>
 
 
+
+#### 排查问题
+
+<font color=red>运行后去target 中查看  dao和mapper是否在一起，如果不在则删除target，重新生成</font>
+
+### spring cloud gateway 报错   chunkedTransfer
+
+#### 报错具体内容
+
+```
+java.lang.NoSuchMethodError: reactor.netty.http.client.HttpClient.chunkedTransfer(Z)Lreactor/netty/http/client/HttpClient;
+```
+
+#### 解决
+
+> 由于 springboot 和 springcloud 版本不一致，本机均设为了  2.2.2.RELEASE
+
+###  A bean with that name has already been defined in class path resource and overriding is disabled.
+
+#### 详情
+
+```
+The bean 'dataSource', defined in BeanDefinition defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class], could not be registered. A bean with that name has already been defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class] and overriding is disabled.
+
+```
+
+#### 解决
+
+springboot 和  springcloud  版本不一致
+
+## mybatis 代码自动生成
+
+### 步骤
+
+#### 方法一  调用jar包
+
+```java
+// 下载 mybatis-generator-core-1.3.5.jar 和 mysql-connector-java-8.0.13.jar
+下载方式可以通过 maven 依赖下载
+// 编写 generatorConfig.xml 如下为范例
+// 填写规则 可以查看官方文档   
+    http://mybatis.org/generator/configreference/table.html
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!--数据库的jdbc驱动的jar包地址  可以是相对路劲，相对于 mybatis-generator-core 的位置-->
+    <classPathEntry location="./mysql-connector-java-8.0.13.jar"/>
+    <context id="tt">
+        <!--url 中的后缀是解决 Cannot obtain primary key information from the database, generated objects may be incomplete 问题-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3308/cook_food?nullCatalogMeansCurrent=true" userId="root"
+                        password="123">
+        </jdbcConnection>
+        <javaModelGenerator targetPackage="com.yichen.cook.food.model"
+                            targetProject="D:/personal/learn note/project/test-demo/mybatis-generator/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="com.yichen.cook.food.mapper"
+                         targetProject="D:/personal/learn note/project/test-demo/mybatis-generator/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+        <javaClientGenerator targetPackage="com.yichen.cook.food.mapper"
+                             targetProject="D:/personal/learn note/project/test-demo/mybatis-generator/src/main/java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <table tableName="t_food_cook_steps" domainObjectName="foodCookSteps" >
+            <!--设置自增主键-->
+            <generatedKey column="id" sqlStatement="Mysql"></generatedKey>
+            <!--用于配置不需要手动插入，即自动生成的，如修改时间-->
+            <ignoreColumn column="create_time"></ignoreColumn>
+        </table>
+    </context>
+
+</generatorConfiguration>
+// 创建  mapper 和model 的存放目录
+
+//运行jar包     
+java -jar mybatis-generator-core-1.3.5.jar -configfile ..\generatorConfig.xml -overwrite
+```
+
+#### 方法二 java程序执行
+
+```java
+// 导入maven 依赖
+<dependency>
+    <groupId>org.mybatis.generator</groupId>
+    <artifactId>mybatis-generator-core</artifactId>
+    <version>1.3.2</version>
+</dependency>
+<plugin>
+    <groupId>org.mybatis.generator</groupId>
+    <artifactId>mybatis-generator-maven-plugin</artifactId>
+    <version>1.3.2</version>
+    <configuration>
+    <!-- mybatis用于生成代码的配置文件 -->
+    <configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
+    <verbose>true</verbose>
+    <overwrite>true</overwrite>
+    </configuration>
+</plugin>
+// 编写构造规则文件   generatorConfig.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!--数据库的jdbc驱动的jar包地址  写绝对路径-->
+    <classPathEntry location="D:\personal\learn note\project\test-demo\mybatis-generator\src\main\resources\lib\mysql-connector-java-8.0.13.jar"/>
+    <context id="tt">
+        <!--url 中的后缀是解决 Cannot obtain primary key information from the database, generated objects may be incomplete 问题-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3308/cook_food?nullCatalogMeansCurrent=true" userId="root"
+                        password="123">
+        </jdbcConnection>
+        <javaModelGenerator targetPackage="com.yichen.cook.food.model"
+                            targetProject="D:/personal/learn note/project/test-demo/mybatis-generator/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="com.yichen.cook.food.mapper"
+                         targetProject="D:/personal/learn note/project/test-demo/mybatis-generator/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+        <javaClientGenerator targetPackage="com.yichen.cook.food.mapper"
+                             targetProject="D:/personal/learn note/project/test-demo/mybatis-generator/src/main/java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <table tableName="t_food_cook_steps" domainObjectName="foodCookSteps" >
+            <!--设置自增主键-->
+            <generatedKey column="id" sqlStatement="Mysql"></generatedKey>
+            <!--用于配置不需要手动插入，即自动生成的，如修改时间-->
+            <ignoreColumn column="create_time"></ignoreColumn>
+        </table>
+    </context>
+
+</generatorConfiguration>
+    
+// java 运行程序
+public class Generator {
+    public static void main(String[] args)throws Exception {
+        //MBG 执行过程中的警告信息
+        List<String> warnings = new ArrayList<String>();
+        //当生成的代码重复时，覆盖原代码
+        boolean overwrite = true;
+        //读取我们的 MBG 配置文件
+        InputStream is = Generator.class.getResourceAsStream("/generatorConfig.xml");
+        ConfigurationParser cp = new ConfigurationParser(warnings);
+        Configuration config = cp.parseConfiguration(is);
+        is.close();
+
+        DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+        //创建 MBG
+        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+        //执行生成代码
+        myBatisGenerator.generate(null);
+        //输出警告信息
+        for (String warning : warnings) {
+            System.out.println(warning);
+        }
+    }
+}
+```
+
+
+
+
+
+
+
+### 问题
+
+#### The content of element type must match "property*, plugin*, commentGenerator?, jdbcConnection, javaTypeResolver?,javaModelGenerator, sqlMapGenerator?, javaClientGenerator?, table+"
+
+>  常理是 标签放置的顺序问题，但如果标签顺序已经按照要求放置了，那么可能就是排列问题，最好的方法就是手打内容而不是复制粘贴
+
+### Cannot obtain primary key information from the database, generated objects may be incomplete
+
+[参考文章](https://blog.csdn.net/jpf254/article/details/79571396)
+
+> 在 mysql 的url 中加    ?nullCatalogMeansCurrent=true
 
 ## 计算 程序运行时间
 
@@ -5580,6 +5737,22 @@ long stop=System.currentTimeMillis();
 # 数据库
 
 ## mysql
+
+### 不太常用命令
+
+```java
+// 查看timeZone
+show variables like '%time_zone%'
+// 修改时区
+set global time_zone = '+8:00';
+FLUSH PRIVILEGES;
+// 方法二  修改 my.ini(windows) 或 my.cnf(linux) 下的 [mysqld]  default-time_zone="+8:00"
+
+// datetime  或 timestamp 中默认值
+在字段中设置 默认值为  CURRENT_TIMESTAMP
+```
+
+
 
 ###  相关操作
 

@@ -33,6 +33,7 @@
 		<module>cas</module>
         <module>cas</module>
 		<module>rabbitmq-case</module>
+		<module>mybatis-generator</module>
     </modules>
 
 	<properties>
