@@ -3215,229 +3215,6 @@ MECE原则（Mutually Exclusive Collectively Exhaustive）的中文意思是 "�
 
 
 
-# java  lambda
-
-[参考链接](https://blog.csdn.net/ioriogami/article/details/12782141/)
-
-## 什么是   lambda  表达式
-
-### 版本一
-
-```
-public int add(int x, int y) {
-    return x + y;
-}
-```
-
-### 版本二
-
-```
-(int x, int y) -> {return x + y;}
-```
-
-### 版本三
-
-```
-(x,y)->{return x+y;}
-```
-
-### 版本四
-
-```
-(x,y)->x+y;
-```
-
-<font color=red>可以看到它由三部分组成：参数列表，箭头（->），以及一个表达式或语句块。</font>
-
-### 如果无参数
-
-```
-()->return 3;
-```
-
- ### 如果单个参数
-
-```
-x->x*x;//return 可以省略
-```
-
-## 函数式接口  funcational interface
-
-这是Java8新引入的概念。它的定义是：一个接口，如果只有一个显式声明的抽象方法，那么它就是一个函数式接口。一般用@FunctionalInterface标注出来（也可以不标）。
-
-**JDK预定义了很多函数式接口以避免用户重复定义。**
-
-```
-@FunctionalInterface
-    public interface Function<T, R> { 
-        R apply(T t);
-    }
-    
-@FunctionalInterface
-    public interface Consumer<T> {
-        void accept(T t);
-    }
-
-@FunctionalInterface
-    public interface Predicate<T> {
-        boolean test(T t);
-    }
-```
-
-
-
-## 设计lambda的一个原因
-
-集合类的批处理操作与λ表达式的配合使用乃是Java8的最主要特性。集合类的批处理操作API的目的是实现集合类的“内部迭代”，并期望充分利用现代多核CPU进行并行计算。
-**Java8之前集合类的迭代（Iteration）都是外部的，即客户代码。而内部迭代意味着改由Java类库来进行迭代，而不是客户代码。**
-
-### 外部迭代
-
-```
-for(Object o: list) { 
-        System.out.println(o);
-    }
-```
-
-### 内部迭代
-
-```
-list.forEach(o -> {System.out.println(o);}); 
-```
-
-
-
-Java8为集合类引入了另一个重要概念：流（stream）。一个流通常以一个集合类实例为其数据源，然后在其上定义各种操作。流的API设计使用了管道（pipelines）模式。对流的一次操作会返回另一个流。如同IO的API或者StringBuffer的append方法那样，从而多个不同的操作可以在一个语句里串起来。
-
-
-
-```
-// 从shapes 中选中颜色是蓝的，然后把他们的颜色改成红色
-List<Shape> shapes = ...
-    shapes.stream()
-      .filter(s -> s.getColor() == BLUE)
-      .forEach(s -> s.setColor(RED));
-```
-
-
-
-```
- //给出一个String类型的数组，找出其中所有不重复的素数
-    public void distinctPrimary(String... numbers) {
-        List<String> l = Arrays.asList(numbers);
-        List<Integer> r = l.stream()
-                .map(e -> new Integer(e))
-                .filter(e -> Primes.isPrime(e))
-                .distinct()
-                .collect(Collectors.toList());
-        System.out.println("distinctPrimary result is: " + r);
-    }
-```
-
-
-
-```
- //给出一个String类型的数组，找出其中各个素数，并统计其出现次数
-    public void primaryOccurrence(String... numbers) {
-        List<String> l = Arrays.asList(numbers);
-        Map<Integer, Integer> r = l.stream()
-            .map(e -> new Integer(e))
-            .filter(e -> Primes.isPrime(e))
-            .collect( Collectors.groupingBy(p->p, Collectors.summingInt(p->1)) );
-        System.out.println("primaryOccurrence result is: " + r);
-    }
-```
-
-
-
-```
-//给出一个String类型的数组，求其中所有不重复素数的和
-    public void distinctPrimarySum(String... numbers) {
-        List<String> l = Arrays.asList(numbers);
-        int sum = l.stream()
-            .map(e -> new Integer(e))
-            .filter(e -> Primes.isPrime(e))
-            .distinct()
-            .reduce(0, (x,y) -> x+y); // equivalent to .sum()
-        System.out.println("distinctPrimarySum result is: " + sum);
-    }
-```
-
-
-
-```
- // 统计年龄在25-35岁的男女人数、比例
-    public void boysAndGirls(List<Person> persons) {
-        Map<Integer, Integer> result = persons.parallelStream().filter(p -> p.getAge()>=25 && p.getAge()<=35).
-            collect(
-                Collectors.groupingBy(p->p.getSex(), Collectors.summingInt(p->1))
-        );
-        System.out.print("boysAndGirls result is " + result);
-        System.out.println(", ratio (male : female) is " + (float)result.get(Person.MALE)/result.get(Person.FEMALE));
-    }
-```
-
-## Stream 方法中常用接口
-
-### reduce()
-
-reduce操作可以实现从一组元素中生成一个值，`sum()`、`max()`、`min()`、`count()`等都是reduce操作，将他们单独设为函数只是因为常用。`reduce()`的方法定义有三种重写形式：
-
-- `Optional<T> reduce(BinaryOperator<T> accumulator)`
-
-<img src="./images/2021-02-05-4.jpg" alt="等价代码" style="zoom:67%;" />
-
-- `T reduce(T identity, BinaryOperator<T> accumulator)`
-
-<img src="./images/2021-02-05-3.jpg" alt="等价代码" style="zoom:67%;" />
-
-- `<U> U reduce(U identity, BiFunction<U,? super T,U> accumulator, BinaryOperator<U> combiner)`
-
-<font color=red> 三个参数整体理解</font>
-
-<img src="./images/2021-02-05-2.jpg" alt="三个参数说明" style="zoom:50%;" />
-
-#### 示例代码
-
-```
-public class StreamDemo {
-    private static final String [] WORD={"hello","hi","name","height","exciting"};
-    public static void main(String[] args) {
-        System.out.println(getLongestWord());
-        System.out.println(getAllCharacter());
-
-    }
-    public static String getLongestWord(){
-        Optional<String> result= Arrays.stream(WORD).reduce((a,b)->a.length()>=b.length()?a:b);
-        return result.get();
-    }
-
-    public static Integer getAllCharacter(){
-        Integer result=Arrays.stream(WORD).reduce(0,(a,b)->a+b.length(),(a,b)->a+b);
-        return result;
-    }
-}
-```
-
-#### 运行结果
-
-![运行结果](./images/2021-02-05-5.jpg)
-
-### collect()
-
-#### 方法引用
-
-|    方法引用类型    |      举例      |
-| :----------------: | :------------: |
-|    引用静态方法    |  Integer::sum  |
-| 引用某个对象的方法 |   list::add    |
-|  引用某个类的方法  | String::length |
-|    引用构造函数    |  HashMap::new  |
-
-#### 参数介绍
-
-<img src="./images/2021-02-05-6.jpg" alt="三个参数示意" style="zoom:50%;" />
-
 
 
 
@@ -5625,6 +5402,237 @@ public class Generator {
 
 > 在 mysql 的url 中加    ?nullCatalogMeansCurrent=true
 
+## java  lambda
+
+[参考链接](https://blog.csdn.net/ioriogami/article/details/12782141/)
+
+### 什么是   lambda  表达式
+
+#### 版本一
+
+```
+public int add(int x, int y) {
+    return x + y;
+}
+```
+
+#### 版本二
+
+```
+(int x, int y) -> {return x + y;}
+```
+
+#### 版本三
+
+```
+(x,y)->{return x+y;}
+```
+
+#### 版本四
+
+```
+(x,y)->x+y;
+```
+
+<font color=red>可以看到它由三部分组成：参数列表，箭头（->），以及一个表达式或语句块。</font>
+
+#### 如果无参数
+
+```
+()->return 3;
+```
+
+ #### 如果单个参数
+
+```
+x->x*x;//return 可以省略
+```
+
+### 函数式接口  funcational interface
+
+这是Java8新引入的概念。它的定义是：一个接口，如果只有一个显式声明的抽象方法，那么它就是一个函数式接口。一般用@FunctionalInterface标注出来（也可以不标）。
+
+**JDK预定义了很多函数式接口以避免用户重复定义。**
+
+```
+@FunctionalInterface
+    public interface Function<T, R> { 
+        R apply(T t);
+    }
+    
+@FunctionalInterface
+    public interface Consumer<T> {
+        void accept(T t);
+    }
+
+@FunctionalInterface
+    public interface Predicate<T> {
+        boolean test(T t);
+    }
+```
+
+
+
+### 设计lambda的一个原因
+
+集合类的批处理操作与λ表达式的配合使用乃是Java8的最主要特性。集合类的批处理操作API的目的是实现集合类的“内部迭代”，并期望充分利用现代多核CPU进行并行计算。
+**Java8之前集合类的迭代（Iteration）都是外部的，即客户代码。而内部迭代意味着改由Java类库来进行迭代，而不是客户代码。**
+
+#### 外部迭代
+
+```
+for(Object o: list) { 
+        System.out.println(o);
+    }
+```
+
+#### 内部迭代
+
+```
+list.forEach(o -> {System.out.println(o);}); 
+```
+
+
+
+Java8为集合类引入了另一个重要概念：流（stream）。一个流通常以一个集合类实例为其数据源，然后在其上定义各种操作。流的API设计使用了管道（pipelines）模式。对流的一次操作会返回另一个流。如同IO的API或者StringBuffer的append方法那样，从而多个不同的操作可以在一个语句里串起来。
+
+
+
+```
+// 从shapes 中选中颜色是蓝的，然后把他们的颜色改成红色
+List<Shape> shapes = ...
+    shapes.stream()
+      .filter(s -> s.getColor() == BLUE)
+      .forEach(s -> s.setColor(RED));
+```
+
+
+
+```
+ //给出一个String类型的数组，找出其中所有不重复的素数
+    public void distinctPrimary(String... numbers) {
+        List<String> l = Arrays.asList(numbers);
+        List<Integer> r = l.stream()
+                .map(e -> new Integer(e))
+                .filter(e -> Primes.isPrime(e))
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println("distinctPrimary result is: " + r);
+    }
+```
+
+
+
+```
+ //给出一个String类型的数组，找出其中各个素数，并统计其出现次数
+    public void primaryOccurrence(String... numbers) {
+        List<String> l = Arrays.asList(numbers);
+        Map<Integer, Integer> r = l.stream()
+            .map(e -> new Integer(e))
+            .filter(e -> Primes.isPrime(e))
+            .collect( Collectors.groupingBy(p->p, Collectors.summingInt(p->1)) );
+        System.out.println("primaryOccurrence result is: " + r);
+    }
+```
+
+
+
+```
+//给出一个String类型的数组，求其中所有不重复素数的和
+    public void distinctPrimarySum(String... numbers) {
+        List<String> l = Arrays.asList(numbers);
+        int sum = l.stream()
+            .map(e -> new Integer(e))
+            .filter(e -> Primes.isPrime(e))
+            .distinct()
+            .reduce(0, (x,y) -> x+y); // equivalent to .sum()
+        System.out.println("distinctPrimarySum result is: " + sum);
+    }
+```
+
+
+
+```
+ // 统计年龄在25-35岁的男女人数、比例
+    public void boysAndGirls(List<Person> persons) {
+        Map<Integer, Integer> result = persons.parallelStream().filter(p -> p.getAge()>=25 && p.getAge()<=35).
+            collect(
+                Collectors.groupingBy(p->p.getSex(), Collectors.summingInt(p->1))
+        );
+        System.out.print("boysAndGirls result is " + result);
+        System.out.println(", ratio (male : female) is " + (float)result.get(Person.MALE)/result.get(Person.FEMALE));
+    }
+```
+
+### Stream 方法中常用接口
+
+#### reduce()
+
+reduce操作可以实现从一组元素中生成一个值，`sum()`、`max()`、`min()`、`count()`等都是reduce操作，将他们单独设为函数只是因为常用。`reduce()`的方法定义有三种重写形式：
+
+- `Optional<T> reduce(BinaryOperator<T> accumulator)`
+
+<img src="./images/2021-02-05-4.jpg" alt="等价代码" style="zoom:67%;" />
+
+- `T reduce(T identity, BinaryOperator<T> accumulator)`
+
+<img src="./images/2021-02-05-3.jpg" alt="等价代码" style="zoom:67%;" />
+
+- `<U> U reduce(U identity, BiFunction<U,? super T,U> accumulator, BinaryOperator<U> combiner)`
+
+<font color=red> 三个参数整体理解</font>
+
+<img src="./images/2021-02-05-2.jpg" alt="三个参数说明" style="zoom:50%;" />
+
+##### 示例代码
+
+```
+public class StreamDemo {
+    private static final String [] WORD={"hello","hi","name","height","exciting"};
+    public static void main(String[] args) {
+        System.out.println(getLongestWord());
+        System.out.println(getAllCharacter());
+
+    }
+    public static String getLongestWord(){
+        Optional<String> result= Arrays.stream(WORD).reduce((a,b)->a.length()>=b.length()?a:b);
+        return result.get();
+    }
+
+    public static Integer getAllCharacter(){
+        Integer result=Arrays.stream(WORD).reduce(0,(a,b)->a+b.length(),(a,b)->a+b);
+        return result;
+    }
+}
+```
+
+##### 运行结果
+
+![运行结果](./images/2021-02-05-5.jpg)
+
+#### collect()
+
+##### 方法引用
+
+|    方法引用类型    |      举例      |
+| :----------------: | :------------: |
+|    引用静态方法    |  Integer::sum  |
+| 引用某个对象的方法 |   list::add    |
+|  引用某个类的方法  | String::length |
+|    引用构造函数    |  HashMap::new  |
+
+##### 参数介绍
+
+<img src="./images/2021-02-05-6.jpg" alt="三个参数示意" style="zoom:50%;" />
+
+
+
+
+
+
+
+
+
 ## 计算 程序运行时间
 
 ### 方法一
@@ -5893,3 +5901,45 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 #### java jdbc数据库报错  closing inbound before receiving peer's close_notify
 
 > 在数据库的url 加上    &useSSL=false
+
+
+
+
+
+
+
+# 算法-刷题
+
+## 常用方法
+
+### 字符串比较大小
+
+```java
+调用String.compareTo()方法即可，已经封装好了，不用在自己手写
+```
+
+### hashmap 自定义排序
+
+```java
+Map<String,Integer> map=new HashMap<>();
+//   ...  给map赋值
+List<Map.Entry<String, Integer>> result =
+    new ArrayList<>(map.entrySet());
+
+Collections.sort(result, new Comparator<Map.Entry<String, Integer>>() {
+    @Override
+    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+        return o2.getValue()==o1.getValue()?o1.getKey().compareTo(o2.getKey()):o2.getValue()-o1.getValue();
+    }
+});
+// 这里的 result 即为自定义排序后的结果集。
+```
+
+
+
+
+
+
+
+
+
