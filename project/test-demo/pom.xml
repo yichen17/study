@@ -29,10 +29,11 @@
 		<module>algorithm-demo</module>
 		<module>web-flux-demo</module>
 		<module>app-mvc</module>
-        <module>tomcat-test</module>
         <module>cas-client</module>
-		<module>cas-client1</module>
+		<module>cas</module>
         <module>cas</module>
+		<module>rabbitmq-case</module>
+		<module>mybatis-generator</module>
     </modules>
 
 	<properties>
