@@ -5394,7 +5394,7 @@ public class Generator {
 
 #### The content of element type must match "property*, plugin*, commentGenerator?, jdbcConnection, javaTypeResolver?,javaModelGenerator, sqlMapGenerator?, javaClientGenerator?, table+"
 
->  常理是 标签放置的顺序问题，但如果标签顺序已经按照要求放置了，那么可能就是排列问题，最好的方法就是手打内容而不是复制粘贴
+>  常理是 标签放置的顺序问题，但 <font color=red>如果标签顺序已经按照要求放置了，那么可能就是排列问题，最好的方法就是手打内容而不是复制粘贴</font>
 
 ### Cannot obtain primary key information from the database, generated objects may be incomplete
 
