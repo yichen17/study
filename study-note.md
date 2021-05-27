@@ -2689,6 +2689,18 @@ private final int initialBytesToStrip;
 private final int lengthFieldEndOffset;
 ```
 
+##### 与固定长度解码器和特定分隔符解码器相似的属性
+
+```java
+private final int maxFrameLength; // 报文最大限制长度
+private final boolean failFast; // 是否立即抛出 TooLongFrameException，与 maxFrameLength 搭配使用
+private boolean discardingTooLongFrame; // 是否处于丢弃模式
+private long tooLongFrameLength; // 需要丢弃的字节数
+private long bytesToDiscard; // 累计丢弃的字节数
+```
+
+
+
 ##### 示例1  典型的基于消息长度 + 消息内容的解码。
 
 ```
@@ -2807,6 +2819,20 @@ BEFORE DECODE (16 bytes)                       AFTER DECODE (13 byte
 - lengthFieldLength = 2，协议设计的固定长度。
 - lengthAdjustment = -3，Length 字段值（16 字节）需要减去 HDR1（1 字节） 和 Length 自身所占字节长度（2 字节）才能得到 HDR2 和 Content 的内容（1 + 12 = 13 字节）。
 - initialBytesToStrip = 3，解码后跳过 HDR1 和 Length 字段，共占用 3 字节。
+
+## 内存分配器
+
+### ptmalloc
+
+ptmalloc 是基于 glibc 实现的内存分配器，它是一个标准实现，所以兼容性较好。pt 表示 per thread 的意思。当然 ptmalloc 确实在多线程的性能优化上下了很多功夫。由于过于考虑性能问题，多线程之间内存无法实现共享，只能每个线程都独立使用各自的内存，所以在内存开销上是有很大浪费的。
+
+### tcmalloc 
+
+tcmalloc 出身于 Google，全称是 thread-caching malloc，所以 tcmalloc 最大的特点是带有线程缓存，tcmalloc 非常出名，目前在 Chrome、Safari 等知名产品中都有所应有。tcmalloc 为每个线程分配了一个局部缓存，对于小对象的分配，可以直接由线程局部缓存来完成，对于大对象的分配场景，tcmalloc 尝试采用自旋锁来减少多线程的锁竞争问题。
+
+### jemalloc 
+
+jemalloc 借鉴了 tcmalloc 优秀的设计思路，所以在架构设计方面两者有很多相似之处，同样都包含 thread cache 的特性。但是 jemalloc 在设计上比 ptmalloc 和 tcmalloc 都要复杂，jemalloc 将内存分配粒度划分为 Small、Large、Huge 三个分类，并记录了很多 meta 数据，所以在空间占用上要略多于 tcmalloc，不过在大内存分配的场景，jemalloc 的内存碎片要少于 tcmalloc。tcmalloc 内部采用红黑树管理内存块和分页，Huge 对象通过红黑树查找索引数据可以控制在指数级时间。
 
 ## 内存分配算法
 
@@ -3162,8 +3188,6 @@ Netty 还提供了延迟释放的功能，来提升并发性能。当内存释�
 | 2AB | 4CDEF | 4GHIJ | 1K | 2LM |
 +-----+-------+-------+----+-----+
 ```
-
-
 
 
 
