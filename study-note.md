@@ -2650,7 +2650,278 @@ public class AccountControllerTest {
 
 # 网络编程
 
-## jdk  NIO 存在的问题
+## java nio
+
+### 介绍
+
+#### 核心成员 
+
+==channel、buffer、selector==
+
+#### selector
+
+##### 创建
+
+```java
+Selector selector = Selector.open();
+```
+
+##### channel 注册
+
+```java
+// 必须为非阻塞模式，故不能使用FileChannel
+channel.configureBlocking(false);
+// register 有四种事件
+// Connect =>  SelectionKey.OP_CONNECT   代表一个管道成功连接另一个服务
+// Accept  => SelectionKey.OP_ACCEPT  服务端 socket 管道接收到连接请求
+// Read => Selection.OP_READ    管道内有数据，可以被读取
+// Write => Selection.OP_WRITE  管道能写入
+SelectionKey key = channel.register(selector, SelectionKey.OP_READ);
+// 如果感兴趣多个事件
+int interestSet = SelectionKey.OP_READ | SelectionKey.OP_WRITE;    
+```
+
+##### Interest Set
+
+==查看 selectKey上注册的类型==
+
+```java
+int interestSet = selectionKey.interestOps();
+
+boolean isInterestedInAccept  = SelectionKey.OP_ACCEPT  == (interests & SelectionKey.OP_ACCEPT);
+boolean isInterestedInConnect = SelectionKey.OP_CONNECT == (interests & SelectionKey.OP_CONNECT);
+boolean isInterestedInRead    = SelectionKey.OP_READ    == (interests & SelectionKey.OP_READ);
+boolean isInterestedInWrite   = SelectionKey.OP_WRITE   == (interests & SelectionKey.OP_WRITE);
+```
+
+##### Ready Set
+
+==管道中准备就绪的类型==
+
+```java
+int readySet = selectionKey.readyOps();
+selectionKey.isAcceptable();
+selectionKey.isConnectable();
+selectionKey.isReadable();
+selectionKey.isWritable();
+```
+
+##### selector+channel
+
+==获取selectKey上的channel、selector==
+
+```java
+Channel  channel  = selectionKey.channel();
+
+Selector selector = selectionKey.selector();  
+```
+
+##### 附加额外信息
+
+```java
+selectionKey.attach(theObject);
+
+Object attachedObj = selectionKey.attachment();
+SelectionKey key = channel.register(selector, SelectionKey.OP_READ, theObject);
+```
+
+##### select()
+
+==获取 ready的管道。但是每次只能有一个管道准备好，即使当前已经有多个准备好了==
+
+##### selectedKeys()
+
+==显示所有就绪的管道的 SelectKey==
+
+```java
+Set<SelectionKey> selectedKeys = selector.selectedKeys();    
+```
+
+##### full selector case
+
+```java
+Selector selector = Selector.open();
+channel.configureBlocking(false);
+SelectionKey key = channel.register(selector, SelectionKey.OP_READ);
+while(true) {
+  int readyChannels = selector.selectNow();
+  if(readyChannels == 0) continue;
+  Set<SelectionKey> selectedKeys = selector.selectedKeys();
+  Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+  while(keyIterator.hasNext()) {
+    SelectionKey key = keyIterator.next();
+    if(key.isAcceptable()) {
+        // a connection was accepted by a ServerSocketChannel.
+    } else if (key.isConnectable()) {
+        // a connection was established with a remote server.
+    } else if (key.isReadable()) {
+        // a channel is ready for reading
+    } else if (key.isWritable()) {
+        // a channel is ready for writing
+    }
+    keyIterator.remove();
+  }
+}
+```
+
+
+
+
+
+
+
+#### buffer
+
+缓冲区本质上是一个内存块，管道可以向其中写入数据，也可以从它那里获取数据。缓冲区基本使用步骤：
+
+1、向缓冲区中写入数据
+
+2、调用  buffer.flip()    // 切换模式，从写模式切换到读模式
+
+3、从缓冲区中读取数据
+
+4、调用buffer.clear()或buffer.compact()  // clear()会将缓冲区的数据清空，且切换到读模式。compact()会将已读取数据移除，未读数据移至缓冲区首位，然后切换到写模式，在数据末尾开始写入。
+
+```java
+// 示例
+RandomAccessFile aFile = new RandomAccessFile("data/nio-data.txt", "rw");
+FileChannel inChannel = aFile.getChannel();
+
+//create buffer with capacity of 48 bytes
+ByteBuffer buf = ByteBuffer.allocate(48);
+
+int bytesRead = inChannel.read(buf); //read into buffer.
+while (bytesRead != -1) {
+
+  buf.flip();  //make buffer ready for read
+
+  while(buf.hasRemaining()){
+      System.out.print((char) buf.get()); // read 1 byte at a time
+  }
+
+  buf.clear(); //make buffer ready for writing
+  bytesRead = inChannel.read(buf);
+}
+aFile.close();
+```
+
+##### 属性介绍
+
+==capacity、position、limit==
+
++ capacity：缓冲区的容量
++ position：写模式从0开始写入数据，最大数值为 capacity-1。flip() 切换到读模式融，仍从0开始读取数据。
++ limit：边界。写模式等同于capacity，读模式下为写模式下的position。
+
+##### 类型
+
+==ByteBuffer、MappedByteBuffer、CharBuffer、DoubleBuffer、FloatBuffer、IntBuffer、LongBuffer、ShortBuffer==
+
+##### 初始化
+
+```java
+ByteBuffer buf = ByteBuffer.allocate(48);
+CharBuffer buf = CharBuffer.allocate(1024);
+```
+
+##### 写入数据
+
+```java
+int bytesRead = inChannel.read(buf); //read into buffer.
+buf.put(127);    // 自己将数据写入
+```
+
+##### 读取数据
+
+```java
+//read from buffer into channel.
+int bytesWritten = inChannel.write(buf);
+byte aByte = buf.get();    // 各种方式可以选择
+```
+
+##### 其他
+
+```java
+rewind()   //将 position置为0
+clear()  // position 置为0，limit=capacity。其中的数据仍在，为覆盖写。只是忘记了读的位置
+compact() // 移除已读数据，将未读的数据移至最前面。position更新为未读长度。
+mark()  // 标记position位置
+reset()  // 回退到 mark()标记的位置
+equals() // 比较两个缓冲区，相同条件：类型一样，长度一样，数据一样
+compareTo() //
+```
+
+#### channel
+
+==可以异步读取或写入缓冲区==
+
+##### 常见类型
+
+FileChannel、DatagramChannel、SocketChannel、ServerSocketChannel
+
+**可见，支持文件、tcp、udp**
+
+##### 示例
+
+```
+ RandomAccessFile aFile = new RandomAccessFile("data/nio-data.txt", "rw");
+    FileChannel inChannel = aFile.getChannel();
+
+    ByteBuffer buf = ByteBuffer.allocate(48);
+
+    int bytesRead = inChannel.read(buf);
+    while (bytesRead != -1) {
+
+      System.out.println("Read " + bytesRead);
+      buf.flip();
+
+      while(buf.hasRemaining()){
+          System.out.print((char) buf.get());
+      }
+
+      buf.clear();
+      bytesRead = inChannel.read(buf);
+    }
+    aFile.close();
+```
+
+
+
+#### Scatter / Gather
+
+##### scatter 
+
+==将管道(channel)内的数据写入到多个缓冲区(buffer)==
+
+```java
+ByteBuffer header = ByteBuffer.allocate(128);
+ByteBuffer body   = ByteBuffer.allocate(1024);
+
+ByteBuffer[] bufferArray = { header, body };
+
+channel.read(bufferArray);
+```
+
+<font color=red>它的写入是按数组中出现的顺序，且是逐一写入的。故它不支持变化长度的数据写入，只支持定长的</font>
+
+##### gather
+
+==将多个缓冲区的数据写入到一个管道中==
+
+```java
+ByteBuffer header = ByteBuffer.allocate(128);
+ByteBuffer body   = ByteBuffer.allocate(1024);
+
+//write data into buffers
+
+ByteBuffer[] bufferArray = { header, body };
+
+channel.write(bufferArray);
+```
+
+<font color=red>它写入的数据是按照数组中出现的顺序，且每个buf 中的数据返回是position-limit，可以支持变长写入</font>
+
+### jdk  NIO 存在的问题
 
 - **Java NIO 的 API 非常复杂。** 要写出成熟可用的 Java NIO 代码，需要熟练掌握 JDK 中的 Selector、ServerSocketChannel、SocketChannel、ByteBuffer 等组件，还要理解其中一些反人类的设计以及底层原理，这对新手来说是非常不友好的。
 - **如果直接使用 Java NIO 进行开发，难度和开发量会非常大**。我们需要自己补齐很多可靠性方面的实现，例如，网络波动导致的连接重连、半包读写等。这就会导致一些本末倒置的情况出现：核心业务逻辑比较简单，但补齐其他公共能力的代码非常多，开发耗时比较长。这时就需要一个统一的 NIO 框架来封装这些公共能力了。
