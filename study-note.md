@@ -5577,6 +5577,21 @@ mvn dependency:copy-dependencies
 
 # JAVA
 
+## 进制转换
+
+```java
+int a = 0b11;   //声明二进制变量
+int b = 011;    //声明八进制变量
+int c = 11;     //声明十进制变量
+int d = 0x11;   //声明十六进制变量
+
+十进制转二进制：Integer.toBinaryString(i);
+十进制转八进制：Integer.toOctalString(i);
+十进制转十六进制：Integer.toHexString(i);
+```
+
+
+
 ## 运算符优先级
 
 | 优先级 | 运算符                                           | 结合性   |
