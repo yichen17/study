@@ -2885,6 +2885,126 @@ FileChannel、DatagramChannel、SocketChannel、ServerSocketChannel
     aFile.close();
 ```
 
+##### FileChannel
+
+###### 打开管道
+
+```java
+RandomAccessFile aFile     = new RandomAccessFile("data/nio-data.txt", "rw");
+FileChannel      inChannel = aFile.getChannel();
+```
+
+###### 从管道中读取数据
+
+```java
+ByteBuffer buf = ByteBuffer.allocate(48);
+int bytesRead = inChannel.read(buf);  // read() 方法返回的是读取的字节数
+```
+
+###### 将数据写入管道
+
+```java
+String newData = "New String to write to file..." + System.currentTimeMillis();
+
+ByteBuffer buf = ByteBuffer.allocate(48);
+buf.clear();
+buf.put(newData.getBytes());
+
+buf.flip();
+
+while(buf.hasRemaining()) {  // 一直写入直到 buf 中没有数据
+    channel.write(buf);
+}
+```
+
+###### 获取更改管道的读写位置
+
+```java
+long pos=channel.position();// 获取位置
+
+channel.position(pos +123);  //设置位置
+// 如果读的时候将位置设置为大于capacity，则返回-1
+// 如果写的时候将位置设置为大于capacity，则会扩容在写入。这种情况下文件空洞， 即数据间存在间隙。
+```
+
+###### 大小
+
+```java
+long fileSize = channel.size();   // 返回与该管道对应的文件大小
+```
+
+###### 截取
+
+```java
+channel.truncate(1024); // 截取指定字节长度的数据
+```
+
+###### 写入磁盘
+
+```java
+channel.force(true);
+```
+
+##### SocketChannel
+
+==tcp连接==
+
+###### 创建管道
+
+1. You open a `SocketChannel` and connect to a server somewhere on the internet.
+2. A `SocketChannel` can be created when an incoming connection arrives at a [`ServerSocketChannel`](http://tutorials.jenkov.com/java-nio/server-socket-channel.html).
+
+###### 打开管道
+
+```java
+SocketChannel socketChannel = SocketChannel.open();
+socketChannel.connect(new InetSocketAddress("http://jenkov.com", 80));
+```
+
+##### DatagramChannel
+
+==接收或者发送 udp包裹==
+
+###### 打开管道
+
+```java
+DatagramChannel channel = DatagramChannel.open();
+channel.socket().bind(new InetSocketAddress(9999));
+```
+
+###### 接收数据
+
+```java
+ByteBuffer buf = ByteBuffer.allocate(48);
+buf.clear();
+// 如果发送的数据大于缓冲区的数据，则多余的数据默认被丢弃
+channel.receive(buf);
+```
+
+###### 发送数据
+
+```java
+String newData = "New String to write to file..."
+                    + System.currentTimeMillis();
+    
+ByteBuffer buf = ByteBuffer.allocate(48);
+buf.clear();
+buf.put(newData.getBytes());
+buf.flip();
+// 这种发送 无法获得任何反馈信息
+int bytesSent = channel.send(buf, new InetSocketAddress("jenkov.com", 80));
+```
+
+###### 连接具体地址
+
+```java
+// 它没有创建真实的连接，只是锁定了管道只能向某个固定的地址收发消息
+channel.connect(new InetSocketAddress("jenkov.com", 80));    
+// 可以向正常管道那样读写
+int bytesRead = channel.read(buf); 
+int bytesWritten = channel.write(buf);
+```
+
 
 
 #### Scatter / Gather
@@ -2926,6 +3046,16 @@ channel.write(bufferArray);
 - **Java NIO 的 API 非常复杂。** 要写出成熟可用的 Java NIO 代码，需要熟练掌握 JDK 中的 Selector、ServerSocketChannel、SocketChannel、ByteBuffer 等组件，还要理解其中一些反人类的设计以及底层原理，这对新手来说是非常不友好的。
 - **如果直接使用 Java NIO 进行开发，难度和开发量会非常大**。我们需要自己补齐很多可靠性方面的实现，例如，网络波动导致的连接重连、半包读写等。这就会导致一些本末倒置的情况出现：核心业务逻辑比较简单，但补齐其他公共能力的代码非常多，开发耗时比较长。这时就需要一个统一的 NIO 框架来封装这些公共能力了。
 - **JDK 自身的 Bug**。其中比较出名的就要属 Epoll Bug 了，这个 Bug 会导致 Selector 空轮询，CPU 使用率达到 100%，这样就会导致业务逻辑无法执行，降低服务性能。
+
+### java IO 和 java NIO区别
+
+|         IO         |          NIO           |
+| :----------------: | :--------------------: |
+| 以流为方向(stream) | 以缓冲区为方向(buffer) |
+|      阻塞 IO       |        非阻塞IO        |
+|                    |       Selectors        |
+
+
 
 ## nettty的优点
 
