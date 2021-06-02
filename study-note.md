@@ -1907,7 +1907,13 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 + 在循环的地方打上断点，然后右击，可以设置条件，设置完毕后debug的时候，会直接进入符合改条件的情况
 
-<img src="./images/2021-01-27-2.jpg" alt="示例" style="zoom: 67%;" />
+<img src="./images/2021-06-02-1.jpg" alt="示例" style="zoom: 67%;" />
+
+或者这样进行复杂设置
+
+<img src="./images/2021-06-02-2.jpg" alt="方法二" style="zoom: 67%;" />
+
+<img src="./images/2021-06-02-3.jpg" alt="方法二-1" style="zoom:50%;" />
 
 ### 方法之间 回跳，回到前一个方法
 
