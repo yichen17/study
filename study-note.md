@@ -1800,9 +1800,11 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 3、 code  =》  identifier under caret（write） 设置为  `BA4040`
 
-### 本地多版本jdk 设置默认打开jdk
+### 设置 idea 打开项目默认设置
 
->  file  > new projects settings structure for new projects
+==可以设置编码格式，默认jdk等==
+
+>  file  > new projects settings  >  structure for new projects
 >
 > 指定你想设定的jdk 即可
 
@@ -1838,6 +1840,14 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 <font color=red>如果设置之后是侧边栏 则做如下处理
 
 ![处理变成侧边栏](./images/2021-05-15-2.jpg)
+
+### 查看源码报错 Decompiled.class file, bytecode version 52.0
+
+> edit > settings  > Build,Execution,Deployment > BuildTools > Maven > importing 
+>
+> 在右侧  Automatically download 中勾选 Source、Document、Annotations。
+
+![操作示例](./images/2021-06-03-1.jpg)
 
 ## idea 跑项目  cpu 狂响
 
@@ -4404,6 +4414,14 @@ if (p.hash == hash &&
 
 
 ## window   
+
+### 安装 openjdk
+
+==安装redhat 提供的openjdk==
+
+[下载链接](https://developers.redhat.com/products/openjdk/download)
+
+下载安装包解压，然后配置环境变量即可
 
 ### 安装子系统 (WSL)
 
