@@ -3850,12 +3850,60 @@ location /shanliang/ {
 > http://hg.openjdk.java.net/
 >
 > 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+>
+> <font color=red>下面的是openjdk 的源代码，不包含native 部分</font>
+>
+> [参考步骤](https://stackoverflow.com/questions/410756/is-it-possible-to-browse-the-source-of-openjdk-online/410765)
+>
+> 操作方式 ： 选择  jdk8u> jdk8u 下的jdk>点击左侧tags > 选择指定版本 > 点击 browse >  进入到 src/share/classes > 左侧选择格式下载
 
 
 
 
 
 # 基础知识
+
+## 线程
+
+java 中线程存在6种状态，new、runnable、blocked、waiting、timed_waiting、terminated
+
+###  new
+
+> 新创建的线程，此时还没有运行
+
+### runnable
+
+运行中，此状态一般为调用了`thread.start()`方法。在该状态下线程不一定处于运行中，可以能等待运行。因为操作系统是以时间片的方式轮流调用线程的。
+
+### blocked
+
+线程虽然启动但是缺少必要的资源(一般为互斥访问或者定量访问)，则会阻塞，直至拿到缺少的资源便进入 `runnable`状态。
+
+### waiting
+
+它一般由 `thread.wait()`方法触发。它需要特定事件唤醒(即 `notify()`或`notifyall()`)。唤醒后理想状态是变为`runnable`,但是一旦缺少运行时的资源，则会变为`blocked`状态。
+
+### timed waiting
+
+等待一定时间。一般由 `thread.wait(timeout)`或`thread.sleep(timeout)`触发
+
+### terminated
+
+结束，两种情况一般是正常结束或者异常中断。
+
+### 关系图
+
+<img src="./images/2021-06-07-1.png" alt="关系图"  />
+
+### 参考文章
+
+[waiting状态和blocked状态的区别](https://stackoverflow.com/questions/15680422/difference-between-wait-and-blocked-thread-states)
+
+[wait唤醒后进入runnable状态还是blocked状态](https://stackoverflow.com/questions/28378592/java-thread-state-transition-waiting-to-blocked-or-runnable)
+
+### wait() 同sleep()区别
+
+==wait会释放拥有的共享资源，而sleep不会释放==
 
 ## 访问控制权限
 
