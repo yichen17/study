@@ -1,7 +1,6 @@
 package com.yichen.test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,6 +32,8 @@ public class ListIteratorTest {
         Iterator it=  data.iterator();
         while(it.hasNext()){
             String value= (String) it.next();
+            // 不是线程安全的，底层 modCount 用来记录修改次数，迭代器会进行对比
+            //data.add("666");
             if("haha"==value){
                 it.remove();
             }

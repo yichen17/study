@@ -3843,19 +3843,9 @@ location /shanliang/ {
 
 修改postman中的setting，将其中的 SSL certificate verfication 改为off
 
-##  如何下载指定版本 的openjdk
 
-[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
 
-> http://hg.openjdk.java.net/
->
-> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
->
-> <font color=red>下面的是openjdk 的源代码，不包含native 部分</font>
->
-> [参考步骤](https://stackoverflow.com/questions/410756/is-it-possible-to-browse-the-source-of-openjdk-online/410765)
->
-> 操作方式 ： 选择  jdk8u> jdk8u 下的jdk>点击左侧tags > 选择指定版本 > 点击 browse >  进入到 src/share/classes > 左侧选择格式下载
+
 
 
 
@@ -4377,6 +4367,20 @@ public class Test {
 
 
 ## 看 openjdk
+
+###  下载 openjdk
+
+[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
+
+> http://hg.openjdk.java.net/
+>
+> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+>
+> <font color=red>下面的是openjdk 的源代码，不包含native 部分</font>
+>
+> [参考步骤](https://stackoverflow.com/questions/410756/is-it-possible-to-browse-the-source-of-openjdk-online/410765)
+>
+> 操作方式 ： 选择  jdk8u> jdk8u 下的jdk>点击左侧tags > 选择指定版本 > 点击 browse >  进入到 src/share/classes > 左侧选择格式下载
 
 ### object.wait 和 object.notify
 
