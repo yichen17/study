@@ -34,6 +34,7 @@
         <module>cas</module>
 		<module>rabbitmq-case</module>
 		<module>mybatis-generator</module>
+		<module>basic-knowledge</module>
     </modules>
 
 	<properties>
