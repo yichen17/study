@@ -5807,6 +5807,84 @@ mvn dependency:copy-dependencies
 
 # JAVA
 
+## 权限控制
+
+### SecurityManager
+
+
+
+### permission
+
+#### policy
+
+##### 默认位置
+
+==它是由安全属性文件规定的==
+
+```java
+//     D:\idea\openjdk-2\openjdk-1.8.0.292\jre\lib\security\java.security
+policy.url.1=file:${java.home}/lib/security/java.policy
+policy.url.2=file:${user.home}/.java.policy
+```
+
+
+
+|        策略类型         |                             位置                             |
+| :---------------------: | :----------------------------------------------------------: |
+| 系统策略(system policy) | java.home/lib/security/java.policy  (Solaris/Linux) java.home\lib\security\java.policy  (Windows) |
+|  用户策略(user policy)  | user.home/.java.policy  (Solaris/Linux) user.home\\.java.policy  (Windows) |
+
+[参考文章](https://docs.oracle.com/javase/7/docs/technotes/guides/security/PolicyFiles.html)
+
+> //  本地两个位置
+>
+> C:\Users\E480\.java.policy
+>
+> D:\idea\openjdk-2\openjdk-1.8.0.292\jre\lib\security\java.policy
+
+##### 运行时指定
+
+> // 这种情况下会和默认路径下的policy一起生效。   someURL 为policy的路径
+>
+> java -Djava.security.manager -Djava.security.policy=someURL SomeApp
+>
+> // <font color=red>-Djava.security.policy 后使用两个==，则 安全属性文件内的policy失效</font>
+>
+> java -Djava.security.manager -Djava.security.policy==someURL SomeApp
+
+##### 替换 Policy实现类
+
+> ==//默认实现类在安全属性文件内指定,必须为完全限定名称，且自定义类需要继承Policy，并实现必要方法==
+>
+> policy.provider=sun.security.provider.PolicyFile
+
+##### 整体格式
+
+```java
+// signedby:keystore 中保存的证书别名，默认为 any signer  
+// principal  默认为any principals
+// codeBase 代表源代码位置，默认 any code   
+grant signedBy "signer_names", codeBase "URL",
+        principal principal_class_name "principal_name",
+        principal principal_class_name "principal_name",
+        ... {
+
+      permission permission_class_name "target_name", "action", 
+          signedBy "signer_names";
+      permission permission_class_name "target_name", "action", 
+          signedBy "signer_names";
+      ...
+  };
+```
+
+==codeBase默认使用斜杠作为文件分隔（windows中也是一样的）。==
+
+> ```
+> grant codeBase "file:/C:/somepath/api/" {
+>         ...
+>     };
+> ```
+
 ## 进制转换
 
 ```java
