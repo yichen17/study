@@ -6554,6 +6554,9 @@ FLUSH PRIVILEGES;
 
 // datetime  或 timestamp 中默认值
 在字段中设置 默认值为  CURRENT_TIMESTAMP
+
+// 查看数据库版本
+select version()
 ```
 
 
@@ -6698,7 +6701,9 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 
 > 在数据库的url 加上    &useSSL=false
 
+#### select * from table limit 1走了全表扫描
 
+[参考解释，不太看的懂](https://dba.stackexchange.com/questions/62439/a-little-clarification-on-how-limit-works)
 
 
 
