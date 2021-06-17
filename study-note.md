@@ -5998,6 +5998,18 @@ int d = 0x11;   //声明十六进制变量
 
 ## 开发问题记录
 
+### springboot 无法进入controller 中的方法
+
+==查看springboot 启动类和controller所在文件夹的关系，理论上应该是同级，且在同一个父文件夹下。==
+
+![示例](./images/2021-06-17-1.jpg)
+
+#### 如果不符合上面的要求，则可以指定springboot 扫描指定目录。
+
+> // 指定具体的controller 存放目录
+>
+> @ComponentScan("com.yichen.cook.food.controller")
+
 ### mybatis dao 接口和 mapper.xml 无法匹配
 
 错误内容如下
