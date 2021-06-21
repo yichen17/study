@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
-
 /**
  * @author Qiuxinchao
  * @version 1.0
@@ -29,6 +27,6 @@ public class testController {
     @ResponseBody
     public String add(@RequestBody foodCookSteps steps){
         service.add(steps);
-        return "add success";
+        return steps.toString();
     }
 }

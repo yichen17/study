@@ -20,4 +20,8 @@ public class testService {
         return dao.insert(steps);
     }
 
+    public foodCookSteps get(int id){
+        return dao.selectByPrimaryKey(id);
+    }
+
 }

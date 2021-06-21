@@ -128,4 +128,14 @@ public class foodCookSteps {
     public void setCookSteps(String cookSteps) {
         this.cookSteps = cookSteps == null ? null : cookSteps.trim();
     }
+
+    @Override
+    public String toString() {
+        return "foodCookSteps{" +
+                "id=" + id +
+                ", foodName=" + foodName +
+                ", comment='" + comment + '\'' +
+                ", cookSteps='" + cookSteps + '\'' +
+                '}';
+    }
 }

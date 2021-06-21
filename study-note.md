@@ -3606,11 +3606,15 @@ Netty 还提供了延迟释放的功能，来提升并发性能。当内存释�
 +-----+-------+-------+----+-----+
 ```
 
+## netty开发问题
 
+### @Component不起作用，使用@Controller却无法访问url
 
+[解决办法](#springboot 无法进入controller 中的方法)
 
+### 客户端能与服务端连通，但是发送请求后提示 请求超时(3s范围)
 
-
+> 1、查看传输是否实现了序列化，如果没有则会在底层序列化失败使得netty没有成功向服务端发送请求，服务端自然没有反馈。
 
 
 
@@ -6569,9 +6573,16 @@ FLUSH PRIVILEGES;
 
 // 查看数据库版本
 select version()
+// 查看当前使用的引擎
+show engines
+// 查看表自增id值
+select auto_increment from information_schema.tables where table_schema=database() and table_name = 'test'
+
 ```
 
+### 备注
 
+> mysql 5.8版本(innodb引擎)前如果数据库重启，自增id会变化，如果表为空，则自增id变为0，否则变为当前表id最大加1。如果是MyISAM引擎则没事。
 
 ###  相关操作
 
