@@ -795,6 +795,15 @@ shutdown.sh
 
 ## 使用到的命令
 
+### wc
+
+==用来计算字数==
+
++ -c 或 --bytes 或 --chars  显示字节数
++ -l  或 --lines 显示行数
++ -w 或 --words 显示字数**以空格划分**
++ --version 显示版本
+
 ### 根据关键字过滤并且指定查看宽度
 
 + 查看关键字上的几行   cat web.log | grep -B 4 one
@@ -1037,6 +1046,20 @@ tar [选项...] [FILE]...
 
 
 ## 基础性知识
+
+### 文件描述符
+
+[参考文章](https://blog.csdn.net/zhaominpro/article/details/82630528)
+
+| 名称                 | 代码 | 操作符                                                       | JAVA中表示 |
+| -------------------- | ---- | ------------------------------------------------------------ | ---------- |
+| 标准输入(stdin)      | 0    | <或<<                                                        | System.in  |
+| 标准输出(stdout)     | 1    | >,>>,1>或1>><br /><font color=red> `>`为覆盖，`>>`为追加</font> | System.out |
+| 标准错误输出(stderr) | 2    | 2>或2>>                                                      | System.err |
+
+#### 基本操作
+
+
 
 ### - 和  -- 的区别
 
@@ -5068,6 +5091,25 @@ apt install rabbitmq-server
 
 ## java  jdk
 
+### centeros
+
+> 下载jar包，解压
+>
+> //  vi /etc/profile   在末尾添加如下信息
+>
+> export JAVA_HOME=/usr/local/java/jdk1.8.0_171
+> export JRE_HOME=${JAVA_HOME}/jre
+> export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+> export PATH=${JAVA_HOME}/bin:$PATH
+>
+> //生效
+>
+> source /etc/profile
+>
+> // 查看是否成功
+>
+> java -version
+
 ### 安装  
 
 <font color=red>默认安装路径  `/usr/lib/jvm/java-8-openjdk-amd64` </font>
@@ -5886,6 +5928,26 @@ mvn dependency:copy-dependencies
 
 # JAVA
 
+## 日志级别(log level)
+
+### 分类
+
++ ERROR。一些糟糕的东西发生了必须被处理。例如：数据库不可用
++ WARN。过程可以继续，但是要格外小心。例如数据查询不到走了缓存，程序启用了开发模式而不是生成模式
++ INFO。重要的业务流程已经完成。可以根据里面记录的信息快速定位程序在干什么
++ DEBUG。开发人员的东西
++ TRACE。非常详细的东西，为开发人员所设计的。在生产环境中部署后，您可能会在短时间内保留跟踪消息，但将这些日志语句视为临时的，最终应该或可能会关闭。例如用户敏感信息。它同DEBUG相比，区别在于会删除记录的数据。
+
+### logback 日志请求级别
+
+TRACE<DEBUG<INFO<WARN<ERROR
+
+==日志请求的级别高于或等于其记录器的有效级别，则称该日志请求已启用。==
+
+### log4j 日志级别
+
+OFF<FATAL<ERROR<WARN<INFO<DEBUG<TRACE<ALL
+
 ## 权限控制
 
 ### SecurityManager
@@ -6058,6 +6120,12 @@ The bean 'dataSource', defined in BeanDefinition defined in class path resource 
 #### 解决
 
 springboot 和  springcloud  版本不一致
+
+### mvn install 错误 Failed to execute goal org.springframework.boot:spring-boot-maven-plugin
+
+创建的springboot项目如果把启动类删除了，则把`build>plugins`下的`spring-boot-maven-plugin`删除。
+
+
 
 ## mybatis 代码自动生成
 
