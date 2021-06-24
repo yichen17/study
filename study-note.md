@@ -6624,9 +6624,115 @@ long stop=System.currentTimeMillis();
 
 # 计算机网络
 
+## NAT穿透
+
+[具体讲解](https://www.cnblogs.com/idignew/p/7419074.html)
+
+[参考内容](https://blog.csdn.net/Rookie_Manito/article/details/85261097)
+
+### NAT分类
+
+#### Full Cone NAT
+
+内网主机建立一个socket(LocalIP:LocalPort) 第一次使用这个socket给外部主机发送数据时NAT会给其分配一个公网(PublicIP:PublicPort),以后用这个socket向外面任何主机发送数据都将使用这对(PublicIP:PublicPort)。此外，任何外部主机只要知道这个(PublicIP:PublicPort)就可以发送数据给(PublicIP:PublicPort)，内网的主机就能收到这个数据包。
+
+#### Restricted Cone NAT
+
+内网主机建立一个socket(LocalIP:LocalPort) 第一次使用这个socket给外部主机发送数据时NAT会给其分配一个公网(PublicIP:PublicPort),以后用这个socket向外面任何主机发送数据都将使用这对(PublicIP:PublicPort)。此外，如果任何外部主机想要发送数据给这个内网主机，只要知道这个(PublicIP:PublicPort)并且内网主机之前用这个socket曾向这个外部主机IP发送过数据。只要满足这两个条件，这个外部主机就可以用自己的(IP,任何端口)发送数据给(PublicIP:PublicPort)，内网的主机就能收到这个数据包。
+
+#### Port Restricted Cone NAT
+
+内网主机建立一个socket(LocalIP:LocalPort) 第一次使用这个socket给外部主机发送数据时NAT会给其分配一个公网(PublicIP:PublicPort),以后用这个socket向外面任何主机发送数据都将使用这对(PublicIP:PublicPort)。此外，如果任何外部主机想要发送数据给这个内网主机，只要知道这个(PublicIP:PublicPort)并且内网主机之前用这个socket曾向这个外部主机(IP,Port)发送过数据。只要满足这两个条件，这个外部主机就可以用自己的(IP,Port)发送数据给(PublicIP:PublicPort)，内网的主机就能收到这个数据包。
+
+#### Symmetric NAT
+
+内网主机建立一个socket(LocalIP,LocalPort),当用这个socket第一次发数据给外部主机1时,NAT为其映射一个(PublicIP-1,Port-1),以后内网主机发送给外部主机1的所有数据都是用这个(PublicIP-1,Port-1)，如果内网主机同时用这个socket给外部主机2发送数据，NAT会为其分配一个(PublicIP-2,Port-2), 以后内网主机发送给外部主机2的所有数据都是用这个(PublicIP-2,Port-2).如果NAT有多于一个公网IP，则PublicIP-1和PublicIP-2可能不同，如果NAT只有一个公网IP,则Port-1和Port-2肯定不同，也就是说一定不能是PublicIP-1等于 PublicIP-2且Port-1等于Port-2。此外，如果任何外部主机想要发送数据给这个内网主机，那么它首先应该收到内网主机发给他的数据，然后才能往回发送，否则即使他知道内网主机的一个(PublicIP,Port)也不能发送数据给内网主机，
+
 ## 抓包工具
 
 [下载链接](https://www.wireshark.org/download.html)
+
+## DNS
+
+### DNS查询
+
+==地 DNS 服务器包括用户自己路由器中的 DNS 缓存、小区的 DNS 服务器、ISP 的 DNS 服务器等==
+
+<img src="./images/2021-06-24-1.jpg" alt="查询过程" style="zoom:50%;" />
+
+### DNS记录
+
+```java
+// 定义www.example.com的ip地址
+www.example.com.     IN     A     139.18.28.5;
+```
+
++ `www.example.com` 是要解析的域名
++ `IN`  代表记录用于互联网，是Internet的缩写
++ `A` DNS记录类型，表示  IPv4记录
++ `139.18.28.5`  域名对应的ip地址
+
+#### DNS 记录类型
+
+##### CNAME(Canonical Name Record)
+
+```java
+// 定义www.example.com的别名
+a.example.com.          IN     CNAME   b.example.com.
+```
+
+这条 DNS 记录定义了 a.example.com 是 b.example.com 的别名。用户在浏览器中输入 a.example.com 时候，通过 DNS 查询会知道 a.example.com 是 b.example.com 的别名，因此需要实际 IP 的时候，会去拿 b.example.com 的 A 记录。
+
+##### AAAA
+
+域名同IPv6之间的关系。
+
+##### MX (Mail Exchanger Record)
+
+MX 记录是邮件记录，用来描述邮件服务器的域名。
+
+```java
+IN MX mail.lagou.com
+```
+
+凡是 @lagou 的邮件都会发送到 mail.lagou.com 中，而 mail.lagou.com 的 IP 地址可以通过查询 mail.lagou.com 的 A 记录和 AAAA 记录获得。
+
+##### NS(Name Server)
+
+==记录是描述 DNS 服务器网址，即网站可以自己提供DNS解析。==
+
+```java
+a.com.     IN      NS      ns1.a.com.
+a.com.     IN      NS      ns2.a.com.
+```
+
+a.com 的记录在 ns1.a.com 和 ns2.a.com 上。从设计上看，ns1 和 ns2 是网站 a.com 提供的智能 DNS 服务器，可以提供负载均衡、分布式 Sharding 等服务。
+
+配置了上面的 NS 记录后，如果还配置了 a.com 的 A 记录，那么这个 A 记录会被 NS 记录覆盖。
+
+## CDN
+
+###### ==内容分发网络（Content Dilivery Network，CDN）是一个专门用来分发内容的分布式应用==
+
+<font color=red>CDN的本质是缓存数据(图片，视频等)，最终来源是服务商</font>
+
+### CDN回源
+
+CDN 回源就是 CDN 节点到源站请求资源，重新设置缓存。通常服务提供方在使用 CDN 的时候，会在自己的某个域名发布静态资源，然后将这个域名交给 CDN。
+
+比如源站在 s.example.com 中发布静态资源，然后在 CDN 管理后台配置了这个源站。在使用 CDN 时，服务提供方会使用另一个域名，比如说 b.example.com。然后配置将 b.example.com 用 CNAME 记录指向 CDN 的智能 DNS。这个时候，如果用户下载b.example.com/a.jpg，CDN 的智能 DNS 会帮用户选择一个最优的 IP 地址（最优的 CDN 节点）响应这次资源的请求。如果这个 CDN 节点没有 a.jpg，CDN 就会到 s.example.com 源站去下载，缓存到 CDN 节点，然后再返回给用户。
+
+## RestFul架构
+
+- Re（Representational）
+- st（State）
+- Ful（Transfer）
+
+**在 RestFul 架构中，状态仅仅存在于服务端，前端无状态**。状态（State）可以理解为业务的状态，这个状态是由服务端管理的。
+
+**前端（浏览器、应用等）没有业务状态，却又要展示内容，因此前端拥有的是状态的表示，也就是 Representation**。
+
+前端没有状态，当用户想要改变订单状态的时候，比如支付，这个时候前端就向服务端提交表单，然后服务端触发状态的变化。这个过程我们称为**转化（Transfer）**。从这个角度来看，Restful 讲的是一套前端无状态、服务端管理状态，中间设计转化途径（请求、函数等）的架构方法。这个方法可以让前后端职责清晰，前端负责渲染， 服务端负责业务。前端不需要业务状态，只需要展示。服务端除了关心状态，还要提供状态的转换接口。
 
 # 数据库
 
