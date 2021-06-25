@@ -6738,6 +6738,164 @@ CDN 回源就是 CDN 节点到源站请求资源，重新设置缓存。通常�
 
 ## mysql
 
+### 数字类型
+
+#### 整数类型
+
+==默认为signed类型,如果使用unsigned，搭配sql_mode=NO_UNSIGNED_SUBTRACTION使用==
+
+| 类型      | 占用空间(字节数) | 最小值~最大值(signed)                    | 最小值~最大值(unsigned) |
+| --------- | ---------------- | ---------------------------------------- | ----------------------- |
+| TINYINT   | 1                | -128~127                                 | 0~255                   |
+| SMALLINT  | 2                | -32768~32767                             | 0~65535                 |
+| MEDUIMINT | 3                | -8388608~8388607                         | 0~16777215              |
+| INT       | 4                | -2147483648~2147483647                   | 0~4294967295            |
+| BIGINT    | 8                | -9223372036854775808~9223372036854775807 | 0~18446744073709551615  |
+
+#### 浮点类型
+
+`Float` 和 `Double` 这些类型因为不是高精度，也不是 SQL 标准的类型，所以在真实的生产环境中不推荐使用，否则在计算时，由于精度类型问题，会导致最终的计算结果出错。
+
+#### 高精度
+
+`Decimal`。在海量并发的互联网业务中使用，金额字段的设计并不推荐使用 DECIMAL 类型，而更推荐使用 INT 整型类型
+
+#### 注意点
+
++ 自增主键用 `BIGINT`而不是`INT`，到达`INT`上限后自增id不会再变化。
++ MySQL 8.0 版本前，**自增不持久化**，自增值可能会存在回溯问题(mysql重启后自增id会变化)！
++ 在海量互联网业务的设计标准中，并不推荐用 DECIMAL 类型，而是更推荐将 DECIMAL 转化为 整型类型。**如果精度到分，则可以通过除100实现。**
+
+### 字符串类型
+
+==推荐把 MySQL 的默认字符集设置为 UTF8MB4==
+
+#### CHAR
+
+CHAR(N) 用来保存固定长度的**字符**，N 的范围是 0 ~ 255
+
+#### VARCHAR
+
+VARCHAR(N) 用来保存变长字符，N 的范围为 0 ~ 65536， N 表示字符。
+
+<font color=red>如果字符数量超过65536，则可以使用TEXT或BLOB，两者的最大存储长度为4G</font>
+
+#### 排序规则
+
+> SHOW CHARSET LIKE 'utf8%'
+>
+> // 排序规则以 _ci 结尾，表示不区分大小写（Case Insentive），_cs 表示大小写敏感，_bin 表示通过存储字符的二进制进行比较。
+>
+> SHOW COLLATION LIKE 'utf8mb4%';
+
+#### 正确修改字符集
+
+> // 新记录改为新的编码格式，旧的不变
+>
+> ALTER TABLE emoji_test CHARSET utf8mb4;
+>
+> // 更改所有记录编码格式
+>
+> ALTER TABLE emoji_test CONVERT TO CHARSET utf8mb4;
+
+#### 字段约束
+
+>// 8.0.16版本前 enum 外加设置严格模式
+>
+>`sex` enum('M','F') COLLATE utf8mb4_general_ci DEFAULT NULL,		
+>
+>SET sql_mode = 'STRICT_TRANS_TABLES'
+>
+>// 8.0.16版本后
+>
+>`sex` char(1) COLLATE utf8mb4_general_ci DEFAULT NULL,
+>
+>CONSTRAINT `user_chk_1` CHECK (((`sex` = _utf8mb4'M') or (`sex` = _utf8mb4'F')))
+
+#### 注意点
+
++ 比较 MySQL 字符串，默认采用不区分大小的排序规则。绝大部分业务的表结构设计无须设置排序规则为大小写敏感
+
+### 时间类型
+
+#### DATETIME
+
+类型 DATETIME 最终展现的形式为：YYYY-MM-DD HH：MM：SS，固定**占用 8 个字节**。
+
+从 MySQL 5.6 版本开始，DATETIME 类型支持毫秒，DATETIME(N) 中的 N 表示毫秒的精度。5.7.31 DATETIME五个字节。
+
+#### TIMESTAMP
+
+其实际存储的内容为‘1970-01-01 00:00:00’到现在的毫秒数。在 MySQL 中，由于类型 TIMESTAMP **占用 4 个字节**，因此其存储的时间上限只能到‘2038-01-19 03:14:07’。
+
+从 MySQL 5.6 版本开始，类型 TIMESTAMP 也能支持毫秒。与 DATETIME 不同的是，**若带有毫秒时，类型 TIMESTAMP 占用 7 个字节，而 DATETIME 无论是否存储毫秒信息，都占用 8 个字节**。
+
+#### 注意点
+
++ 日期字段推荐使用DATETIME，如果使用了TIMESTAMP，则需要显示配置时区(如果使用默认操作系统时区，会调用操作系统底层系统函数__tz_convert()，会执行加锁操作，影响性能)。且TIMESTAMP范围期限临近。
++ **每张业务核心表都增加一个 DATETIME 类型的 last_modify_date 字段，并设置修改自动更新机制，** 即便标识每条记录最后修改的时间。
+
+#### 自带工具压测
+
+[开发文档](https://dev.mysql.com/doc/refman/8.0/en/mysqlslap.html)
+
+```java
+mysqlslap -uroot -p123 -P3308 --number-of-queries=1000000 --concurrency=100 --query='SELECT NOW()'
+```
+
+### 非结构存储 json
+
+#### 方式
+
+```java
+DROP TABLE IF EXISTS UserLogin;
+
+CREATE TABLE UserLogin (
+
+    userId BIGINT NOT NULL,
+
+    loginInfo JSON,
+
+    PRIMARY KEY(userId)
+
+);
+// 插入数据
+SET @a = '
+{
+	"cellphone" : "13918888888",
+	"wxchat" : "破产码农",
+    "QQ" : "82946772"
+}
+';
+INSERT INTO UserLogin VALUES (1,@a);
+// 查询数据，具体见官方文档  ， mysql  5.7版本开始有json数据类型
+SELECT
+    userId,
+    JSON_UNQUOTE(JSON_EXTRACT(loginInfo,"$.cellphone")) cellphone,
+    JSON_UNQUOTE(JSON_EXTRACT(loginInfo,"$.wxchat")) wxchat
+FROM UserLogin;
+// 有效索引
+ALTER TABLE UserLogin ADD COLUMN cellphone VARCHAR(255) AS (loginInfo->>"$.cellphone");
+ALTER TABLE UserLogin ADD UNIQUE INDEX idx_cellphone(cellphone);
+
+```
+
+#### 注意点
+
++ JSON 数据类型的好处是无须预先定义列，数据本身就具有很好的描述性
++ JSON 数据类型推荐使用在不经常更新的静态数据存储。
++ 不要将有明显关系型的数据用 JSON 存储，如用户余额、用户姓名、用户身份证等，这些都是每个用户必须包含的数据；
++ 使用 JSON 数据类型，推荐用 MySQL 8.0.17 以上的版本，性能更好，同时也支持 Multi-Valued Indexes；
+
+
+
+### 命令
+
+####  \g 和 \G
+
+> \g 的作用是分号和在sql语句中写’;’是等效的 
+> \G 的作用是将原来的行记录单独抽取出来，查看数据更加直观
+
 ### 不太常用命令
 
 ```java
@@ -6757,6 +6915,7 @@ select version()
 show engines
 // 查看表自增id值
 select auto_increment from information_schema.tables where table_schema=database() and table_name = 'test'
+
 
 ```
 
