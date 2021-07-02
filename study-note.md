@@ -1872,6 +1872,33 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ![操作示例](./images/2021-06-03-1.jpg)
 
+### 设置方法模板和类模板
+
+[参考链接](https://blog.csdn.net/sdut406/article/details/81750858)
+
+#### 设置类模板
+
+> file > settings > Editor > File and Code Templates > Includes 
+
+输入如下类注释模板
+
+```java
+/**
+ * @author  Qiuxinchao
+ * @date  ${DATE} ${TIME}
+ * @version 1.0
+ * @describe 
+ */
+```
+
+![示例](./images/2021-06-28-1.jpg)
+
+#### 方法模板
+
+没啥用，自带的就挺好的。
+
+
+
 ## idea 跑项目  cpu 狂响
 
 > 修改 idea安装目录下的 idea.exe.vmoptions    位置是  安装位置/bin/idea.exe.vmoptions
@@ -6738,6 +6765,144 @@ CDN 回源就是 CDN 节点到源站请求资源，重新设置缓存。通常�
 
 ## mysql
 
+### 有用插件
+
+#### MGR（Mysql Group Replication）
+
+mysql 5.7版本新加
+
+### 查看运行日志
+
+```java
+//  日志是否开启
+show variables like 'log_bin'
+//  当前库对应的日志名称
+show master status
+//  查看日志内容
+show binlog events in 'binlog.000056';
+// 查看第一个binlog 中的日志
+show binlog events
+```
+
+#### mysqlbinlog 查看
+
+[参考链接](https://www.cnblogs.com/wqbin/p/14183943.html)
+
+```java
+mysqlbinlog binlog.000065
+```
+
+
+
+##### 错误问题
+
+###### ERROR: Error in Log_event::read_log_event(): 'Sanity check failed', data_len: 31, event_type: 35
+
+==mysqlbinlog的版本和binlog日志生成的版本不一致==
+
+###### mysqlbinlog 查看binlog时报错unknown variable 'default-character-set=utf8'
+
+[参考链接](https://www.cnblogs.com/cobbliu/p/4311926.html)
+
+> 1、使用 --no-defaults。例： mysqlbinlog --no-defaults  --version
+>
+> 2、修改my.ini  将default-character-set=utf8 修改为 character-set-server = utf8   需要重启服务
+
+### 慢日志分析
+
+#### 查看慢日志功能
+
+```java
+//  默认不开启
+show variables like '%slow_query_log%';
++---------------------+---------------------------------------------------------------+
+| Variable_name       | Value                                                         |
++---------------------+---------------------------------------------------------------+
+| slow_query_log      | ON                                                            |
+| slow_query_log_file | D:\mysql-5.8\mysql-8.0.21-winx64data\DESKTOP-RR3GOJS-slow.log |
++---------------------+---------------------------------------------------------------+
+// 开启   再次查询生效
+set global slow_query_log=1;
+```
+
+#### 查看区分条件(多久被归为慢查询)
+
+```java
+//  默认为10s
+show variables like '%long_query_time%'
+//  自定义  关闭当前cmd 重新 查看生效
+set global long_query_time=3;
+```
+
+#### 查询慢日志条数
+
+```java
+show global status like '%slow_queries';
+```
+
+#### 永久设置(重启后仍生效)
+
+```java
+slow_query_log=1
+slow_query_log_file=d:/mysql/my.log
+long_query_time=3
+long_output=FILE
+```
+
+
+
+### sql执行计划 explain
+
+#### 可执行情景
+
+==select、delete、insert、replace、update==
+
+#### 字段解释
+
+[参考官方文档](https://dev.mysql.com/doc/refman/8.0/en/explain-output.html)
+
+##### id(json格式叫:select_id)
+
+select 标识符
+
+##### select_type(json格式叫:none)
+
+| `select_type` Value                                          | JSON Name                    | Meaning                                                      |
+| :----------------------------------------------------------- | :--------------------------- | :----------------------------------------------------------- |
+| `SIMPLE`                                                     | None                         | Simple [`SELECT`](https://dev.mysql.com/doc/refman/8.0/en/select.html) (not using [`UNION`](https://dev.mysql.com/doc/refman/8.0/en/union.html) or subqueries) |
+| `PRIMARY`                                                    | None                         | Outermost [`SELECT`](https://dev.mysql.com/doc/refman/8.0/en/select.html) |
+| [`UNION`](https://dev.mysql.com/doc/refman/8.0/en/union.html) | None                         | Second or later [`SELECT`](https://dev.mysql.com/doc/refman/8.0/en/select.html) statement in a [`UNION`](https://dev.mysql.com/doc/refman/8.0/en/union.html) |
+| `DEPENDENT UNION`                                            | `dependent` (`true`)         | Second or later [`SELECT`](https://dev.mysql.com/doc/refman/8.0/en/select.html) statement in a [`UNION`](https://dev.mysql.com/doc/refman/8.0/en/union.html), dependent on outer query |
+| `UNION RESULT`                                               | `union_result`               | Result of a [`UNION`](https://dev.mysql.com/doc/refman/8.0/en/union.html). |
+| [`SUBQUERY`](https://dev.mysql.com/doc/refman/8.0/en/optimizer-hints.html#optimizer-hints-subquery) | None                         | First [`SELECT`](https://dev.mysql.com/doc/refman/8.0/en/select.html) in subquery |
+| `DEPENDENT SUBQUERY`                                         | `dependent` (`true`)         | First [`SELECT`](https://dev.mysql.com/doc/refman/8.0/en/select.html) in subquery, dependent on outer query |
+| `DERIVED`                                                    | None                         | Derived table                                                |
+| `DEPENDENT DERIVED`                                          | `dependent` (`true`)         | Derived table dependent on another table                     |
+| `MATERIALIZED`                                               | `materialized_from_subquery` | Materialized subquery                                        |
+| `UNCACHEABLE SUBQUERY`                                       | `cacheable` (`false`)        | A subquery for which the result cannot be cached and must be re-evaluated for each row of the outer query |
+| `UNCACHEABLE UNION`                                          | `cacheable` (`false`)        | The second or later select in a [`UNION`](https://dev.mysql.com/doc/refman/8.0/en/union.html) that belongs to an uncacheable subquery (see `UNCACHEABLE SUBQUERY`) |
+
+##### table(json格式叫:table_name)
+
+结果数据来源表
+
+##### partitions(json格式叫:partitions)
+
+结果匹配数据来源(存在分区的情况下)
+
+##### type(json格式叫:access_type)
+
+##### possible_keys(json格式叫:possible_keys)
+
+possible_keys 列指示 MySQL 可以选择从中查找该表中行的索引。
+
+
+
+#### 查看格式
+
++ FORMAT=TREE
++ FORMAT=JSON
+
 ### 数字类型
 
 #### 整数类型
@@ -6887,6 +7052,250 @@ ALTER TABLE UserLogin ADD UNIQUE INDEX idx_cellphone(cellphone);
 + 不要将有明显关系型的数据用 JSON 存储，如用户余额、用户姓名、用户身份证等，这些都是每个用户必须包含的数据；
 + 使用 JSON 数据类型，推荐用 MySQL 8.0.17 以上的版本，性能更好，同时也支持 Multi-Valued Indexes；
 
+### 数据库范式
+
+#### 三范式简化定义
+
++ 一范式要求所有属性都是不可分的基本数据项
+
++ 二范式解决部分依赖
+
++ 三范式解决传递依赖
+
+#### 主键
+
+##### 自增主键缺陷
+
+> 1、自增存在回溯问题。
+>
+> 2、自增值在服务器端产生，存在并发性能问题。
+>
+> 3、自增值做主键，只能在当前实例中保证唯一，不能保证全局唯一。
+>
+> 4、公开数据值，容易引发安全问题，例如知道地址http://www.example.com/User/10/，很容猜出 User 有 11、12 依次类推的值，容易引发数据泄露。
+>
+> 5、MGR（MySQL Group Replication） 可能引起的性能问题。
+>
+> 6、分布式架构设计问题。
+
+##### uuid
+
+###### 缺陷
+
+UUID 是根据时间位逆序存储， 也就是低时间低位存放在最前面，高时间位在最后，即 UUID 的前 4 个字节会随着时间的变化而不断“随机”变化，并非单调递增。而非随机值在插入时会产生离散 IO，从而产生性能瓶颈。这也是 UUID 对比自增值最大的弊端。
+
+###### mysql 8.0优化
+
+==UUID_TO_BIN/BIN_TO_UUID==
+
+> UUID_TO_BIN(UUID())
+
+> 优化内容如下：
+>
+> 1、通过参数将时间高位放在最前，解决了 UUID 插入时乱序问题；
+>
+> 2、去掉了无用的字符串"-"，精简存储空间；
+>
+> 3、将字符串其转换为二进制值存储，空间最终从之前的 36 个字节缩短为了 16 字节。
+
+###### mysql 8.0版本之前，使用用户自己定函数
+
+```java
+CREATE FUNCTION MY_UUID_TO_BIN(_uuid BINARY(36))
+    RETURNS BINARY(16)
+    LANGUAGE SQL  DETERMINISTIC  CONTAINS SQL  SQL SECURITY INVOKER
+    RETURN
+        UNHEX(CONCAT(
+            SUBSTR(_uuid, 15, 4),
+            SUBSTR(_uuid, 10, 4),
+            SUBSTR(_uuid,  1, 8),
+            SUBSTR(_uuid, 20, 4),
+            SUBSTR(_uuid, 25) ));
+
+CREATE FUNCTION MY_BIN_TO_UUID(_bin BINARY(16))
+    RETURNS  CHAR(36)
+    LANGUAGE SQL  DETERMINISTIC  CONTAINS SQL  SQL SECURITY INVOKER
+    RETURN
+        LCASE(CONCAT_WS('-',
+            HEX(SUBSTR(_bin,  5, 4)),
+            HEX(SUBSTR(_bin,  3, 2)),
+            HEX(SUBSTR(_bin,  1, 2)),
+            HEX(SUBSTR(_bin,  9, 2)),
+            HEX(SUBSTR(_bin, 11)) ));
+```
+
+### 表压缩
+
+#### COMPRESS 页压缩
+
+虽然 COMPRESS 压缩可以有效减小存储空间，但 COMPRESS 页压缩的实现对性能的开销是巨大的，性能会有明显退化。主要原因是一个压缩页在内存缓冲池中，存在压缩和解压两个页。
+
+```java
+CREATE TABLE Log (
+  logId BINARY(16) PRIMARY KEY,
+  ......
+)
+ROW_FORMAT=COMPRESSED
+KEY_BLOCK_SIZE=8
+//     后续数据压缩
+ALTER TABLE Transaction202102 COMPRESSION=ZLIB；
+//  全表压缩
+OPTIMIZE TABLE Transaction202102;
+```
+
+
+
+#### TPC 压缩
+
+TPC（Transparent Page Compression）是 5.7 版本推出的一种新的页压缩功能，其利用文件系统的空洞（Punch Hole）特性进行压缩。<font color=red>windows不支持。</font>
+
+```java
+CREATE TABLE Transaction （
+  transactionId BINARY(16) PRIMARY KEY,
+  .....
+)
+COMPRESSION=ZLIB | LZ4 | NONE;
+```
+
+### 索引
+
+#### B+树索引结构
+
+基于磁盘的平衡树，但树非常矮，通常为 3~4 层，能存放千万到上亿的排序数据。树矮意味着访问效率高，从千万或上亿数据里查询一条数据，只用 3、4 次 I/O。
+
+==以下需要mysql8.0==
+
+#### 查看索引情况
+
+```java
+SELECT 
+table_name,index_name,stat_name,
+stat_value,stat_description 
+FROM innodb_index_stats 
+WHERE table_name = 'orders' and index_name = 'PRIMARY';
+```
+
+#### 查看索引使用情况
+
+```java
+// 如果数据库使用了一段时间，索引还在该表中，则可以删除
+SELECT * FROM schema_unused_indexes
+WHERE object_schema != 'performance_schema';
+// 保险起见，可以先将索引设置对优化器不可见，如果业务无影响，则可以删除
+ALTER TABLE t1 
+ALTER INDEX idx_name INVISIBLE/VISIBLE;
+```
+
+#### 查看表索引
+
+```java
+show index from test
+```
+
+
+
+### 索引出错：CBO索引规则
+
+CBO（Cost-based Optimizer，基于成本的优化器），优化器的选择策略是执行成本。哪个索引的成本越低，优先使用哪个索引。
+
+```java
+// 一条sql的计算成本
+Cost  = Server Cost + Engine Cost
+      = CPU Cost + IO Cost
+```
+
+
+
+MySQL 数据库由 Server 层和 Engine 层组成：
+
+- Server 层有 SQL 分析器、SQL优化器、SQL 执行器，用于负责 SQL 语句的具体执行过程；
+- Engine 层负责存储具体的数据，如最常使用的 InnoDB 存储引擎，还有用于在内存中存储临时结果集的 TempTable 引擎。
+
+#### server 计算规则
+
+==select * from mysql.server_cost==
+
+- disk_temptable_create_cost：创建磁盘临时表的成本，默认为20。
+- disk_temptable_row_cost：磁盘临时表中每条记录的成本，默认为0.5。
+- key_compare_cost：索引键值比较的成本，默认为0.05，成本最小。
+- memory_temptable_create_cost：创建内存临时表的成本：默认为1。
+- memory_temptable_row_cost：内存临时表中每条记录的成本，默认为0.1。
+- row_evaluate_cost：记录间的比较成本，默认为0.1。
+
+#### engine 计算规则
+
+==select * from engine_cost==
+
+- io_block_read_cost：从磁盘读取一个页的成本，默认值为1。
+- memory_block_read_cost：从内存读取一个页的成本，默认值为0.25。
+
+#### 自定义执行成本
+
+```java
+INSERT INTO 
+engine_cost(engine_name,device_type,cost_name,cost_value,last_update,comment) 
+VALUES ('InnoDB',0,'io_block_read_cost',12.5,CURRENT_TIMESTAMP,'Using HDD for InnoDB');
+
+
+FLUSH OPTIMIZER_COSTS;
+```
+
+#### 查看 sql执行成本
+
+```java
+EXPLAIN FORMAT=json 
+SELECT o_custkey,SUM(o_totalprice) 
+FROM orders GROUP BY o_custkey\G
+```
+
+### 查询
+
+#### join连接
+
+#### 子查询
+
+### 表分区
+
+#### 注意问题
+
+> 1、MySQL 分区表中，主键也必须是分区列的一部分，不然创建分区表时会失败。
+>
+> 2、MySQL 中的分区表是把一张大表拆成了多张表，每张表有自己的索引，从逻辑上看是一张表，但物理上存储在不同文件中。
+>
+> 3、在 MySQL 数据库中，分区表的索引都是局部，而非全局。也就是说，索引在每个分区文件中都是独立的，所以分区表上的唯一索引必须包含分区列信息。正因为唯一索引包含了分区列，唯一索引也就变成仅在当前分区唯一，而不是全局唯一了。
+
+#### 错误想法
+
+==分区表设计不解决性能问题，更多的是解决数据迁移和备份的问题。==
+
+#### 示例
+
+```java
+// 分区创建
+CREATE TABLE t (
+    a INT,
+    b INT,
+    c DATETIME,
+    d VARCHAR(32),
+    e INT,
+    PRIMARY KEY (a,b,c),
+    KEY idx_e (e)
+)
+partition by range columns(c) (
+    PARTITION p0000 VALUES LESS THAN ('2019-01-01'),
+    PARTITION p2019 VALUES LESS THAN ('2020-01-01'),
+    PARTITION p2020 VALUES LESS THAN ('2021-01-01'),
+    PARTITION p9999 VALUES LESS THAN (MAXVALUE)
+);
+//  创建索引  需要包含主键
+ALTER TABLE t ADD UNIQUE KEY idx_d(d,c);
+// 插入数据    
+insert into t values(1,1,'2021-01-01','aaa',1);
+insert into t values(1,1,'2020-01-01','aaa',1);
+// 删除分区数据
+ alter table t truncate partition p2019;
+```
+
 
 
 ### 命令
@@ -6895,6 +7304,16 @@ ALTER TABLE UserLogin ADD UNIQUE INDEX idx_cellphone(cellphone);
 
 > \g 的作用是分号和在sql语句中写’;’是等效的 
 > \G 的作用是将原来的行记录单独抽取出来，查看数据更加直观
+>
+> select * from userlogin\G
+
+#### 导入备份数据
+
+```java
+ source d:/download/baidu_download/tpch_small/tpch_small.sql
+```
+
+
 
 ### 不太常用命令
 
