@@ -772,6 +772,10 @@ shutdown.sh
 + tmp(temporary)  用于存放各种临时文件
 + var(variable)  用于存放运行时需要改变数据的文件
 
+## 功能脚本
+
+### 文件归档
+
 
 
 ## 页面切换命令
@@ -825,6 +829,8 @@ shutdown.sh
 > p   //   粘贴到下一行，原来的往下顺移
 >
 > u  // 撤回操作
+>
+> esc  =》  :set number // 显示行数      :set nonu  // 不显示行数
 
 ###  !pwd
 
@@ -5237,6 +5243,45 @@ apt install rabbitmq-server
 
 ## tomcat 安装
 
+### 基础知识
+
+tomcat 下 webapp 目录为运行的web 目录，其中可以放多个项目，但是都使用的是同一个端口，区分方式是在请求端口后面加文件夹名称做匹配。如果不想这样，直接默认为 `/` 做为根目录，则将原有 ROOT 文件夹删除，然后将你的文件夹改名为 ROOT
+
+### window下部署
+
+#### 替换日志 改为log4j打印
+
+[资源链接](https://www.jianguoyun.com/p/DXJ66S8Quu_8CBiPsIAE)
+
+[参考步骤](https://blog.csdn.net/jeryjeryjery/article/details/69342542)
+
+> 1、删除 conf 下的 logging.properties 文件
+>
+> 2、下载  tomcat-juli.jar   tomcat-juli-adapter.jar  log4j-1.2.7.jar    以及自己写一个log4j.properties文件
+>
+> 3、将 tomcat-juli.jar  丢到 bin文件夹下   其他三个丢到 lib文件夹下
+>
+> 4、conf 文件夹下  context.xml 中 Context 标签加 swallowOutput="true"
+
+#### 问题记录
+
+##### tomcat 7 和jdk8，启动程序报错  org.apache.tomcat.util.bcel.classfile.ClassFormatException: Invalid byte tag in constant pool
+
+[解决办法](https://blog.51cto.com/1008610086/1925269)
+
+```java
+{tomcat路径}/conf/web.xml 在下面代码中添加红色部分:  metadata-complete="true"
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="true">
+```
+
+更换 lib 文件夹下的  ecj-4.4.2.jar，改用tomcat8的jar包，实际测试无用。
+
+### 分割catalina 日志
+
+[参考步骤](https://www.cnblogs.com/dxy1451713982/p/8079145.html)
+
+### 安装步骤
+
 apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 
 >  //  安装目录
@@ -6764,6 +6809,10 @@ CDN 回源就是 CDN 节点到源站请求资源，重新设置缓存。通常�
 # 数据库
 
 ## mysql
+
+### 高可用
+
+
 
 ### 有用插件
 
