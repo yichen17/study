@@ -2153,7 +2153,9 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 > 到仓库的对应目录，将 `_remote.repositories` 文件删除，然后重新加载maven依赖即可
 
+### terminal  打印乱码
 
+[参考解决办法](https://qq52o.me/2520.html)
 
 
 
