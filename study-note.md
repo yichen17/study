@@ -4850,7 +4850,16 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >
 >select 6 使用6号数据库  <font color=red> 在jedis中如果设置了    redis_database=6 ，如果数字大于六，到时候查询数据的时候可能存在查不到的情况，原因是保存在不同的数据库中，可以用该命令切换数据库</font>
 >
->
+
+### 查询命令
+
+```java
+keys *hello*    //对key 进行模糊查询
+type  hello    // 查看 hello 保存的类型
+
+```
+
+
 
 ### 设置redis  访问 auth 密码
 
