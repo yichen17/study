@@ -813,6 +813,7 @@ shutdown.sh
 + 查看关键字上的几行   cat web.log | grep -B 4 one
 + 查看关键字下的几行   cat web.log | grep -A 4 one
 + 查看关键字前几行和后几行  cat web.log | grep -C one
++ <font color=red> 使得查询出来的字段变红，容易识别    cat a.txt | grep hello --color=auto 即可</font>
 
 
 
@@ -852,6 +853,12 @@ shutdown.sh
 ```java
 // 查看指定端口开放情况    =>   unbutu 不可用
 lsof -i:5672   // 查看rabbitmq 端口开放情况
+```
+
+### 打印环境变量
+
+```
+printenv
 ```
 
 
@@ -2156,6 +2163,33 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 ### terminal  打印乱码
 
 [参考解决办法](https://qq52o.me/2520.html)
+
+### springboot 项目 Application.main() 启动 无报错但是无法访问页面
+
+#### 描述
+
+> 使用了 jetty，main()方法启动内容如下
+>
+>  ```java
+> public static void main(String[] args) {
+>     new SpringApplicationBuilder(App.class).web(true).run(args);
+>     SystemService.printKeyLoadMessage();
+> }
+>  ```
+>
+> 
+
+#### 解决办法
+
+==指定工作目录==
+
+![解决办法](C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210722165020449.png)
+
+
+
+
+
+
 
 
 
@@ -5996,7 +6030,26 @@ mvn dependency:copy-dependencies
 
 <img src="./images/2021-05-14-1.jpg" alt="操作步骤" style="zoom:67%;" />
 
+## 将本地jar包放入maven仓库
 
+[参考链接](https://blog.csdn.net/lvdaan/article/details/79760976)
+
+```java
+// 配置maven 环境变量
+mvn install:install-file -DgroupId=com.jf.ams -DartifactId=ams-api -Dversion=1.2.2-SNAPSHOT -Dpackaging=jar -Dfile=ams-api-1.2.2-20171019.023745-1.jar
+```
+
+## mvn springboot:run 中文乱码
+
+[解决办法](https://blog.csdn.net/weixin_42610529/article/details/95602598)
+
+```java
+//application.properties或application.yml
+spring.http.encoding.force=true
+spring.http.encoding.charset=UTF-8
+spring.http.encoding.enabled=true
+server.tomcat.uri-encoding=UTF-8
+```
 
 
 
@@ -6979,7 +7032,7 @@ possible_keys 列指示 MySQL 可以选择从中查找该表中行的索引。
 #### 注意点
 
 + 自增主键用 `BIGINT`而不是`INT`，到达`INT`上限后自增id不会再变化。
-+ MySQL 8.0 版本前，**自增不持久化**，自增值可能会存在回溯问题(mysql重启后自增id会变化)！
++ MySQL 8.0 版本前，**自增不持久化**，自增值可能会存在回溯问题(mysql重启后自增id会变化)！<font color=red>即使建表指定了自增起始值或者通过 `alter table`设置起始值，重启数据库后都会丢失，需要重新设置</font>
 + 在海量互联网业务的设计标准中，并不推荐用 DECIMAL 类型，而是更推荐将 DECIMAL 转化为 整型类型。**如果精度到分，则可以通过除100实现。**
 
 ### 字符串类型
