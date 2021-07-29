@@ -1824,6 +1824,18 @@ logging.level.dao对应的位置=debug
 
 > view  >  Appearance  > status bar widges  > memory indicator
 
+### 设置标记
+
+#### 标记设置
+
+> 鼠标右键行的最左边，选择 Set Bookmark with Mnemonic 设置标记
+
+![操作方法](./images/2021-07-26-1.jpg)
+
+#### 查看标记
+
+> 快捷键  shift+f11 即可 查看标记
+
 ## 常用设置
 
 ### 设置 选中对象时背景颜色
@@ -2177,7 +2189,7 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 > }
 >  ```
 >
-> 
+> 报错为 404，找不到页面
 
 #### 解决办法
 
@@ -7631,6 +7643,21 @@ Collections.sort(result, new Comparator<Map.Entry<String, Integer>>() {
 ```
 
 
+
+# 高端操作
+
+## google 发送post请求
+
+[参考链接](https://www.cnblogs.com/woyujiezhen/p/13961371.html)
+
+```java
+//参考代码
+var xhr=new XMLHttpRequest();
+xhr.open("POST","http://47.93.168.209:7006/ossFile/download.do?fileId=e2bdad90-06d9-470a-956c-869095a8ef71",true);
+xhr.setRequestHeader("Content-Type","image/jpg");
+xhr.setRequestHeader("Content-Disposition","hello");
+xhr.send();
+```
 
 
 
