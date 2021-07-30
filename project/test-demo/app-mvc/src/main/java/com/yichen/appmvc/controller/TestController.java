@@ -1,12 +1,19 @@
 package com.yichen.appmvc.controller;
 
+import com.yichen.appmvc.model.User;
+import com.yichen.appmvc.service.UserService;
 import com.yichen.appmvc.vo.ResultVo;
+import com.yichen.utils.ResultUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,10 +24,11 @@ import java.util.Map;
 @Controller
 public class TestController {
 
-    /**
-     * 存在问题，按ctrl 可以跳转到对应的jsp，但是项目运行时controller 无法实现跳转
-     * @return
-     */
+    private Logger logger = LoggerFactory.getLogger(TestController.class);
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/test",method = RequestMethod.GET)
     public String test(){
         System.out.println("test ");
@@ -38,6 +46,30 @@ public class TestController {
         resultVo.setData(data);
         return resultVo;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/getUsers")
+    public ResultVo getUsers(){
+        logger.info("请求方法getUsers");
+        List<User> users= userService.getUsers();
+        logger.info("查询结果集{}", users);
+        ResultVo resultVo= ResultUtils.successResult();
+        resultVo.setData(users);
+        resultVo.setCode("0");
+        return resultVo;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getUsersGroupByName")
+    public ResultVo getUsersGroupByName(){
+        logger.info("请求方法getUsersGroupByName");
+        Map<String, List<User>> users = userService.getUsersAndGroupByName();
+        ResultVo resultVo= ResultUtils.successResult();
+        resultVo.setData(users);
+        resultVo.setCode("0");
+        return resultVo;
+    }
+
 
 
 

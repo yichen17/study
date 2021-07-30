@@ -2197,7 +2197,9 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 ![解决办法](C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210722165020449.png)
 
+### idea 实体类存在但是提示找不到 报红
 
+![参考解决办法](C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210730085931598.png)
 
 
 

@@ -10,6 +10,12 @@ public class ResultVo<T> {
     private String code;
     private T data;
 
+
+    public ResultVo() {
+    }
+
+
+
     @Override
     public String toString() {
         return "ResultVo{" +
