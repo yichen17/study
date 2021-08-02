@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,13 @@ public class TestController {
     public String test(){
         System.out.println("test ");
         return "base/modules/sys/hello";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/show")
+    public ResultVo show(){
+        logger.info("show()方法开始执行");
+        return new ResultVo().setCode("1").setData(new String[]{"hello","world","show"});
     }
 
     @ResponseBody
@@ -68,6 +76,18 @@ public class TestController {
         resultVo.setData(users);
         resultVo.setCode("0");
         return resultVo;
+    }
+
+    /**
+     * 测试 controller 层面转发
+     * @return
+     */
+    @RequestMapping(value = "/redirect")
+    public ModelAndView redirectTest(){
+        logger.info("访问redirect方法，即将转发请求至show方法");
+        ModelAndView mav=new ModelAndView();
+        mav.setViewName("forward:show");
+        return  mav;
     }
 
 

@@ -28,15 +28,17 @@ public class ResultVo<T> {
         return code;
     }
 
-    public void setCode(String code) {
+    public ResultVo setCode(String code) {
         this.code = code;
+        return this;
     }
 
     public T getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public ResultVo setData(T data) {
         this.data = data;
+        return this;
     }
 }
