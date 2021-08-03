@@ -35,6 +35,7 @@
 		<module>rabbitmq-case</module>
 		<module>mybatis-generator</module>
 		<module>basic-knowledge</module>
+		<module>heartbeat</module>
     </modules>
 
 	<properties>
