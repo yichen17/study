@@ -1282,6 +1282,10 @@ git log
 >
 > git pull
 
++ 删除远程分支(dev)
+
+> git push origin --delete dev
+
 ## 查看提交历史  git log
 
 > //   -p  每次提交差异  -2 显示日志条数(这里表示两条)
@@ -4833,6 +4837,36 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 ## 查看磁盘信息
 
 > df -h 
+
+## kafka
+
+### 安装
+
+> [安装包下载](https://mirrors.tuna.tsinghua.edu.cn/)
+>
+> // 启动zookeeper
+>
+> bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
+>
+> // 停止
+>
+> bin/zookeeper-server-stop.sh
+>
+> // 启动 kafka
+>
+> bin/kafka-server-start.sh -daemon config/server.properties
+>
+> // 停止
+>
+> bin/kafka-server-stop.sh
+
+### 问题
+
+#### No snapshot found, but there are log entries. Something is broken!
+
+[参考解决办法](https://blog.csdn.net/laoyao199044/article/details/104158467)
+
+> dataDir 数据目录冲突，本地有其他zookeeper 在使用该目录，如果是没有的目录，直接删除，如果还在使用，则手动修改目录。
 
 ## redis
 
