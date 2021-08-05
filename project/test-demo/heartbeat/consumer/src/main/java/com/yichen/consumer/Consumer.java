@@ -18,10 +18,18 @@ public class Consumer {
 
     @KafkaListener(topics = "test")
     public void show(ConsumerRecord<String, String> record, Acknowledgment acknowledgment){
-        String value= record.value();
-        System.out.println(value);
-        Student student= JSON.parseObject(value,Student.class);
-        System.out.println("转换后的数据是"+student);
+        try{
+            String value= record.value();
+            System.out.println(value);
+            Student student= JSON.parseObject(value,Student.class);
+            System.out.println("转换后的数据是"+student);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            acknowledgment.acknowledge();
+        }
     }
 
 

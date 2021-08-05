@@ -3910,6 +3910,12 @@ MECE原则（Mutually Exclusive Collectively Exhaustive）的中文意思是 "�
 
 # 问题记录
 
+## java 变量命名问题
+
+> 请求入参如果带 is前缀变量  貌似会舍弃
+>
+> 通过序列化  is前缀变量反序列化没问题
+
 ## 接口中的已经赋值的变量可以直接使用吗
 
 两种方式 一种通过接口.变量，另一种通过import引入
@@ -4860,6 +4866,10 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >
 > bin/kafka-server-stop.sh
 
+### 可视化界面
+
+
+
 ### 问题
 
 #### No snapshot found, but there are log entries. Something is broken!
@@ -4867,6 +4877,30 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 [参考解决办法](https://blog.csdn.net/laoyao199044/article/details/104158467)
 
 > dataDir 数据目录冲突，本地有其他zookeeper 在使用该目录，如果是没有的目录，直接删除，如果还在使用，则手动修改目录。
+
+#### Caused by: java.lang.ClassNotFoundException: org.apache.kafka.clients.consumer.ConsumerGroupMetadata
+
+具体报错如下：
+
+```java
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.autoconfigure.kafka.KafkaAnnotationDrivenConfiguration]: Constructor threw exception; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name ‘kafkaTemplate’ defined in class path resource [org/springframework/boot/autoconfigure/kafka/KafkaAutoConfiguration.class]: Post-processing of merged bean definition failed; nested exception is java.lang.IllegalStateException: Failed to introspect Class [org.springframework.kafka.core.KafkaTemplate] from ClassLoader [org.springframework.boot.loader.LaunchedURLClassLoader@439f5b3d]
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name ‘kafkaTemplate’ defined in class path resource [org/springframework/boot/autoconfigure/kafka/KafkaAutoConfiguration.class]: Post-processing of merged bean definition failed; nested exception is java.lang.IllegalStateException: Failed to introspect Class [org.springframework.kafka.core.KafkaTemplate] from ClassLoader [org.springframework.boot.loader.LaunchedURLClassLoader@439f5b3d]
+Caused by: java.lang.IllegalStateException: Failed to introspect Class [org.springframework.kafka.core.KafkaTemplate] from ClassLoader [org.springframework.boot.loader.LaunchedURLClassLoader@439f5b3d]
+Caused by: java.lang.NoClassDefFoundError: org/apache/kafka/clients/consumer/ConsumerGroupMetadata
+```
+
+解决办法： springboot 与 kafka 版本问题  
+
+> springboot2.2.x 对应kafka2.3.x和2.4.x 版本
+> springboot2.3.x 对应kafka2.5.x 版本
+>
+> // 自己测试使用的版本
+>
+> springboot  2.0.6.RELEASE  kafka-clients  2.3.1
+
+#### kafka 无法关闭问题
+
+> 先关闭 kafka，后关闭 zookeeper，如果先关闭 zookeeper 就会出现该问题
 
 ## redis
 
@@ -6768,6 +6802,18 @@ long stop=System.currentTimeMillis();
 + `W` ： 表示有效工作日（周一至周五），只能出现在 `DayofMonth` 域，系统将在离指定日期最近的有效工作日触发事件。例如在`DayofMonth` 使用 5W  ，如果5日是星期六，则将在最近的工作日：星期五，即四日触发。如果5日是星期天，则在6日（周一触发）。如果5日在星期一到星期五中的一天，则就在5日触发。**另外一点，W的最近寻找不会跨过月份**。
 + `LW` ：这连个字符可以连用，表示在某个月最后一个工作日
 + `#` : 用于确定每个月第几个星期几，只能出现在  `DayofMonth` 域，例如在 `4#2` 表示某月的第二个星期三
+
+## pointcut 表达式
+
+[参考链接](https://cloud.tencent.com/developer/article/1497814#:~:text=Pointcut%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B1%BB%E5%9E%8B%201%20execution%EF%BC%9A%E4%B8%80%E8%88%AC%E7%94%A8%E4%BA%8E%E6%8C%87%E5%AE%9A%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C%EF%BC%8C%E7%94%A8%E7%9A%84%E6%9C%80%E5%A4%9A%E3%80%82%202%20within%EF%BC%9A%E6%8C%87%E5%AE%9A%E6%9F%90%E4%BA%9B%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%A8%E9%83%A8%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%EF%BC%8C%E4%B9%9F%E5%8F%AF%E7%94%A8%E6%9D%A5%E6%8C%87%E5%AE%9A%E4%B8%80%E4%B8%AA%E5%8C%85%E3%80%82%203%20this%EF%BC%9ASpring%20Aop%E6%98%AF%E5%9F%BA%E4%BA%8E%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%EF%BC%8C%E7%94%9F%E6%88%90%E7%9A%84bean%E4%B9%9F%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1%EF%BC%8Cthis%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1%EF%BC%8C%E5%BD%93%E8%BF%99%E4%B8%AA%E5%AF%B9%E8%B1%A1%E5%8F%AF%E4%BB%A5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%8C%87%E5%AE%9A%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%97%B6%EF%BC%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%88%87%E5%85%A5%E7%82%B9%E5%B0%B1%E6%98%AF%E5%AE%83%E4%BA%86%EF%BC%8CSpring,args%EF%BC%9A%E5%BD%93%E6%89%A7%E8%A1%8C%E7%9A%84%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E6%98%AF%E6%8C%87%E5%AE%9A%E7%B1%BB%E5%9E%8B%E6%97%B6%E7%94%9F%E6%95%88%E3%80%82%206%20%40target%EF%BC%9A%E5%BD%93%E4%BB%A3%E7%90%86%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AF%B9%E8%B1%A1%E4%B8%8A%E6%8B%A5%E6%9C%89%E6%8C%87%E5%AE%9A%E7%9A%84%E6%B3%A8%E8%A7%A3%E6%97%B6%E7%94%9F%E6%95%88%E3%80%82%207%20%40args%EF%BC%9A%E5%BD%93%E6%89%A7%E8%A1%8C%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B%E4%B8%8A%E6%8B%A5%E6%9C%89%E6%8C%87%E5%AE%9A%E7%9A%84%E6%B3%A8%E8%A7%A3%E6%97%B6%E7%94%9F%E6%95%88%E3%80%82%20More%20items...%20)
+
+### 类型匹配语法
+
+`*`：匹配任何数量字符；
+
+ `…`：匹配任何数量字符的重复，如在类型模式中匹配任何数量子包；而在方法参数模式中匹配任何数量参数。
+
+ `+`：匹配指定类型的子类型；仅能作为后缀放在类型模式后边。
 
 
 

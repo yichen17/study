@@ -28,7 +28,7 @@ public class KafkaConfig {
 
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1");
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 1048576);
         properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 67108864);
         properties.put(ProducerConfig.ACKS_CONFIG, "all");

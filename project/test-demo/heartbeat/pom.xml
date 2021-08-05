@@ -18,6 +18,7 @@
 		<module>client</module>
 		<module>producer</module>
 		<module>consumer</module>
+		<module>common</module>
 	</modules>
 
 </project>

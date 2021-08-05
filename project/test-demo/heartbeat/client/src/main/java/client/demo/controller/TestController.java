@@ -1,30 +1,20 @@
 package client.demo.controller;
 
-import client.demo.model.ReturnT;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Qiuxinchao
  * @version 1.0
- * @date 2021/8/3 16:10
- * @describe
+ * @date 2021/8/5 15:37
+ * @describe 远程请求 controller ，单纯转发数据
  */
-@Controller
+@RestController
 public class TestController {
 
-    @RequestMapping("/test")
-    @ResponseBody
-    public ReturnT test(){
-        return new ReturnT<String>(ReturnT.SUCCESS_CODE, "远程调用成功");
+    @RequestMapping(value = "/get")
+    public String getData(){
+        return null;
     }
-
-    @RequestMapping("/t")
-    @ResponseBody
-    public String t(){
-        return "test";
-    }
-
 
 }
