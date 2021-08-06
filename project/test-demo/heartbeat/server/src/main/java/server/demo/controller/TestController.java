@@ -1,6 +1,7 @@
 package server.demo.controller;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import java.util.Map;
  * @describe 远程调用的接口，理论上应该是内网
  */
 @RestController
+@Slf4j
 public class TestController {
 
     /**
@@ -22,6 +24,7 @@ public class TestController {
      */
     @RequestMapping("/get")
     public String getData(){
+        log.info("访问get接口");
         Map<String,Object> map=new HashMap<>();
         map.put("name","yichen");
         map.put("age",18);

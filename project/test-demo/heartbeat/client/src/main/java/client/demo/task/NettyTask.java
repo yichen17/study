@@ -1,6 +1,8 @@
-package client.demo.test;
+package client.demo.task;
 
 import client.demo.handler.ReqHandler;
+import com.yichen.handler.RpcDecoder;
+import com.yichen.handler.RpcEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -11,21 +13,22 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author Qiuxinchao
  * @version 1.0
- * @date 2021/8/3 15:20
+ * @date 2021/8/6 10:47
  * @describe
  */
-//@Component
+@Component
 @Slf4j
-public class Client implements InitializingBean {
+public class NettyTask implements Runnable{
+
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void run() {
         EventLoopGroup bossGroup=new NioEventLoopGroup();
         EventLoopGroup workGroup=new NioEventLoopGroup();
         try{
@@ -34,7 +37,8 @@ public class Client implements InitializingBean {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new IdleStateHandler(180,180,0, TimeUnit.SECONDS))
+                            ch.pipeline().addLast(new RpcDecoder()).addLast(new RpcEncoder())
+                                    .addLast(new IdleStateHandler(5,5,0, TimeUnit.SECONDS))
                                     .addLast(new ReqHandler());
                         }
                     });

@@ -1,6 +1,7 @@
 package com.yichen.handler;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -11,11 +12,12 @@ import java.io.Serializable;
  * @describe netty 自定义消息实体
  */
 @Data
-public class NettyMessage<T> implements Serializable {
+@ToString
+public class NettyMessage implements Serializable {
     /**
      * 0 表示写  1 表示读   2表示通信
      */
-    private String code;
+    private int code;
 
-    private T data;
+    private String data;
 }
