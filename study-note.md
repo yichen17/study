@@ -2205,7 +2205,13 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 ![参考解决办法](C:\Users\E480\AppData\Roaming\Typora\typora-user-images\image-20210730085931598.png)
 
+### springboot 中通过 InitializingBean 创建netty，运行时web无法访问
 
+> 原因是 netty 阻塞了  springboot 内置的 tomcat 的创建
+>
+> // 解决方法，不通过 springboot bean 的初始化函数，而是通过 手动跑 Thread
+
+[参考解决方法](https://blog.csdn.net/qq_41571395/article/details/108635892)
 
 
 
