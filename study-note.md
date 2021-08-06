@@ -1282,9 +1282,9 @@ git log
 >
 > git pull
 
-+ 删除远程分支(dev)
++ 查看文件区别
 
-> git push origin --delete dev
+> git diff note.txt
 
 ## 查看提交历史  git log
 
@@ -1308,7 +1308,12 @@ git log
 
 [参考链接](https://www.jianshu.com/p/ff1877c5864e)
 
-
+> //删除远程分支(dev)
+> git push origin --delete dev
+>
+> // 合并分支
+>
+> git merge dev
 
 ## 版本回退
 
