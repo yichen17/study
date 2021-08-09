@@ -1847,6 +1847,12 @@ logging.level.dao对应的位置=debug
 
 ## 常用设置
 
+## 不显示  .iml 文件
+
+> File > Settings > Editor > FIle Type  在最下面的  Ignore Files and Folders 末尾添加 *.iml;    即可
+
+![参考步骤](./images/2021-08-07-3.jpg)
+
 ### 设置 选中对象时背景颜色
 
 setting =》  editor  =》  color scheme  =》  general    右侧   
@@ -2220,9 +2226,14 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 ### springboot 配置日志
 
+<img src="./images/2021-08-07-1.jpg" alt="参考步骤" style="zoom:67%;" />
+
+#### 方法一：View > Tool Windows > Maven 选中 maven即可打开右侧的菜单
 
 
+#### 方法二： Help > Find Action > 输入 Maven Projects ，选择下面的 Add  Maven Project
 
+<img src="./images/2021-08-07-2.jpg" alt="参考步骤" style="zoom: 80%;" />
 
 # 响应式编程
 
@@ -2237,6 +2248,9 @@ Flux.fromIteratable()
 Mono.just()
 ```
 
+### idea 没有maven 窗口，也没有进行maven 加载
+
+[参考解决办法](https://www.cnblogs.com/learcher/p/13420116.html)
 
 
 ## 异步请求的三种实现
