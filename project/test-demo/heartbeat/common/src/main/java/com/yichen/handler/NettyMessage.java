@@ -15,7 +15,7 @@ import java.io.Serializable;
 @ToString
 public class NettyMessage implements Serializable {
     /**
-     * 0 表示写  1 表示读   2表示通信
+     * 0 中台发心跳包  1 内部服务器反馈心跳包   2表示通信
      */
     private int code;
 

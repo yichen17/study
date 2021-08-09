@@ -38,7 +38,8 @@ public class NettyTask implements Runnable{
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new RpcDecoder()).addLast(new RpcEncoder())
-                                    .addLast(new IdleStateHandler(5,5,0, TimeUnit.SECONDS))
+                                    // 指定心跳频率  60s发送一次心跳
+                                    .addLast(new IdleStateHandler(20,5,0, TimeUnit.SECONDS))
                                     .addLast(new ReqHandler());
                         }
                     });

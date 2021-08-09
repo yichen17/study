@@ -25,8 +25,12 @@ public class RespHandler extends ChannelDuplexHandler {
         // 给外网调用发送反馈
         NettyMessage nettyMessage=(NettyMessage)msg;
         log.info("RespHandler接收到的msg: ,code= "+nettyMessage.getCode()+",data= "+nettyMessage.getData());
+        if(0==nettyMessage.getCode()){
+            log.info(">>> 接收到中台发的心跳");
+            ctx.writeAndFlush(buildHeartBeat(1));
+        }
         if(2==nettyMessage.getCode()){
-            //TODO 访问本地服务，获取结果
+            //TODO 访问本地服务，获取结果  可进行优化
             String result="";
             try{
                 result= HttpRequest.post("localhost:8088/get").timeout(2000).execute().body();
@@ -53,6 +57,7 @@ public class RespHandler extends ChannelDuplexHandler {
             });
         }
         else{
+            log.info("其他code，具体内容为{}",msg);
             ctx.fireChannelRead(msg);
         }
     }
@@ -62,12 +67,13 @@ public class RespHandler extends ChannelDuplexHandler {
         if (IdleStateEvent.class.isAssignableFrom(evt.getClass())) {
             IdleStateEvent event = (IdleStateEvent)evt;
             if (event.state() == IdleState.READER_IDLE) {
-                log.info("RespHandler当前状态为Read");
-                //ctx.writeAndFlush(buildHeartBeat("1"));
+                log.info(">>> 接收到中台读数据心跳");
+                log.info("60s内没有接收到心跳，关闭channel");
+                ctx.disconnect();
+                //ctx.channel().closeFuture().sync();
             }
-            if (event.state() == IdleState.WRITER_IDLE) {
-                log.info("RespHandler当前状态为Write");
-                //ctx.writeAndFlush(buildHeartBeat("0"));
+            if(event.state()==IdleState.WRITER_IDLE){
+                log.info(">>> 接收到中台写数据心跳");
             }
         }
     }

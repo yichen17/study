@@ -3,8 +3,10 @@ package client.demo.utils;
 import io.netty.channel.Channel;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.Future;
 
 /**
@@ -24,5 +26,9 @@ public class MapTools {
      * 存储 channel 和 channelFuture之间的映射关系，在获取内网返回的结果后，根据 channel 反传 controller
      */
     public static HashMap<Channel, Future> channelFutureMap=new HashMap<>();
+    /**
+     * 内网主机 ip地址
+     */
+    public static HashSet<String> ips=new HashSet<>();
 
 }

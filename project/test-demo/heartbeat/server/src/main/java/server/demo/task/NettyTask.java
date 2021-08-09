@@ -35,12 +35,12 @@ public class NettyTask implements Runnable{
         EventLoopGroup eventExecutors=new NioEventLoopGroup();
         try{
             Bootstrap bootstrap=new Bootstrap();
-            bootstrap.group(eventExecutors).channel(NioSocketChannel.class).remoteAddress(ALIYUN,7421)
+            bootstrap.group(eventExecutors).channel(NioSocketChannel.class).remoteAddress(LOCAL,7421)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new RpcDecoder()).addLast(new RpcEncoder())
-                                    .addLast(new IdleStateHandler(5,5,0, TimeUnit.SECONDS))
+                                    .addLast(new IdleStateHandler(20,5,0, TimeUnit.SECONDS))
                                     .addLast(new RespHandler());
                         }
                     });

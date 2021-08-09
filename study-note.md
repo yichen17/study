@@ -2218,6 +2218,8 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 [参考解决方法](https://blog.csdn.net/qq_41571395/article/details/108635892)
 
+### springboot 配置日志
+
 
 
 
