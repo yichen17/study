@@ -7,10 +7,10 @@
 		<artifactId>test-demo</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>heartbeat</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>com.yichen</groupId>
+	<artifactId>heartbeat</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>heartbeat</name>
 	<description>心跳测试</description>
 	<packaging>pom</packaging>
 	<modules>
