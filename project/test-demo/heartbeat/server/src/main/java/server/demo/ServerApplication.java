@@ -9,14 +9,14 @@ import server.demo.task.NettyTask;
 
 @SpringBootApplication
 @ComponentScan(value = "server.demo.*")
-public class DemoApplication implements CommandLineRunner
+public class ServerApplication implements CommandLineRunner
 {
 
 	@Autowired
 	private NettyTask nettyTask;
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(ServerApplication.class, args);
 	}
 
 

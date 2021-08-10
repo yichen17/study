@@ -1,6 +1,9 @@
 package client.demo.controller;
 
 import client.demo.utils.MapTools;
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.yichen.handler.NettyMessage;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -57,20 +60,24 @@ public class TestController {
                 try{
                     CompletableFuture<String> future=(CompletableFuture<String>)MapTools.channelFutureMap.get(channel);
                     if(future==null){
-                        Thread.sleep(1000);
+                        Thread.sleep(10000);
                         continue;
                     }
                     if(future.isDone()){
                         String res= future.get();
                         log.info("远程调用返回的结果{}",res);
-                        return res;
+                        SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
+                        String decryptStr = aes.decryptStr(res, CharsetUtil.CHARSET_UTF_8);
+                        log.info("解密后的数据结果");
+                        return decryptStr;
                     }
                 }
                 catch (Exception e){
                     e.printStackTrace();
+                    break;
                 }
             }
-//            return "future 没有获取到值";
+            return "出现异常";
         }
         catch (Exception e){
             e.printStackTrace();

@@ -9,13 +9,13 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(value = "client.demo.*")
-public class DemoApplication implements CommandLineRunner {
+public class ClientApplication implements CommandLineRunner {
 
 	@Autowired
 	private NettyTask nettyTask;
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(ClientApplication.class, args);
 	}
 
 	@Override

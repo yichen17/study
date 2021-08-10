@@ -1,11 +1,11 @@
-package server.demo.model;
+package com.yichen.model;
 
 import java.io.Serializable;
 
 /**
  * @author Qiuxinchao
  * @version 1.0
- * @date 2021/8/3 15:35
+ * @date 2021/8/10 15:39
  * @describe
  */
 public class ReturnT<T> implements Serializable {

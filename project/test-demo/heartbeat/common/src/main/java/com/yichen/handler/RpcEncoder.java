@@ -15,8 +15,15 @@ public class RpcEncoder extends MessageToByteEncoder<NettyMessage> {
     @Override
     protected void encode(ChannelHandlerContext ctx, NettyMessage msg, ByteBuf out) throws Exception {
         out.writeInt(msg.getCode());
-        byte [] data=msg.getData().getBytes(CharsetUtil.UTF_8);
-        out.writeInt(data.length);
-        out.writeBytes(data);
+        // 判空逻辑 如果是心跳包需要判空，不然存在异常
+        String data=msg.getData();
+        if(data==null||"".equals(data)){
+            out.writeInt(0);
+        }
+        else{
+            byte [] datas=msg.getData().getBytes(CharsetUtil.UTF_8);
+            out.writeInt(datas.length);
+            out.writeBytes(datas);
+        }
     }
 }

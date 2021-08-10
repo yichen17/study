@@ -20,4 +20,16 @@ public class NettyMessage implements Serializable {
     private int code;
 
     private String data;
+
+    /**
+     * 构建心跳
+     * @param type 心跳类型
+     * @return 心跳消息
+     */
+    public static NettyMessage buildHeartBeat(int type) {
+        NettyMessage msg = new NettyMessage();
+        msg.setCode(type);
+        return msg;
+    }
+
 }

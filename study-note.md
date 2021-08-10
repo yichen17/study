@@ -1198,6 +1198,9 @@ git status
 // 删除暂存区中的文件   只能是文件，文件夹不行。
 git rm --cache 文件名
 
+// 清除缓存中的文件， 根据目录清除(删除study目录下git add 的文件)
+git rm -r --cached /d/study
+
 // 提交
 git commit -m "说明注释"
 
@@ -1387,7 +1390,11 @@ git config --global credential.helper store
 git config --global core.quotepath false
 ```
 
+### 初始化仓库 master 合并到main  报错 refusing to merge unrelated histories
 
+[参考解决方法](https://developer.aliyun.com/article/614459)
+
+> git merge master --allow-unrelated-histories
 
 
 
@@ -1847,7 +1854,7 @@ logging.level.dao对应的位置=debug
 
 ## 常用设置
 
-## 不显示  .iml 文件
+### 不显示  .iml 文件
 
 > File > Settings > Editor > FIle Type  在最下面的  Ignore Files and Folders 末尾添加 *.iml;    即可
 
@@ -6173,6 +6180,32 @@ server.tomcat.uri-encoding=UTF-8
 
 # JAVA
 
+## springboot 
+
+### 读取配置文件
+
+#### @Value()
+
+> // 使用方法
+>
+> // application.properties中配置信息
+>
+> yichen.age=10
+>
+> // 类中获取配置信息
+>
+> @Value("${yichen.age}")
+>
+> private int age;
+
+#### @Configuration
+
+[参考链接](https://www.cnblogs.com/tian874540961/p/12146467.html)
+
+
+
+
+
 ## 日志级别(log level)
 
 ### 分类
@@ -7720,7 +7753,15 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 
 [参考解释，不太看的懂](https://dba.stackexchange.com/questions/62439/a-little-clarification-on-how-limit-works)
 
+#### 自动更新字段 修改后没更新
 
+> // 具体描述
+>
+> 例如时间字段，设定为自动更新(on update currrent_timestamp)，但是在数据行上修改数据后，发现该字段没有更新
+>
+> // 解决办法
+>
+> 因为在更新字段时，也修改了这个自动更新字段。此时该更新由于自动更新。
 
 
 

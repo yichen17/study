@@ -7,10 +7,10 @@
 		<artifactId>demo</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>server</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>com.yichen</groupId>
+	<artifactId>server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>server</name>
 	<description>心跳测试服务端</description>
 	<properties>
 		<java.version>1.8</java.version>
@@ -34,15 +34,11 @@
 
 		<dependency>
 			<groupId>com.yichen</groupId>
-			<artifactId>demo</artifactId>
+			<artifactId>common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
-		<dependency>
-			<groupId>cn.hutool</groupId>
-			<artifactId>hutool-all</artifactId>
-			<version>5.5.7</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>com.alibaba</groupId>

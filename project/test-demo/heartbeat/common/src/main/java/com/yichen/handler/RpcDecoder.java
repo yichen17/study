@@ -18,10 +18,13 @@ public class RpcDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         int code=in.readInt();
         int len=in.readInt();
-        String data=in.readBytes(len).toString(CharsetUtil.UTF_8);
+        // 判断长度，如果为0 则表示为心跳
         NettyMessage nettyMessage=new NettyMessage();
         nettyMessage.setCode(code);
-        nettyMessage.setData(data);
+        if(len!=0){
+            String data=in.readBytes(len).toString(CharsetUtil.UTF_8);
+            nettyMessage.setData(data);
+        }
         out.add(nettyMessage);
     }
 }
