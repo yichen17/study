@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -32,8 +33,9 @@ public class TestController {
 
 
     @RequestMapping(value = "/get")
-    public String getData(){
+    public String getData(HttpServletRequest request){
         try{
+            log.info("接收到请求，访问ip为{}",request.getRemoteAddr());
             log.info("get方法开始调用");
             Channel channel=MapTools.channels.iterator().next();
             // 远程调用服务
@@ -68,8 +70,8 @@ public class TestController {
                         log.info("远程调用返回的结果{}",res);
                         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
                         String decryptStr = aes.decryptStr(res, CharsetUtil.CHARSET_UTF_8);
-                        log.info("解密后的数据结果");
-                        return decryptStr;
+                        log.info("解密后的数据结果{}",decryptStr);
+                        return decryptStr.replace("|","\n");
                     }
                 }
                 catch (Exception e){

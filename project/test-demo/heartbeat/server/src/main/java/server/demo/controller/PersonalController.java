@@ -5,6 +5,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.yichen.model.ReturnT;
+import com.yichen.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +24,15 @@ public class PersonalController {
     @Value("${yichen.file.path}")
     private String filePath;
 
+    @Value("${yichen.secret}")
+    private String secret;
+
     @RequestMapping("/getFile")
     public String getFile(){
         // TODO 读取的数据没了换行,需要存在换行，不然不易查看
-        FileReader fileReader=new FileReader(filePath);
-        String data=fileReader.readString();
+//        FileReader fileReader=new FileReader(filePath);
+//        String data=fileReader.readString();
+        String data= FileUtils.readFileByPath(filePath);
         log.info("原数据{}",data);
         //构建
         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
