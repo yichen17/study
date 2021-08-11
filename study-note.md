@@ -6176,6 +6176,67 @@ spring.http.encoding.enabled=true
 server.tomcat.uri-encoding=UTF-8
 ```
 
+## springboot 将默认的logback改为 slf4j2
+
+```java
+// springboot 版本
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.3.4.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+
+// 变量声明
+<properties>
+    <java.version>1.8</java.version>
+    <log4j.version>2.13.3</log4j.version>
+</properties>
+
+// 替换日志类型
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+
+<!--使用log4j -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-1.2-api</artifactId>
+    <version>${log4j.version}</version>
+</dependency>
+
+<!-- 日志 Log4j2 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>
+<!-- 桥接：告诉Slf4j使用Log4j2 -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-slf4j-impl</artifactId>
+    <version>${log4j.version}</version>
+</dependency>
+<!-- 桥接：告诉commons logging使用Log4j2 -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-jcl</artifactId>
+    <version>${log4j.version}</version>
+</dependency>
+<!-- log4j2 无锁并发 -->
+<dependency>
+    <groupId>com.lmax</groupId>
+    <artifactId>disruptor</artifactId>
+    <version>3.4.2</version>
+</dependency>
+```
+
 
 
 # JAVA

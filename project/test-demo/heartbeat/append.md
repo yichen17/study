@@ -12,6 +12,7 @@
 1、netty 心跳机制具体是怎么实现的
 2、ctx.writeAndFlush()  同  ctx.channel().writeAndFlush()  区别
 3、ctx.disconnect()     ctx.channel().closeFuture().sync()  区别  后者运行好像会报错
+4、替换日志  将springboot默认的logback 改为 slf4j2    `√`
 
 
 # 传输协议字段
