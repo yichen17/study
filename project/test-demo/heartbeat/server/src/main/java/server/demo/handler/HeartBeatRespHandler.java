@@ -1,11 +1,15 @@
 package server.demo.handler;
 
 import com.yichen.handler.NettyMessage;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
 
 import static com.yichen.handler.NettyMessage.buildHeartBeat;
 
@@ -24,7 +28,17 @@ public class HeartBeatRespHandler extends SimpleChannelInboundHandler<NettyMessa
         log.info("RespHandler接收到的msg: ,code= "+nettyMessage.getCode()+",data= "+nettyMessage.getData());
         if(0==nettyMessage.getCode()){
             log.info(">>> 接收到心跳");
-            ctx.writeAndFlush(buildHeartBeat(1));
+            ctx.writeAndFlush(buildHeartBeat(1)).addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+                    if(future.isSuccess()){
+                        log.info("发送心跳反馈成功");
+                    }
+                    else{
+                        log.warn("发送心跳反馈失败{}", Arrays.toString(future.cause().getStackTrace()));
+                    }
+                }
+            });
         }
         else{
             ctx.fireChannelRead(msg);

@@ -9,6 +9,8 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+
 import static com.yichen.handler.NettyMessage.buildHeartBeat;
 
 /**
@@ -36,10 +38,10 @@ public class HeartBeatReqHandler extends ChannelDuplexHandler {
                     @Override
                     public void operationComplete(ChannelFuture future) throws Exception {
                         if(future.isSuccess()){
-                            System.out.println("发送心跳成功");
+                            log.info("发送心跳成功");
                         }
                         else{
-                            future.cause().printStackTrace();
+                            log.warn("发送心跳失败{}", Arrays.toString(future.cause().getStackTrace()));
                         }
                     }
                 });
