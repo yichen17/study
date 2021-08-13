@@ -6243,6 +6243,10 @@ server.tomcat.uri-encoding=UTF-8
 
 ## springboot 
 
+### 整合shiro
+
+[参考链接](https://cloud.tencent.com/developer/article/1643122)
+
 ### 读取配置文件
 
 #### @Value()

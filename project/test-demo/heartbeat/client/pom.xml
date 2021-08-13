@@ -15,8 +15,23 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<log4j.version>2.13.3</log4j.version>
+		<shiro.version>1.4.2</shiro.version>
 	</properties>
 	<dependencies>
+
+		<!--shiro 认证-->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>org.apache.shiro</groupId>-->
+<!--			<artifactId>shiro-core</artifactId>-->
+<!--			<version>${shiro.version}</version>-->
+<!--		</dependency>-->
+		<!--shiro end-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

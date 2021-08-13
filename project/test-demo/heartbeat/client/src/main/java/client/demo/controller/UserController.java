@@ -5,9 +5,15 @@ import client.demo.utils.MapTools;
 import client.demo.utils.ReturnT;
 import com.yichen.utils.SecretUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,13 +36,25 @@ public class UserController {
     @Value("${yichen.password}")
     private String password;
 
-
-
     @RequestMapping("/login")
-    public ReturnT login(HttpServletRequest httpServletRequest,
+    @ResponseBody
+    public String login(HttpServletRequest httpServletRequest){
+        log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
+        return "请输入账号密码登陆";
+    }
+
+
+
+    @RequestMapping("/loginCheck")
+    public ReturnT loginCheck(HttpServletRequest httpServletRequest,
                          @RequestParam("username") String username, @RequestParam("password")String password){
         log.info("请求ip地址为{},入参username:{},password:{}",httpServletRequest.getRemoteAddr(),username,password);
-        if(this.username.equals(username)&&this.password.equals(password)){
+
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+        try {
+            subject.login(token);
+            log.info("登陆成功");
             Map<String,String> data=new HashMap<>();
             String key=SecretUtils.constructPrivateKey();
             String encodeKey= SecretUtils.transform(key);
@@ -45,8 +63,9 @@ public class UserController {
             MapTools.md5_keys.put(httpServletRequest.getRemoteAddr(),encodeKey);
             ReturnT res=new ReturnT(data);
             return res;
+        } catch (UnknownAccountException | IncorrectCredentialsException e) {
+            return new ReturnT("1","用户名或密码错误");
         }
-        return new ReturnT("1","用户名或密码错误");
     }
 
 }
