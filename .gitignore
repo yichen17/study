@@ -9,4 +9,3 @@ svn/*.*
 svn/**
 **/logs/**
 **/logs/*.*
-**/SecretUtils.*

@@ -1,7 +1,9 @@
 package client.demo.controller;
 
 
+import client.demo.utils.MapTools;
 import client.demo.utils.ReturnT;
+import com.yichen.utils.SecretUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +38,11 @@ public class UserController {
         log.info("请求ip地址为{},入参username:{},password:{}",httpServletRequest.getRemoteAddr(),username,password);
         if(this.username.equals(username)&&this.password.equals(password)){
             Map<String,String> data=new HashMap<>();
-            data.put("secret","yichenshanliangz");
+            String key=SecretUtils.constructPrivateKey();
+            String encodeKey= SecretUtils.transform(key);
+            data.put("secret",encodeKey);
+            log.info("随机生成md5=key{},加密后的key{}",key,encodeKey);
+            MapTools.md5_keys.put(httpServletRequest.getRemoteAddr(),encodeKey);
             ReturnT res=new ReturnT(data);
             return res;
         }

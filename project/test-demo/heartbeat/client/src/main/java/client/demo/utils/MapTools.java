@@ -30,5 +30,9 @@ public class MapTools {
      * 内网主机 ip地址
      */
     public static HashSet<String> ips=new HashSet<>();
+    /**
+     * 外部访问公网主机，根据ip匹配md5加密的key
+     */
+    public static HashMap<String,String> md5_keys=new HashMap<>();
 
 }

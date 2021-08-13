@@ -20,10 +20,11 @@
 3、ctx.disconnect()     ctx.channel().closeFuture().sync()  区别  后者运行好像会报错
 4、替换日志  将springboot默认的logback 改为 slf4j2    `√`
 5、内网通过netty与外网建立连接后，内网对应的外网ip是绑定单个端口，还是全部端口都对应
+6、springboot 多次请求是复用链路还是 分开重建
 
 
 # 传输协议字段
 1、type： 心跳、请求
 2、数据长度：
 3、数据内容
-4、
+4、分段位置(分段序列)
