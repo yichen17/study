@@ -799,6 +799,14 @@ shutdown.sh
 
 ## 使用到的命令
 
+> //  .gz文件解压  hello.gz  源文件消失
+>
+> gunzip  hello.gz
+>
+> // 解压保留源文件
+>
+> gunzip -c  hello.gz >  hello
+
 ### wc
 
 ==用来计算字数==
