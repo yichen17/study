@@ -876,11 +876,15 @@ printenv
 [参考文章](https://my.oschina.net/u/4255280/blog/3781794)
 
 ```java
-kill -9 `ps -ef |grep xxx|awk '{print $2}' `      // xxx 中输入 command 中公有的名词
+kill -9 `ps -ef |grep xxx|awk '{print $2}'      // xxx 中输入 command 中公有的名词
 //  rabbitmq 中存在的 启动在关闭后 后台有很多 daemon
 // awk 用于输出某一列    {print $2} 表示输出第二列，即 PID列
 kill -9 `ps -ef | grep daemon | awk '{print $2}'`  
 //  多余选项  grep -v root  表示排除 root 字段
+    
+//   查询 java 进行对应的pid，排除查询的命令
+// 正常执行 grep ，后台都会有一个  grep --color 的进行，需要把它排除
+kill -9 `ps -ef |grep xxx| grep -v grep |awk '{print $2}'
 ```
 
 
@@ -1052,6 +1056,104 @@ tar [选项...] [FILE]...
 > -k  跳过 SSL 检测。
 >
 > curl -k http://www.baidu.com
+
+## bash 脚本命令
+
+[入门文档](https://www.w3cschool.cn/bashshell/bashshell-n2xd37ig.html)
+
+### 查看系统支持的bash，以及 bash的绝对路径
+
+```java
+// 查看支持的bash
+cat /etc/shells
+// 查看  bash  绝对路径
+which bash
+```
+
+### bash 文件系统
+
+```java
+//  ls -l 可以查看文件目录
+// 一共有7列，意义如下
+1、代表文件类型及权限，每个文件均以类型开头，接着指定访问权限。以特定字符表示：
+    常规文件（-）
+    特殊档案（c）
+    命名管道（p）
+    块设备（b）
+    套接字（s）
+    目录（d）
+    链接（l）
+2、代表存储块的数量。
+3、代表文件的所有者或具有管理权限的超级用户。
+4、代表所有者、超级用户组
+5、代表文件大小
+6、代表文件的最后修改日期（具体到分钟）
+7、代表文件或目录的名称
+```
+
+### 更改权限
+
+```java
+//  基本格式
+chmod [class][operator][permission] file_name
+chmod [ugoa][+or-][rwx] file_name
+    
+class由u（超级用户）,g（用户组）,o（其他用户）,a（所有类型）表示。
+operator（+或-）表示添加或删除权限。
+permission由指示符r（读取）,w（修改）,x（运行）表示。
+// 实例，给超级用户加 a.txt  运行权限
+chmod u+x a.txt
+```
+
+### bash 注释
+
+```java
+// 单行注释
+行前使用  #
+// 多行注释
+<< BLOCK 开头
+BLOCK 结尾
+```
+
+###  引号
+
+```java
+// 双引号可以打印变量(即在引号内替换成变量的值，变量通过$引用)单引号则直接输出，如果打印纯文本，单双引号没有区别。
+//  示例
+$ ./bash_script.sh
+echo
+echo "Hello World!"
+comment='Welcome to W3Cschool!'
+echo $comment
+
+echo
+echo "Hello World!"
+comment="Welcome to W3Cschool!"
+echo $comment
+
+echo
+echo "Hello World!"
+remark="Hello User, $comment"
+echo $remark
+    
+echo
+echo "Hello World!"
+remark='Hello User, $comment'
+echo $remark
+// 结果
+$ ./bash_script.sh
+Hello World!
+Welcome to W3Cschool!
+    
+Hello World!
+Welcome to W3Cschool!
+    
+Hello World!
+Hello User, Welcome to W3Cschool!
+    
+Hello World!
+Hello User, $comment
+```
 
 
 
@@ -5510,9 +5612,28 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 
 > 修改启动文件  /conf/server.xml 中   shutdown  的端口，默认值是-1(当前版本  tomcat  9)，改为  8005。再次重启后使用  shutdown 可以成功，当前关闭需要调用  kill 命令来关闭
 
-### zookeeper 和  tomcat 端口冲突，都使用 8080端口
+#### zookeeper 和  tomcat 端口冲突，都使用 8080端口
 
 [参考解决方案](https://blog.csdn.net/liujian8654562/article/details/100860002)
+
+#### tomcat 运行报错  this web application instance has been stopped already.
+
+```
+// 具体报错内容
+20-Aug-2021 10:32:03.183 INFO [Abandoned connection cleanup thread] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+ java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+        at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1305)
+        at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:986)
+        at com.mysql.jdbc.AbandonedConnectionCleanupThread.checkContextClassLoaders(AbandonedConnectionCleanupThread.java:90)
+        at com.mysql.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:63)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+        at java.lang.Thread.run(Thread.java:745)
+```
+
+##### 解决办法
+
+具体产生错误的原因，可以看 tomcat 日志目录下的 `localhost.2021-08-20.log`,将里面的错误解决该问题也会消失
 
 ## 防火墙
 
