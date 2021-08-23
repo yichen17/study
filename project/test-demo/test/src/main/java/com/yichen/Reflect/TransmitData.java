@@ -13,10 +13,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Qiuxinchao
@@ -40,13 +37,22 @@ public class TransmitData {
      *  用来将 一个数据库中查询出来的数据 插入到另一个数据库中。
      *  这里是正常使用账号密码连接数据库实例    数据库实例是通过字符串 url来解析，以 `|`划分
      *  示例：  jdbc:mysql://localhost:3307/transmit?serverTimezone=Asia/Shanghai|root|123
-     *  TODO 待解决，如果涉及到 SSH通道，怎么处理
      *  TODO querySql 只考虑简单查询，复合查询暂时未考虑
      * @param connFrom 数据源 mysql配置信息
      * @param connTo 目的地 mysql 配置信息
      * @param querySql 查询sql   这里指定为 select 查询
+     * @param tableName 目标插入表名
      */
     public static void transmit(String connFrom,String connTo,String querySql,String tableName){
+        SshConnectionTool tool=null;
+        // 先建立  ssh 通道
+        try{
+            tool = buildSshSession();
+        }
+        catch (Throwable throwable){
+            logger.warn("ssh 桥接建立失败，错误内容为{}",throwable.getMessage());
+        }
+
         // 构造数据库连接
         Connection from=buildConnection(connFrom);
         Connection to=buildConnection(connTo);
@@ -63,6 +69,10 @@ public class TransmitData {
             String sql=constructSql(fields,o,tableName);
             insertDataToDb(sql,to);
         }
+        // 执行关闭 关闭 ssh
+        if(tool!=null){
+            tool.closeSsh();
+        }
         logger.info("已成功执行完毕");
     }
 
@@ -70,19 +80,23 @@ public class TransmitData {
 
 
     /**
-     * TODO 指定了具体的信息，待修改为配置
      * 构建 ssh 连接实例
-     * @return 返回连接实例
      */
-    public Session buildSshSession() throws Throwable {
+    public static SshConnectionTool buildSshSession() throws Throwable {
         SshConnectionTool tool=new SshConnectionTool();
-        tool.setRemoteSshProperties("appuser","WWa7jn#2QQ8X",22,"123.57.186.183");
-        tool.setForwardProperties(3309,"127.0.0.1",3306,"192.168.68.6");
-        return  tool.getSession();
+        // 贷后联调库 私有云
+//        tool.setRemoteSshProperties("appuser","WWa7jn#2QQ8X",22,"123.57.186.183");
+//        tool.setForwardProperties(3309,"127.0.0.1",3306,"192.168.68.6");
+
+        tool.setRemoteSshProperties("daili","Ta3l4Q%sDa6G",22,"192.168.30.186");
+        tool.setForwardProperties(3309,"127.0.0.1",3306,"192.168.68.5");
+
+        tool.getSession();
+        return tool;
     }
 
     /**
-     * TODO 字段填充类型指定为 字符串，待优化，扩充：区分数值和字符串
+     * TODO 字段填充类型指定为 字符串，待优化，扩充：区分数值和字符串    mysql5.7 貌似存在自动转换机制， int、decimal 传入 字符串也会自动转换。
      * 构造 查询 sql
      * @param fields 数据字段
      * @param o 实例数据
@@ -98,7 +112,17 @@ public class TransmitData {
         builder.replace(builder.length()-1,builder.length(),")");
         builder.append("values (");
         for(String field:fields){
-            builder.append("'").append(getFieldValueByName(field,o)).append("',");
+            Object value=getFieldValueByName(field,o);
+            // 可以需要根据情况排查。
+            //  1、数字、decimal 等可以直接用字符串插入，mysql 会自动转换(自己测试 5.7)
+            //  2、如果 值为空，则直接插入null，不再加 '' ，不然会报错
+            if(value==null){
+                builder.append(value).append(",");
+            }
+            else{
+                builder.append("'").append(value).append("',");
+            }
+
         }
         builder.replace(builder.length()-1,builder.length(),");");
         logger.info("字段名称{},表名{},构建的sql为{}",fields,tableName,builder.toString());
@@ -111,7 +135,6 @@ public class TransmitData {
      * @param conn 数据库连接实例
      */
     public static void insertDataToDb(String sql,Connection conn){
-        List<Object> res=new ArrayList<>();
         try{
             Statement statement=conn.createStatement();
             int i = statement.executeUpdate(sql);
@@ -245,7 +268,7 @@ public class TransmitData {
 
 
     /**
-     * TODO 存在情况 字段中有 as 字符问题
+     * TODO 存在情况 字段中有 as 字符问题  mysql 5.5.58貌似不支持 as 别名
      * @param queryFields 未切分的查询字段
      * @return 切分后的查询字段数组
      */
@@ -299,6 +322,7 @@ public class TransmitData {
             // 只有一个列字段，直接添加
             res.add(field);
         }
+        logger.info("获取的查询列信息{}", res);
         return res;
     }
 
@@ -308,6 +332,9 @@ public class TransmitData {
      * @return 返回查询sql中的查询字段
      */
     public static String getQueryField(String querySql){
+        logger.info("getQueryField方法入参{}",querySql);
+        // 统一转为小写，避免出错
+        querySql=querySql.toLowerCase();
         int selectPos=querySql.indexOf("select");
         int fromPos=querySql.indexOf("from");
         String queryField=querySql.substring(selectPos+6,fromPos).trim();
@@ -333,15 +360,16 @@ public class TransmitData {
         } catch (ClassNotFoundException | SQLException e) {
             logger.warn("连接数据库异常，异常信息为{}",e.getMessage());
         }
+        logger.info("数据库已连接");
         return connection;
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
-        transmit("jdbc:mysql://localhost:3307/transmit?serverTimezone=Asia/Shanghai|root|123",
-                "jdbc:mysql://localhost:3308/transmit?serverTimezone=Asia/Shanghai|root|123",
-                "select age,name from person where job = 'student'","student");
+        transmit("jdbc:mysql://127.0.0.1:3309/fincloud_loan_order_test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT|fincloud_loan_rw|ZwSMBGTuAtqx",
+                "jdbc:mysql://localhost:3307/test?serverTimezone=Asia/Shanghai|root|123",
+                "SELECT id, merch_no, asset_product_id, inst_no, fund_product_id, order_id, jf_apply_id, third_trans_no, fund_provide_product_id, third_loan_invoice_id, loan_date, deal_result, deal_desc, apply_num, query_num, remark, is_delate, drawn_amt, trans_no, apply_loan_amt, launch_code, bus_batch_id, old_id, apply_loan_date, safeguard_type, value_date  FROM t_order_loan_apply limit 10","t_order_loan_apply_fincloud");
 
 
 

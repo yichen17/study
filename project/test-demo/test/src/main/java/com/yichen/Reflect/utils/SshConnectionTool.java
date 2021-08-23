@@ -10,6 +10,7 @@ import java.util.Properties;
  * @version 1.0
  * @date 2021/8/23 9:53
  * @describe 构建 通过ssh桥接实现的 连接
+ * ssh 桥接 java 实现参考    https://blog.csdn.net/earbao/article/details/50216999
  */
 public class SshConnectionTool {
 
