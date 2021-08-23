@@ -1,6 +1,8 @@
 package com.yichen.Reflect;
 
 import com.google.common.collect.Maps;
+import com.jcraft.jsch.Session;
+import com.yichen.Reflect.utils.SshConnectionTool;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,18 +37,19 @@ public class TransmitData {
     private static Class structClass=null;
 
     /**
-     *  用来将 一个数据库中查询出来的数据 插入到另一个数据库中
+     *  用来将 一个数据库中查询出来的数据 插入到另一个数据库中。
+     *  这里是正常使用账号密码连接数据库实例    数据库实例是通过字符串 url来解析，以 `|`划分
+     *  示例：  jdbc:mysql://localhost:3307/transmit?serverTimezone=Asia/Shanghai|root|123
      *  TODO 待解决，如果涉及到 SSH通道，怎么处理
-     *  TODO querySql 只考虑简单查询，符合查询暂时未考虑
-     *  TODO 查询字段即为列名，别名暂未考虑
-     * @param conn_from 数据源 mysql配置信息
-     * @param conn_to 目的地 mysql 配置信息
+     *  TODO querySql 只考虑简单查询，复合查询暂时未考虑
+     * @param connFrom 数据源 mysql配置信息
+     * @param connTo 目的地 mysql 配置信息
      * @param querySql 查询sql   这里指定为 select 查询
      */
-    public static void transmit(String conn_from,String conn_to,String querySql,String tableName){
+    public static void transmit(String connFrom,String connTo,String querySql,String tableName){
         // 构造数据库连接
-        Connection from=buildConnection(conn_from);
-        Connection to=buildConnection(conn_to);
+        Connection from=buildConnection(connFrom);
+        Connection to=buildConnection(connTo);
         // 截取查询字段
         String queryField=getQueryField(querySql);
         List<String> fields=getFields(queryField);
@@ -61,6 +64,21 @@ public class TransmitData {
             insertDataToDb(sql,to);
         }
         logger.info("已成功执行完毕");
+    }
+
+
+
+
+    /**
+     * TODO 指定了具体的信息，待修改为配置
+     * 构建 ssh 连接实例
+     * @return 返回连接实例
+     */
+    public Session buildSshSession() throws Throwable {
+        SshConnectionTool tool=new SshConnectionTool();
+        tool.setRemoteSshProperties("appuser","WWa7jn#2QQ8X",22,"123.57.186.183");
+        tool.setForwardProperties(3309,"127.0.0.1",3306,"192.168.68.6");
+        return  tool.getSession();
     }
 
     /**

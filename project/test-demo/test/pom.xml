@@ -33,6 +33,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.2.69</version>
@@ -56,6 +62,7 @@
 			<version>3.2.5.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- 不同库数据传输  pom 依赖-->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
@@ -68,6 +75,13 @@
 			<version>18.0</version>
 			<scope>compile</scope>
 		</dependency>
+		<!--SSH 连接-->
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.55</version>
+		</dependency>
+		<!-- end  -->
 
 	</dependencies>
 
