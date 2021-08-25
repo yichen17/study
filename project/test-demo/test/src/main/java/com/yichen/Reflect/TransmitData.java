@@ -8,8 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cglib.beans.BeanGenerator;
 import org.springframework.cglib.beans.BeanMap;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.beans.PropertyDescriptor;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -34,20 +38,80 @@ public class TransmitData {
     private static Class structClass=null;
 
     /**
+     * 传输数据 入口，存在两种方式，一种是通过String直接指定两个db的连接信息，另一种是读取配置文件。<br/>
+     * 读取配置文件分两种情况，相对路径和绝对路径 <br/>
+     * <font color=red>相对路径的情况下，可能会出现读取失败，原因是用户目录可能不同。</font>
+     * @param type 0 => 2个字符串的连接url     1 => 绝对路径读取配置文件  2 => 相对路径读取配置文件
+     * @param paths 路径
+     * @param querySql 查询sql
+     * @param tableName 目标插入表名
+     * @param config  ssh配置信息
+     */
+    public static void transmit(int type,String[] paths,String querySql,String tableName,Map<String,String> config){
+        // 如果有 ssh 需要用到，手动指定。
+//        Map<String,String> sshConfig=new HashMap<>(8);
+//        sshConfig.put("sshUsername","daili");
+//        sshConfig.put("sshPwd","Ta3l4Q%sDa6G");
+//        sshConfig.put("sshPort","22");
+//        sshConfig.put("sshHost","192.168.30.186");
+//        sshConfig.put("localPort","3309");
+//        sshConfig.put("localHost","127.0.0.1");
+//        sshConfig.put("remotePort","3306");
+//        sshConfig.put("remoteHost","192.168.68.5");
+
+        if(type==0){
+            transmit(paths[0],paths[1],querySql,tableName,config);
+        }
+        // 当前位置
+        String position=System.getProperty("user.dir");
+        Properties properties=null;
+        if(type==1){
+            properties = getPropertiesByPath(paths[0]);
+        }
+        if(type==2){
+            logger.info("为相对路径，当前默认文件路径前缀{}",position);
+            properties = getPropertiesByPath(paths[0]);
+        }
+        if(properties==null){
+            logger.info("读取配置文件失败，请核对配置文件位置");
+            return ;
+        }
+        String from=properties.get("db1.url")+"|"+properties.get("db1.username")+"|"+properties.get("db1.pwd");
+        String to=properties.get("db2.url")+"|"+properties.get("db2.username")+"|"+properties.get("db2.pwd");
+        Map<String,String> sshConfig=new HashMap<>(8);
+        sshConfig.put("sshUsername", (String) properties.get("sshUsername"));
+        sshConfig.put("sshPwd", (String) properties.get("sshPwd"));
+        sshConfig.put("sshPort", (String) properties.get("sshPort"));
+        sshConfig.put("sshHost", (String) properties.get("sshHost"));
+        sshConfig.put("localPort", (String) properties.get("localPort"));
+        sshConfig.put("localHost", (String) properties.get("localHost"));
+        sshConfig.put("remotePort", (String) properties.get("remotePort"));
+        sshConfig.put("remoteHost", (String) properties.get("remoteHost"));
+        transmit(from,to,querySql,tableName,sshConfig);
+    }
+
+
+    /**
      *  用来将 一个数据库中查询出来的数据 插入到另一个数据库中。
      *  这里是正常使用账号密码连接数据库实例    数据库实例是通过字符串 url来解析，以 `|`划分
      *  示例：  jdbc:mysql://localhost:3307/transmit?serverTimezone=Asia/Shanghai|root|123
      *  TODO querySql 只考虑简单查询，复合查询暂时未考虑
+     *  TODO 只实现了 mysql数据库
+     *  TODO 只考虑到了单个 ssh，没考虑多个ssh。
      * @param connFrom 数据源 mysql配置信息
      * @param connTo 目的地 mysql 配置信息
      * @param querySql 查询sql   这里指定为 select 查询
      * @param tableName 目标插入表名
      */
-    public static void transmit(String connFrom,String connTo,String querySql,String tableName){
+    public static void transmit(String connFrom,String connTo,String querySql,String tableName,Map<String,String> sshConfig){
         SshConnectionTool tool=null;
         // 先建立  ssh 通道
         try{
-            tool = buildSshSession();
+            if(sshConfig!=null&&sshConfig.size()==8){
+                tool = buildSshSession(sshConfig.get("sshUsername"),sshConfig.get("sshPwd"),Integer.parseInt(sshConfig.get("sshPort"))
+                        ,sshConfig.get("sshHost"),Integer.parseInt(sshConfig.get("localPort")),
+                        sshConfig.get("localHost"),Integer.parseInt(sshConfig.get("remotePort")),sshConfig.get("remoteHost"));
+            }
         }
         catch (Throwable throwable){
             logger.warn("ssh 桥接建立失败，错误内容为{}",throwable.getMessage());
@@ -77,20 +141,26 @@ public class TransmitData {
     }
 
 
-
-
     /**
-     * 构建 ssh 连接实例
+     * 构建 ssh 连接实例,根据情况自己填充数据
+     * @param sshUsername ssh 用户名
+     * @param sshPwd ssh 密码
+     * @param sshPort ssh 端口
+     * @param sshHost  ssh ip地址
+     * @param localPort  本机端口，用于ssh转发
+     * @param localHost  本机 ip地址
+     * @param remotePort 远程端口
+     * @param remoteHost 远程ip地址
+     * @return ssh连接实例,用于之后关闭 ssh
+     * @throws Throwable ssh建立连接异常
      */
-    public static SshConnectionTool buildSshSession() throws Throwable {
+    public static SshConnectionTool buildSshSession(String sshUsername,String sshPwd,int sshPort,String sshHost,
+                                                    int localPort,String localHost,int remotePort,String remoteHost) throws Throwable {
+        logger.info("buildSshSession入参:sshUsername:{},sshPwd:{},sshPort:{},sshHost:{},localPort:{},localHost:{},remotePort:{},remoteHost:{}",
+                sshUsername,sshPwd,sshPort,sshHost,localPort,localHost,remotePort,remoteHost);
         SshConnectionTool tool=new SshConnectionTool();
-        // 贷后联调库 私有云
-//        tool.setRemoteSshProperties("appuser","WWa7jn#2QQ8X",22,"123.57.186.183");
-//        tool.setForwardProperties(3309,"127.0.0.1",3306,"192.168.68.6");
-
-        tool.setRemoteSshProperties("daili","Ta3l4Q%sDa6G",22,"192.168.30.186");
-        tool.setForwardProperties(3309,"127.0.0.1",3306,"192.168.68.5");
-
+        tool.setRemoteSshProperties(sshUsername,sshPwd,sshPort,sshHost);
+        tool.setForwardProperties(localPort,localHost,remotePort,remoteHost);
         tool.getSession();
         return tool;
     }
@@ -364,12 +434,41 @@ public class TransmitData {
         return connection;
     }
 
+    /**
+     * 读取指定位置的配置文件
+     * @param path 配置文件放置的地方
+     * @return 读取配置文件的实例
+     */
+    public static Properties getPropertiesByPath(String path){
+        Properties properties= null;
+        try{
+//            properties=PropertiesLoaderUtils.loadProperties(new FileSystemResource(path));
+            // 可以执行指定路径
+            File file=new File(path);
+            if(!file.exists()){
+                logger.info("该路径下面没有对应的配置文件，请核对路径{}",file.getAbsolutePath());
+                return null;
+            }
+            properties=PropertiesLoaderUtils.loadProperties(new FileSystemResource(file));
+            logger.info("读取properties成功");
+        }
+        catch (IOException e){
+            logger.warn("读取db配置文件失败,配置文件所在位置{}",path);
+        }
+        return properties;
+    }
+
+
 
     public static void main(String[] args){
 
-        transmit("jdbc:mysql://127.0.0.1:3309/fincloud_loan_order_test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT|fincloud_loan_rw|ZwSMBGTuAtqx",
-                "jdbc:mysql://localhost:3307/test?serverTimezone=Asia/Shanghai|root|123",
-                "SELECT id, merch_no, asset_product_id, inst_no, fund_product_id, order_id, jf_apply_id, third_trans_no, fund_provide_product_id, third_loan_invoice_id, loan_date, deal_result, deal_desc, apply_num, query_num, remark, is_delate, drawn_amt, trans_no, apply_loan_amt, launch_code, bus_batch_id, old_id, apply_loan_date, safeguard_type, value_date  FROM t_order_loan_apply limit 10","t_order_loan_apply_fincloud");
+
+//        System.out.println(getPropertiesByPath("F:\\data\\db.properties").get("db1.username"));
+        System.out.println(getPropertiesByPath(".\\test\\src\\main\\resources\\db.properties").get("aa"));
+
+//        transmit("jdbc:mysql://127.0.0.1:3309/fincloud_loan_order_test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT|fincloud_loan_rw|ZwSMBGTuAtqx",
+//                "jdbc:mysql://localhost:3307/test?serverTimezone=Asia/Shanghai|root|123",
+//                "SELECT id, merch_no, asset_product_id, inst_no, fund_product_id, order_id, jf_apply_id, third_trans_no, fund_provide_product_id, third_loan_invoice_id, loan_date, deal_result, deal_desc, apply_num, query_num, remark, is_delate, drawn_amt, trans_no, apply_loan_amt, launch_code, bus_batch_id, old_id, apply_loan_date, safeguard_type, value_date  FROM t_order_loan_apply limit 10","t_order_loan_apply_fincloud");
 
 
 

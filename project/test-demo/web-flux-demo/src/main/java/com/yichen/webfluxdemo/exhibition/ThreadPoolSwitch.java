@@ -10,6 +10,9 @@ import reactor.core.scheduler.Schedulers;
  * @version 1.0
  * @date 2021/8/24 10:15
  * @describe 响应流实现运行中线程池的切换
+ *    备注：publishOn() 局部生效，即调用该方法后的线程都被切换，优先级高于  subscribeOn()
+ *         subscribeOn() 整体生效，即整个响应流都生效替换成目标线程
+ *
  */
 public class ThreadPoolSwitch {
 
