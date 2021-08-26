@@ -5217,6 +5217,35 @@ failed
 
 ### 遇到的问题
 
+##### centeros  rpm 安装修改密码提示不符合当前策略要求
+
+> // 修改密码错误提示
+>
+> Your password does not satisfy the current policy requirement
+>
+> //  执行其他语句报错
+>
+> You must reset your password using ALTER USER statement before executing this statement.
+
+<font color=red>解决办法</font>
+
+> // 先修改成它要求的策略  密码长度为8  密码中包含大小写字母，数字，特殊字符
+>
+> ALTER USER 'root'@'localhost' IDENTIFIED BY 'qwe!@#QWE123';
+>
+> // 查看密码规则
+>
+> show variables like 'validate_password%';
+>
+> // 修改策略
+>
+> set global validate_password_policy=0;
+> set global validate_password_length=4;  // 最小长度即为4
+>
+> // 再次修改密码
+>
+> ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
+
 #### apt 安装后无法通过  service mysql start 启动
 
 <font color=red> 子系统和主系统公用端口号，需要把主系统的mysql关闭。</font>
@@ -6562,7 +6591,7 @@ org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
 
 2、通过  `@MapperScan("com.yichen.useall.dao")` 指定  dao 接口位置，同时创建对应的xml文件，<font color=red>这里对xml的放置位置以及文件名称有要求：文件位置需要同dao接口位置一致，只不过是放置在类路径下，文件名同dao接口一致，不过文件后缀由dao  的  `.java` 改为  `.xml`</font>
 
-
+<font color=green>`@MapperScan("com.yichen.useall.dao")` 指定到目录，不要加`*`</font>
 
 #### 排查问题
 

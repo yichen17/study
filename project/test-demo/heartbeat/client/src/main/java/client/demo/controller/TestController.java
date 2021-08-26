@@ -1,5 +1,7 @@
 package client.demo.controller;
 
+import client.demo.service.VisitHostService;
+import client.demo.service.VisitLogService;
 import client.demo.utils.MapTools;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
@@ -9,6 +11,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

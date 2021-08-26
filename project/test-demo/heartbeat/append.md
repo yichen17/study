@@ -9,6 +9,8 @@
 6、改造返回方式，用 Callable 替换 while(true) 逻辑   =》测试不太成功，还是依赖循环逻辑，待思考
 7、springboot @ResponseBody 不显示 换行
 8、传输协议 优化
+9、netty channel 添加异常处理 handler
+10、自定义网关  判断是否正常请求、netty是否请求正确， 出现异常则对它进行标记拉黑，最多三次
 
 
 # 设计抉择

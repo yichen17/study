@@ -16,8 +16,27 @@
 		<java.version>1.8</java.version>
 		<log4j.version>2.13.3</log4j.version>
 		<shiro.version>1.4.2</shiro.version>
+		<mysq.version>5.1.46</mysq.version>
 	</properties>
 	<dependencies>
+
+		<!--jdbc-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysq.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!--end-->
 
 		<!--shiro 认证-->
 		<dependency>
@@ -31,6 +50,7 @@
 <!--			<artifactId>shiro-core</artifactId>-->
 <!--			<version>${shiro.version}</version>-->
 <!--		</dependency>-->
+
 		<!--shiro end-->
 
 		<dependency>
@@ -95,7 +115,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

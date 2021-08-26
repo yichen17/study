@@ -7,7 +7,6 @@
 		<artifactId>heartbeat</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.yichen</groupId>
 	<artifactId>common</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>common</name>
