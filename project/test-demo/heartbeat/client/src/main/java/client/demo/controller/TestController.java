@@ -3,6 +3,7 @@ package client.demo.controller;
 import client.demo.service.VisitHostService;
 import client.demo.service.VisitLogService;
 import client.demo.utils.MapTools;
+import client.demo.utils.ReturnT;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
@@ -29,14 +30,14 @@ import java.util.concurrent.CompletableFuture;
 public class TestController {
 
     @RequestMapping("/test")
-    public String test(){
+    public ReturnT test(){
         log.info("test接口访问成功");
-        return "test";
+        return new ReturnT("test");
     }
 
 
     @RequestMapping(value = "/get")
-    public String getData(HttpServletRequest request){
+    public ReturnT getData(HttpServletRequest request){
         try{
             log.info("接收到请求，访问ip为{}",request.getRemoteAddr());
             log.info("get方法开始调用");
@@ -74,7 +75,7 @@ public class TestController {
                         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
                         String decryptStr = aes.decryptStr(res, CharsetUtil.CHARSET_UTF_8);
                         log.info("解密后的数据结果{}",decryptStr);
-                        return decryptStr.replace("|","\n");
+                        return new ReturnT(decryptStr.replace("|","\n"));
                     }
                 }
                 catch (Exception e){
@@ -82,11 +83,11 @@ public class TestController {
                     break;
                 }
             }
-            return "出现异常";
+            return new ReturnT("1","出现异常");
         }
         catch (Exception e){
             e.printStackTrace();
-            return "get future error";
+            return new ReturnT("1","get future error");
         }
     }
 

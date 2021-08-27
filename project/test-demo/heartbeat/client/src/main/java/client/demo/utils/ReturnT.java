@@ -10,10 +10,9 @@ import lombok.ToString;
  * @describe 前端统一返回结果
  */
 @Data
-@ToString
 public class ReturnT<T> {
     /**
-     * 状态码 0 成功，1 失败
+     * 状态码 0 成功，1 失败,2 非法请求
      */
     private String code;
     /**

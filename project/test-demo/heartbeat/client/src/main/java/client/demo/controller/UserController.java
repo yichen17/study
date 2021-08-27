@@ -38,9 +38,9 @@ public class UserController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public String login(HttpServletRequest httpServletRequest){
+    public ReturnT login(HttpServletRequest httpServletRequest){
         log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
-        return "请输入账号密码登陆";
+        return new ReturnT("请输入账号密码登陆");
     }
 
 
