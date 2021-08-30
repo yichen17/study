@@ -1399,6 +1399,10 @@ git log
 
 > git diff note.txt
 
++ 将一个分支的 一个commit 合并到另一个分支
+
+>  git cherry-pick b64ca7aec5c818f1fe13331197a4f8f10049da35(版本号)
+
 ## 查看提交历史  git log
 
 > //   -p  每次提交差异  -2 显示日志条数(这里表示两条)
@@ -1447,6 +1451,16 @@ git log
   > git reset --hard 版本号
 
 <font color=red>此处所说的index是指对暂存区文件的版本标识，如果index回退，即`--mixed`，此时即使有新文件，它也无法识别。因为旧的   index 中不存在</font>
+
+```
+// 远程仓库版本回退
+// 1、本地仓库回退
+git reset --hard  xxx(版本号)
+// 2、强制提交
+git push -f
+```
+
+
 
 ## 能快速访问github.com 以及 加速下载
 
