@@ -6425,6 +6425,143 @@ server.tomcat.uri-encoding=UTF-8
 
 [参考链接](https://www.cnblogs.com/tian874540961/p/12146467.html)
 
+###  mybatis 中mysql 处理json 类型数据
+
+[参考实现](https://cloud.tencent.com/developer/article/1649021)
+
+#### 实体类定义字段
+
+```
+private JSONObject extend;
+```
+
+#### 自定义 handler
+
+```java
+package client.demo.handler.mybatis;
+
+@MappedTypes(JSONObject.class)
+@MappedJdbcTypes(JdbcType.VARCHAR)
+public class MySqlJsonHandler extends BaseTypeHandler<JSONObject>{
+    /**
+     * 设置非空参数
+     * @param ps
+     * @param i
+     * @param parameter
+     * @param jdbcType
+     * @throws SQLException
+     */
+    @Override
+    public void setNonNullParameter(PreparedStatement ps, int i, JSONObject parameter, JdbcType jdbcType) throws SQLException {
+        ps.setString(i,String.valueOf(parameter.toJSONString()));
+    }
+    /**
+     * 根据列名，获取可以为空的结果
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public JSONObject getNullableResult(ResultSet rs, String columnName) throws SQLException {
+        String sqlJson = rs.getString(columnName);
+        if (null != sqlJson) {
+            return JSONObject.parseObject(sqlJson);
+        }
+        return null;
+    }
+    /**
+     * 根据列索引，获取可以为内控的接口
+     * @param rs
+     * @param columnIndex
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public JSONObject getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+        String sqlJson = rs.getString(columnIndex);
+        if (null != sqlJson) {
+            return JSONObject.parseObject(sqlJson);
+        }
+        return null;
+    }
+    /**
+     *
+     * @param cs
+     * @param columnIndex
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public JSONObject getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+        String sqlJson = cs.getNString(columnIndex);
+        if (null != sqlJson) {
+            return JSONObject.parseObject(sqlJson);
+        }
+        return null;
+    }
+}
+```
+
+#### application.properties 引入相应配置
+
+```java
+# 自定义 handler 所在包
+mybatis.type-handlers-package=client.demo.handler.mybatis
+```
+
+#### xml中引入自定义类型
+
+```java
+<insert id="insertExtend" parameterType="client.demo.model.VisitLog" >
+    insert into t_visit_log (host_id, visit_url, status, extend
+    )
+    values (#{hostId,jdbcType=BIGINT}, #{visitUrl,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+    #{extend,jdbcType=OTHER,typeHandler=client.demo.handler.mybatis.ExtendHandler}
+    )
+  </insert>
+```
+
+### 全局异常拦截器
+
+```java
+@ControllerAdvice
+@ResponseBody
+@Slf4j
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = Exception.class)
+    public ReturnT<String> exceptionHandler(HttpServletRequest request, Exception e){
+        log.error("全局异常捕获，异常信息为{}", Arrays.toString(e.getStackTrace()));
+        return new ReturnT<>("2",e.getMessage());
+
+    }
+}
+```
+
+## mybatis generator
+
+### varchar(1) 自动构造 变成 byte类型
+
+#### 说明
+
+**查询构造**
+
+```java
+VisitLogExample example=new VisitLogExample();
+        example.createCriteria().andHostIdEqualTo(hostId)
+                .andStatusEqualTo("N").andValidEqualTo("Y");
+```
+
+**查看mysql日志**
+
+```java
+select  host_id, visit_url, status  from t_visit_log  
+    WHERE (  host_id = 15 and status = 78 and valid = 89 )
+```
+
+<font color=red>这里可以看到，他把原来的一个字节的字符串变成了数字
+
 
 
 
@@ -7431,6 +7568,13 @@ show master status
 show binlog events in 'binlog.000056';
 // 查看第一个binlog 中的日志
 show binlog events
+    
+// 查看全局日志开启状态
+show variables like 'general_log'
+// 开启全局日志
+set global general_log=on;
+// 查看日志存放位置
+show variables like '%log%'
 ```
 
 #### mysqlbinlog 查看

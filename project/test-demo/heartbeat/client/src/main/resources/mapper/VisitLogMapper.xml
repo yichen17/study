@@ -10,6 +10,7 @@
     <result column="host_id" property="hostId" jdbcType="BIGINT" />
     <result column="visit_url" property="visitUrl" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="valid" property="valid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -128,6 +129,15 @@
     values (#{hostId,jdbcType=BIGINT}, #{visitUrl,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
       )
   </insert>
+
+  <insert id="insertExtend" parameterType="client.demo.model.VisitLog" >
+    insert into t_visit_log (host_id, visit_url, status, extend
+    )
+    values (#{hostId,jdbcType=BIGINT}, #{visitUrl,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+    #{extend,jdbcType=OTHER,typeHandler=client.demo.handler.mybatis.ExtendHandler}
+    )
+  </insert>
+
   <insert id="insertSelective" parameterType="client.demo.model.VisitLog" >
     <!--
       WARNING - @mbggenerated
@@ -200,7 +210,8 @@
     update t_visit_log
     set host_id = #{record.hostId,jdbcType=BIGINT},
       visit_url = #{record.visitUrl,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR},
+      valid=#{record.valid,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>

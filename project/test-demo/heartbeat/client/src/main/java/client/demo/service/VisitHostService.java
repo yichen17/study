@@ -29,5 +29,12 @@ public interface VisitHostService {
 
     public List<VisitHost> getVisitHostByIp(String ip);
 
+    /**
+     * 禁用 目标ip
+     * @param ip 被禁用的ip地址
+     * @return 影响行数
+     */
+    public int rejectIpByIp(String ip);
+
 
 }

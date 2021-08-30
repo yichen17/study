@@ -35,6 +35,7 @@ public class VisitHostServiceImpl implements VisitHostService {
         int res = 0;
         try{
             res = visitHostMapper.insert(visitHost);
+            log.info("查询结果为{}",res);
             if(res>0){
                 return visitHost.getId();
             }
@@ -61,5 +62,16 @@ public class VisitHostServiceImpl implements VisitHostService {
         VisitHostExample example=new VisitHostExample();
         example.createCriteria().andIpEqualTo(ip);
         return visitHostMapper.selectByExample(example);
+    }
+
+    @Override
+    public int rejectIpByIp(String ip) {
+        log.info("VisitHostServiceImpl =》 rejectIpByIp =》ip:{}",ip);
+        VisitHost host = getVisitHostByIp(ip).get(0);
+        VisitHostExample example=new VisitHostExample();
+        example.createCriteria().andIpEqualTo(ip);
+        host.setStatus("N");
+        //  前面为更新的值，后面为条件
+        return visitHostMapper.updateByExample(host,example);
     }
 }

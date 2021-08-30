@@ -12,7 +12,7 @@ import lombok.ToString;
 @Data
 public class ReturnT<T> {
     /**
-     * 状态码 0 成功，1 失败,2 非法请求
+     * 状态码 0 成功，1 失败,2 请求出错
      */
     private String code;
     /**
@@ -35,12 +35,13 @@ public class ReturnT<T> {
     }
 
     /**
-     * 成功情况自定义 消息和返回结果
-     * @param msg
-     * @param data
+     * 自定义状态码，消息体，数据体
+     * @param code 状态码
+     * @param msg 消息内容
+     * @param data 数据内容
      */
-    public ReturnT(String msg,T data){
-        this.code="0";
+    public ReturnT(String code,String msg,T data){
+        this.code=code;
         this.msg=msg;
         this.data=data;
     }

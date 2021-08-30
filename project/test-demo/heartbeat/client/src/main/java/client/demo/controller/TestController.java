@@ -34,6 +34,11 @@ public class TestController {
         log.info("test接口访问成功");
         return new ReturnT("test");
     }
+    @RequestMapping("/ers")
+    public ReturnT error(){
+        log.info("error访问成功");
+        return new ReturnT(""+1/0);
+    }
 
 
     @RequestMapping(value = "/get")
