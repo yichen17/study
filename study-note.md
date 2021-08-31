@@ -6578,6 +6578,24 @@ logging:
     com.onecard.ordertask.dao: debug
 ```
 
+#### web项目默认存在请求 favicon
+
+##### 关闭 favicon
+
+> // 在application.properties 写入如下内容
+>
+> spring.mvc.favicon.enabled=false
+
+##### 配置 favicon
+
+[参考步骤](https://blog.csdn.net/VariatioZbw/article/details/108139453)
+
+>1、挑选图片， 图库 =》  https://www.iconfont.cn/
+>
+>2、将图片转为  .ico     =>  http://favicon.htmlkit.com/favicon/
+>
+>3、将图片放到  resources >  static 该目录下即可
+
 ### 单元测试
 
 #### 构建model对象数据
@@ -8480,7 +8498,7 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 
 + 进入安装目录，安装mysql服务,<font color=red>记得以管理员方式启动cmd，服务名最好不要叫 MySQL 避免与 通多 exe安装时 的冲突</font>
 
-> D:\mysql-5.7\mysql-5.7.34-winx64\bin>  mysqld install mysql7 --default-file="D:/mysql-5.7/mysql-5.7.34-winx64\my.ini"
+> D:\mysql-5.7\mysql-5.7.34-winx64\bin>  mysqld install mysql7 --defaults-file="D:/mysql-5.7/mysql-5.7.34-winx64\my.ini"
 >
 > 成功安装后会提示：
 > Service successfully installed.
@@ -8499,17 +8517,17 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 >
 > D:\mysql-5.7\mysql-5.7.34-winx64\bin>   mysqld --initialize  
 
-+ 启动mysql D:\mysql-5.7\mysql-5.7.34-winx64\bin>mysql -P3308 -uroot -p
-  Enter password: ************
++ 启动 新安装 的mysql服务
 
 > D:\mysql-5.7\mysql-5.7.34-winx64\bin>net start mysql7
 > mysql7 服务正在启动 ..
 > mysql7 服务已经启动成功。
->
->  
->
+
++ 启动mysql D:\mysql-5.7\mysql-5.7.34-winx64\bin>mysql -P3308 -uroot -p
+  Enter password: `********`
+
 > //  去data/xxx.err文件(gs中文件名  DESKTOP-RR3GOJS.err )中找到临时密码(查找关键字 temporary)，进行登录
->
+> 
 > 2021-05-08T01:23:56.385718Z 1 [Note] A temporary password is generated for root@localhost: e#ez)<f8ef:T
 >
 >  
@@ -8517,11 +8535,15 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 > // 登陆 数据库
 >
 > D:\mysql-5.7\mysql-5.7.34-winx64\bin>mysql -P3308 -uroot -p
-> Enter password: 输入密码
+>Enter password: 输入密码
+>  
+>// 修改密码，退出重进即可  5.7版本
+> 
+>set password for root@localhost=password('123');
+> 
+> // 修改密码  5.8版本
 >
-> // 修改密码，退出重进即可
->
-> set password for root@localhost=password('123');
+> ALTER USER 'root'@'localhost'  IDENTIFIED WITH mysql_native_password  BY 'root';
 
 
 
