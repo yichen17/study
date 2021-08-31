@@ -6553,6 +6553,280 @@ public class GlobalExceptionHandler {
 }
 ```
 
+### test 中读取配置文件
+
+1、指定某个文件夹为 test 的资源文件夹
+
+<img src="./images/2021-08-31-1.jpg" alt="设置方式" style="zoom:67%;" />
+
+2、指定读取的配置文件
+
+```java
+// 测试类前加注解 
+@TestPropertySource("classpath:model.properties")
+// 注入所需要的 配置名称
+@Value("${loan_order}")
+private String loanOrderProperties;
+```
+
+### yml指定logging.level
+
+```java
+logging:
+  config: classpath:conf/log4j2-dev.xml
+  level:
+    com.onecard.ordertask.dao: debug
+```
+
+### 单元测试
+
+#### 构建model对象数据
+
+==如果是微服务或者存在远程调用的情况，开发阶段无法请求其他服务，只能本地构建测试==
+
+##### SqlUtils
+
+```java
+/**
+ * @author Qiuxinchao
+ * @version 1.0
+ * @date 2021/8/30 16:58
+ * @describe mysql 数据库相关的工具类
+ *   用途：根据 mysql表构建 其他服务的 model 类供 自己进行 单元测试
+ *   1、在 navicat 中找到对应表，选择一条记录，右键行前选择 复制 insert 语句
+ *   2、将语句放于 下面类的 main 中，运行即可生成对应的 由 fastjson 转换而成的 string
+ *   3、将运行的结果放于 单元测试中，通过 JSONObject.parseObject() 生成对象
+ */
+
+public class SqlUtils {
+
+    private static Logger logger= LoggerFactory.getLogger(SqlUtils.class);
+
+    /**
+     * 根据 insert sql 构造 json格式 数据字符串
+     * <font color=red>这里的sql 必然是简单插入.也不存在列取别名</font>
+     * @param insertSql insert 类型的数据sql
+     * @return json 转换而来的 字符串
+     */
+    public static String constructMapFromInsertSql(String insertSql){
+        String[] a=insertSql.replace("(","|").split("\\|");
+        String [] b=a[1].replace(")","|").split("\\|");
+        String []c=a[2].replace(")","|").split("\\|");
+        String []fields=b[0].replace("`","").split(",");
+        String []values=c[0].replace("'","").split(",");
+        JSONObject res=new JSONObject();
+        for(int i=0;i<fields.length;i++){
+            res.put(FormatUtils.lineToHump(fields[i].trim()),values[i].trim());
+        }
+        // TODO 这里存在一个缺陷， NULL 类型被加了 双引号，需要手动转换，不然无法转回对象
+        String r=JSONObject.toJSONString(res);
+
+        //  去掉null 前后的 双引号
+        r=r.replace("\"NULL\"","NULL");
+
+        logger.info("转换后的结果{}",r);
+        return r;
+    }
+
+
+
+
+    public static void main(String[] args) {
+        constructMapFromInsertSql("INSERT INTO `wk_db_user`.`wk_customer`(`customerId`, `name`, `certId`, `source`, `birthDay`, `sex`, `tradePwd`, `createTime`, `updatedTime`, `serial_no`, `certIdphoto`, `pinyin`, `address`, `authority`, `timelimit`, `mobile`, `tenant_id`, `proId`, `nationality`) VALUES (1170262913, '杨云鹏', '140481199003136811', 1799, '1990-03-13', 1, '', '2021-08-30 16:59:06', '2021-08-30 16:59:06', NULL, NULL, 'yangyunpeng', NULL, NULL, NULL, '15601292370', 1001, '360sjzs8a518bd623ddbecbb2b2a3bb7f640e30', NULL);\n");
+
+    }
+
+}
+```
+
+##### FormatUtils
+
+```java
+/**
+ * @author Qiuxinchao
+ * @version 1.0
+ * @date 2021/8/31 9:05
+ * @describe 格式工具类
+ */
+public class FormatUtils {
+
+    private static Pattern linePattern = Pattern.compile("_(\\w)");
+
+    /** 下划线转驼峰 */
+    public static String lineToHump(String str) {
+        str = str.toLowerCase();
+        Matcher matcher = linePattern.matcher(str);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    /** 驼峰转下划线(简单写法，效率低于{@link #humpToLine2(String)}) */
+    public static String humpToLine(String str) {
+        return str.replaceAll("[A-Z]", "_$0").toLowerCase();
+    }
+
+    private static Pattern humpPattern = Pattern.compile("[A-Z]");
+
+    /** 驼峰转下划线,效率比上面高 */
+    public static String humpToLine2(String str) {
+        Matcher matcher = humpPattern.matcher(str);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+}
+```
+
+#### mock 示例
+
+> 过程： 由于对象数据长，所以通过读取配置文件来读取对象数据
+> 1、将 FormatUtils构造出来的对象的 string从配置文件中读取(
+> == @TestPropertySource(value = "classpath:model.properties") 指定配置文件，需要先指定 test 资源文件夹
+> ),然后通过fastjson 再次构建对象
+> UserCustomerExtendDTO dto=JSONObject.parseObject(userCustomerExtend,UserCustomerExtendDTO.class);
+> 2、Mock本地无法调用的对象，然后指定其中我们使用的方法返回指定的返回值
+> @Mock UserInfoApiService userInfoApiService;
+> Mockito.when(userInfoApiService.custExtend(Mockito.anyString(),Mockito.anyInt())).thenReturn(dto);
+> 3、如果有其他类使用我们 mock的类，则通过 @InjectMocks 注入。例 a 使用了 b，b已被mock，a 使用了 @InjectMocks，则a中的b则使用的是我们mock的b。
+> <font color=red>一旦使用了该注解，使用 @Autowired 失效,为被 mock 的均为 null，需要注意</font>
+> 4、如果单元测试还使用到其他 本地类，则通过  @SpringBootTest(classes = StartApplication.class) 构建
+
+==示例代码，供参考==
+
+```java
+package com.onecard.ordertask.test;
+
+import com.alibaba.fastjson.JSONObject;
+import com.onecard.order.common.model.dto.UserCustomerDTO;
+import com.onecard.order.common.model.dto.UserCustomerExtendDTO;
+import com.onecard.ordertask.StartApplication;
+import com.onecard.ordertask.dao.firstdatasource.OrderLabeMapper;
+import com.onecard.ordertask.dao.firstdatasource.SysconfigMapper;
+import com.onecard.ordertask.model.loando.LoanOrderDO;
+import com.onecard.ordertask.model.loando.LoanOrderExtendDO;
+import com.onecard.ordertask.model.loando.SysconfigDO;
+import com.onecard.ordertask.remote.service.UserInfoApiService;
+import com.onecard.ordertask.remote.service.UserServiceService;
+import com.onecard.ordertask.service.BuildLoanApp561;
+import com.onecard.ordertask.service.SysconfigService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+// 指定启动 类
+@SpringBootTest(classes = StartApplication.class)
+// 获取test 中的配置
+@TestPropertySource(value = "classpath:model.properties")
+public class ImportPartsTest {
+
+
+
+    @Mock
+    UserInfoApiService userInfoApiService;
+
+    @Mock
+    UserServiceService userServiceService;
+
+    @Mock
+    OrderLabeMapper orderLabeMapper;
+
+    @Mock
+    SysconfigMapper sysconfigMapper;
+
+    @Mock
+    SysconfigService sysconfigService;
+
+
+    @InjectMocks
+    BuildLoanApp561 app561;
+
+    @Value("${loan_order}")
+    private String loanOrderProperties;
+
+    @Value("${loan_order_extend}")
+    private String loanOrderExtendProperties;
+
+    @Value("${user_customer_extend}")
+    private String userCustomerExtend;
+
+    @Value("${user_customer}")
+    private String userCustomer;
+
+    @Value("${shuhe}")
+    private String shuhe;
+
+    @Value("${old_and_new}")
+    private String oldAndNew;
+    @Value("${big_data_appid}")
+    private String bigDataAppid;
+    @Value("${big_data_appsecret}")
+    private String bigDataAppsecret;
+
+
+    @Test
+    public void TestApp561() throws Exception {
+
+        // 构造model 数据对象
+        UserCustomerExtendDTO dto=JSONObject.parseObject(userCustomerExtend,UserCustomerExtendDTO.class);
+        UserCustomerDTO userCustomerDTO=JSONObject.parseObject(userCustomer,UserCustomerDTO.class);
+        SysconfigDO shuheConfig=JSONObject.parseObject(shuhe,SysconfigDO.class);
+        SysconfigDO oldConfig=JSONObject.parseObject(oldAndNew,SysconfigDO.class);
+        SysconfigDO appIdConfig=JSONObject.parseObject(bigDataAppid,SysconfigDO.class);
+        SysconfigDO secretConfig=JSONObject.parseObject(bigDataAppsecret,SysconfigDO.class);
+        LoanOrderDO loanOrder= JSONObject.parseObject(loanOrderProperties, LoanOrderDO.class);
+        LoanOrderExtendDO loanOrderExtend=JSONObject.parseObject(loanOrderExtendProperties,LoanOrderExtendDO.class);
+
+        // mock 模拟请求  有返回值
+        Mockito.when(userServiceService.findById(Mockito.anyLong(),Mockito.anyInt())).thenReturn(userCustomerDTO);
+        Mockito.when(userInfoApiService.custExtend(Mockito.anyString(),Mockito.anyInt())).thenReturn(dto);
+        Mockito.when(orderLabeMapper.findByAppId(Mockito.anyLong())).thenReturn(null);
+        Mockito.when(sysconfigMapper.getByKeyAndSystem("isXyApp","wk")).thenReturn(shuheConfig);
+        Mockito.when(sysconfigService.getValueByKeyAndSystem("get_new_or_old_customer","wk")).thenReturn(oldConfig.getOptionvalue());
+        Mockito.when(sysconfigService.getValueByKeyAndSystem("reuqst_big_data_appid","wk")).thenReturn(appIdConfig.getOptionvalue());
+        Mockito.when(sysconfigService.getValueByKeyAndSystem("reuqst_big_data_appsecret","wk")).thenReturn(secretConfig.getOptionvalue());
+		//  mock 请求，无返回值
+        Mockito.doNothing().when(app561).setNewAndoldCustomerData(Mockito.any(),Mockito.anyMap());
+
+        //
+        Map<String,Object> res=new HashMap<>();
+        app561.set39Info(res,loanOrder,null,loanOrderExtend,null);
+        System.out.println("处理结果"+res);
+    }
+}
+```
+
+#### 思考
+
+1、a使用b，b使用c，c对象mock了，b对象使用 injectMock，那a怎么办。  ==》 理论，测a到b的时候应该已经测试了b到c
+
+### 问题记录
+
+#### 读取配置文件中文显示乱码
+
+[参考解决方案](https://blog.csdn.net/yuyanchuan/article/details/105838292)
+
+> // 在读取的配置文件中添加如下内容
+>
+> spring.http.encoding.enabled=true
+
 ## mybatis generator
 
 ### varchar(1) 自动构造 变成 byte类型
@@ -7591,6 +7865,19 @@ set global general_log=on;
 show variables like '%log%'
 ```
 
+#### 开启binlog 日志
+
+[参考解决办法](https://blog.csdn.net/weixin_43944305/article/details/108620849)
+
+```java
+// my.ini 中 [mysqld] 下添加如下信息
+log_bin=ON
+log_bin_basename=/var/lib/mysql/mysql-bin
+log_bin_index=/var/lib/mysql/mysql-bin.index
+```
+
+
+
 #### mysqlbinlog 查看
 
 [参考链接](https://www.cnblogs.com/wqbin/p/14183943.html)
@@ -7598,8 +7885,6 @@ show variables like '%log%'
 ```java
 mysqlbinlog binlog.000065
 ```
-
-
 
 ##### 错误问题
 

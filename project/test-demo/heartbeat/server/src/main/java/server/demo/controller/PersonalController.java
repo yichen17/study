@@ -4,12 +4,12 @@ import cn.hutool.core.io.file.FileReader;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
-import com.yichen.model.ReturnT;
 import com.yichen.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import server.demo.utils.ReturnT;
 
 /**
  * @author Qiuxinchao
@@ -28,7 +28,7 @@ public class PersonalController {
     private String secret;
 
     @RequestMapping("/getFile")
-    public String getFile(){
+    public ReturnT getFile(){
         // TODO 读取的数据没了换行,需要存在换行，不然不易查看
 //        FileReader fileReader=new FileReader(filePath);
 //        String data=fileReader.readString();
@@ -38,7 +38,7 @@ public class PersonalController {
         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
         String encodeData=aes.encryptHex(data);
         log.info("加密后的数据{}",encodeData);
-        return encodeData;
+        return new ReturnT(encodeData);
     }
 
 //    public static void main(String[] args) {

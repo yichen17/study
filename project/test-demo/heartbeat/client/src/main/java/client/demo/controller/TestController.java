@@ -7,6 +7,7 @@ import client.demo.utils.ReturnT;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import com.alibaba.fastjson.JSONObject;
 import com.yichen.handler.NettyMessage;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -76,9 +77,10 @@ public class TestController {
                     }
                     if(future.isDone()){
                         String res= future.get();
-                        log.info("远程调用返回的结果{}",res);
+                        ReturnT data= JSONObject.parseObject(res,ReturnT.class);
+                        log.info("远程调用返回的结果{},加密数据为:{}",res,data.getData().toString());
                         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
-                        String decryptStr = aes.decryptStr(res, CharsetUtil.CHARSET_UTF_8);
+                        String decryptStr = aes.decryptStr(data.getData().toString(), CharsetUtil.CHARSET_UTF_8);
                         log.info("解密后的数据结果{}",decryptStr);
                         return new ReturnT(decryptStr.replace("|","\n"));
                     }

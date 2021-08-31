@@ -25,7 +25,7 @@ public class ShiroConfig {
         factoryBean.setSecurityManager(manager);
         // 页面权限以及认证， 可参考  https://cloud.tencent.com/developer/article/1643122
         Map<String,String> map = new HashMap<>();
-        map.put("/get","authc");
+//        map.put("/get","authc");
 //        map.put("/test","authc");
         factoryBean.setFilterChainDefinitionMap(map);
         //设置登录页面

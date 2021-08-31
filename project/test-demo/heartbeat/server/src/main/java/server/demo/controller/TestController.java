@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import server.demo.utils.ReturnT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,13 +24,13 @@ public class TestController {
      * @return
      */
     @RequestMapping("/get")
-    public String getData(){
+    public ReturnT getData(){
         log.info("访问get接口");
         Map<String,Object> map=new HashMap<>();
         map.put("name","yichen");
         map.put("age",18);
         map.put("sex","girl");
-        return JSON.toJSONString(map);
+        return new ReturnT(map);
     }
 
 }

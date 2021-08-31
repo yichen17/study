@@ -86,6 +86,7 @@ public class EntranceFilter implements Filter {
                 return ;
             }
             else{
+                logger.info("请求uri{}",uri);
                 // 放行。让请求继续执行
                 chain.doFilter(request,wrapper);
             }
@@ -93,6 +94,7 @@ public class EntranceFilter implements Filter {
 
         // 对 请求结果做判断
         String result = wrapper.getResponseData(response.getCharacterEncoding());
+        logger.info("获取的返回结果为{}",result);
         response.getOutputStream().write(result.getBytes());
 
         // 转换成 ReturnT
