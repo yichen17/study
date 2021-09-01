@@ -47,6 +47,10 @@ public class TestController {
         try{
             log.info("接收到请求，访问ip为{}",request.getRemoteAddr());
             log.info("get方法开始调用");
+            // 判定是否有现成的netty连接，如果没有则直接返回默认值
+            if(MapTools.channels.size()==0){
+                return new ReturnT("1","内部出错，请求拒绝");
+            }
             Channel channel=MapTools.channels.iterator().next();
             // 远程调用服务
             NettyMessage nettyMessage=new NettyMessage();

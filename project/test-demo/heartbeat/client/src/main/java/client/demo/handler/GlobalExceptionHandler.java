@@ -25,8 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ReturnT<String> exceptionHandler(HttpServletRequest request, Exception e){
-        log.error("全局异常捕获，异常信息为{}", Arrays.toString(e.getStackTrace()));
+        log.error("全局捕获Exception异常，异常信息为{}", Arrays.toString(e.getStackTrace()));
         return new ReturnT<>("2",e.getMessage());
-
     }
 }

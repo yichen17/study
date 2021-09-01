@@ -6,6 +6,8 @@ import client.demo.service.VisitHostService;
 import client.demo.service.VisitLogService;
 import client.demo.utils.ReturnT;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.catalina.connector.Response;
+import org.apache.catalina.connector.ResponseFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 
@@ -95,8 +98,28 @@ public class EntranceFilter implements Filter {
         // 对 请求结果做判断
         String result = wrapper.getResponseData(response.getCharacterEncoding());
         logger.info("获取的返回结果为{}",result);
-        response.getOutputStream().write(result.getBytes());
+        if(result==null||"".equals(result)){
+            // TODO 请求结果为空说明调用链存在异常，一种情况是 dispatch 无法分发请求路由
+            result=JSONObject.toJSONString(new ReturnT("2","请核对你的请求，请勿随意访问"));
+            logger.warn("请求调用返回结果为空，设定默认值");
+            // TODO 修改返回码有问题
+            try{
+                Class clazz=ResponseFacade.class;
+                Field field=clazz.getDeclaredField("response");
+                field.setAccessible(true);
+                Object o = field.get(((ResponseFacade) response));
+                //  修改状态，默认情况 放过调用链执行后 response.setStatus 失败
+                ((Response)o).setAppCommitted(false);
+                ((Response)o).setSuspended(false);
+            }
+            catch (Exception e){
+                logger.error("========> 反射获取response失败");
+            }
 
+        }
+        response.getOutputStream().write(result.getBytes());
+        wrapper.setStatus(200);
+        wrapper.flushBuffer();
         // 转换成 ReturnT
         ReturnT body = JSONObject.parseObject(result, ReturnT.class);
         logger.info("请求url:{} => 请求返回的状态码  {}",uri,body.getCode());
@@ -109,7 +132,7 @@ public class EntranceFilter implements Filter {
             visitLogService.insert(hostId,uri,"N",jsonObject);
             logger.info("异常请求日志已记录");
             // 拒绝次数达到指定次数，ip禁用
-            if(visitLogByHostIdAndValid.size()>=localRejectTime){
+            if(visitLogByHostIdAndValid.size()>localRejectTime){
                 int d = visitHostService.rejectIpByIp(remoteAddr);
                 if(d>0){
                     logger.info("ip:{}被禁止访问",remoteAddr);
