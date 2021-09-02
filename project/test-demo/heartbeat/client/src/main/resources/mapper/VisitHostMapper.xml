@@ -233,7 +233,8 @@
     set id = #{record.id,jdbcType=BIGINT},
       ip = #{record.ip,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
-      reject_times = #{record.rejectTimes,jdbcType=TINYINT}
+      reject_times = #{record.rejectTimes,jdbcType=TINYINT},
+      pre_reject_time = #{record.preRejectTime,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>

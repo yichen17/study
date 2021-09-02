@@ -5,6 +5,7 @@ import client.demo.model.VisitLog;
 import client.demo.service.VisitHostService;
 import client.demo.service.VisitLogService;
 import client.demo.utils.ReturnT;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.connector.ResponseFacade;
@@ -53,6 +54,7 @@ public class EntranceFilter implements Filter {
         // 包装 response 使得容易获取返回的响应数据
         ResponseWrapper wrapper = new ResponseWrapper((HttpServletResponse) response);
         HttpServletRequest req = (HttpServletRequest) request;
+        VisitHost visitHost=null;
         // 请求的  uri
         String uri = req.getRequestURI();
         long hostId=-1;
@@ -75,7 +77,7 @@ public class EntranceFilter implements Filter {
             return ;
         }
         else{
-            VisitHost visitHost=visitHosts.get(0);
+            visitHost=visitHosts.get(0);
             localRejectTime=visitHost.getRejectTimes();
             hostId=visitHost.getId();
             if(Objects.equals("N",visitHost.getStatus())){
@@ -102,7 +104,6 @@ public class EntranceFilter implements Filter {
             // TODO 请求结果为空说明调用链存在异常，一种情况是 dispatch 无法分发请求路由
             result=JSONObject.toJSONString(new ReturnT("2","请核对你的请求，请勿随意访问"));
             logger.warn("请求调用返回结果为空，设定默认值");
-            // TODO 修改返回码有问题
             try{
                 Class clazz=ResponseFacade.class;
                 Field field=clazz.getDeclaredField("response");
@@ -117,8 +118,11 @@ public class EntranceFilter implements Filter {
             }
 
         }
+        // =====>  reset() 方法可以清空缓冲区以及重置状态码 200   但是这里又需要依赖前面的try模块，需要先设置他们
+        //  =====>  还需要设置 内容类型，这块也被重置了
+        response.reset();
+        response.setContentType("text/html;charset=UTF-8");
         response.getOutputStream().write(result.getBytes());
-        wrapper.setStatus(200);
         wrapper.flushBuffer();
         // 转换成 ReturnT
         ReturnT body = JSONObject.parseObject(result, ReturnT.class);
@@ -138,6 +142,17 @@ public class EntranceFilter implements Filter {
                     logger.info("ip:{}被禁止访问",remoteAddr);
                 }
             }
+            // 如果有异常请求日志，则更新 visit_host 表的 pre_reject_time字段
+            visitHost.setPreRejectTime(DateUtil.now());
+            int d=visitHostService.update(visitHost);
+            if(d==1){
+                logger.info("visit_host表更新对应的拒绝时间成功");
+            }
+            else{
+                logger.error("visit_host更新拒绝时间失败，参数为{},执行影响行数为{}",visitHost,d);
+            }
+
+
         }
         else{
             JSONObject jsonObject=new JSONObject();
@@ -145,8 +160,8 @@ public class EntranceFilter implements Filter {
             jsonObject.put("msg",body.getMsg());
             visitLogService.insert(hostId,uri,"Y",jsonObject);
             logger.info("正常请求日志已记录");
-            int r = visitLogService.invalidLogByHostId(hostId);
-            logger.info("成功将{}条记录设置为无效记录",r);
+            int d = visitLogService.invalidLogByHostId(hostId);
+            logger.info("成功将{}条记录设置为无效记录",d);
         }
         
 

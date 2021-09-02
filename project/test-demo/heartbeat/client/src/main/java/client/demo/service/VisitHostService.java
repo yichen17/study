@@ -36,5 +36,12 @@ public interface VisitHostService {
      */
     public int rejectIpByIp(String ip);
 
+    /**
+     * 通用更新方法
+     * @param visitHost 要更新的字段
+     * @return 影响行数
+     */
+    public int update(VisitHost visitHost);
+
 
 }

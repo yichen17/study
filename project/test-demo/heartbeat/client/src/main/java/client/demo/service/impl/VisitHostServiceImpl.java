@@ -4,6 +4,7 @@ import client.demo.dao.VisitHostMapper;
 import client.demo.model.VisitHost;
 import client.demo.model.VisitHostExample;
 import client.demo.service.VisitHostService;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,5 +74,13 @@ public class VisitHostServiceImpl implements VisitHostService {
         host.setStatus("N");
         //  前面为更新的值，后面为条件
         return visitHostMapper.updateByExample(host,example);
+    }
+
+    @Override
+    public int update(VisitHost visitHost) {
+        log.info("VisitHostServiceImpl =》 rejectIpByIp 入参{}", JSONObject.toJSONString(visitHost));
+        VisitHostExample example=new VisitHostExample();
+        example.createCriteria().andIdEqualTo(visitHost.getId());
+        return visitHostMapper.updateByExample(visitHost,example);
     }
 }
