@@ -17,7 +17,7 @@
 		</Console>
 		<RollingFile name="debugAppender"
 			fileName="${LOG_HOME}/debug.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/debug-%d{MM-dd}.%i.log">
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/debug-%d{MM-dd}.log">
 			<filters>
 				<ThresholdFilter level="error" onMatch="DENY"
 					onMismatch="NEUTRAL" />
@@ -48,7 +48,7 @@
 		</RollingFile>
 		<RollingFile name="infoAppender"
 			fileName="${LOG_HOME}/info.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/info-%d{MM-dd}.%i.log">
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/info-%d{MM-dd}.log">
 			<filters>
 				<ThresholdFilter level="error" onMatch="DENY"
 					onMismatch="NEUTRAL" />
@@ -75,7 +75,7 @@
 		</RollingFile>
 		<RollingFile name="warnAppender"
 			fileName="${LOG_HOME}/warn.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/warn-%d{MM-dd}.%i.log">
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/warn-%d{MM-dd}.log">
 			<filters>
 				<ThresholdFilter level="error" onMatch="DENY"
 					onMismatch="NEUTRAL" />
@@ -100,7 +100,7 @@
 		</RollingFile>
 		<RollingFile name="errorAppender"
 			fileName="${LOG_HOME}/error.log"
-			filePattern="${LOG_HOME}/$${date:yyyy-MM}/error-%d{MM-dd}.%i.log">
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/error-%d{MM-dd}.log">
 			<filters>
 				<ThresholdFilter level="error" onMatch="ACCEPT"
 					onMismatch="DENY" />

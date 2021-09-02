@@ -6348,6 +6348,10 @@ spring.http.encoding.enabled=true
 server.tomcat.uri-encoding=UTF-8
 ```
 
+
+
+
+
 ## springboot 将默认的logback改为 slf4j2
 
 ```java
@@ -6407,6 +6411,145 @@ server.tomcat.uri-encoding=UTF-8
     <artifactId>disruptor</artifactId>
     <version>3.4.2</version>
 </dependency>
+```
+
+==参考 log4j2.xml==
+
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<!-- Log4j 2.DSConfig 配置文件。每60秒自动检查和应用配置文件的更新； -->
+<Configuration status="warn" monitorInterval="60"
+	 strict="true">
+	<Properties>
+		<Property name="PROJECT_NAME">client</Property>
+		<Property name="LOG_HOME">./logs/</Property>
+		<Property name="COMMON_LEVEL">info</Property>
+		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss,SSS} [%C %M %L] %t [%p] - %msg%n
+		</Property>
+	</Properties>
+	<Appenders> 
+		<!-- 输出到控制台 -->
+		<Console name="console" target="SYSTEM_OUT" follow="true">
+			<PatternLayout charset="utf-8" pattern="${LOG_PATTERN}" />
+		</Console>
+		<RollingFile name="debugAppender"
+			fileName="${LOG_HOME}/debug.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/debug-%d{MM-dd}.log">
+			<filters>
+				<ThresholdFilter level="error" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="info" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="warn" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="debug" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</filters>
+			<PatternLayout charset="UTF-8">
+				<pattern>${LOG_PATTERN}</pattern>
+			</PatternLayout>
+			<Policies>
+				<OnStartupTriggeringPolicy />
+				<TimeBasedTriggeringPolicy />
+				<!-- 封存文件的大小 -->
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+			<!-- 封存文件的序号的最大值。（超过最大值时，将有文件被删除）默认7 -->
+			<DefaultRolloverStrategy max="500">
+				<Delete basePath="${LOG_HOME}" maxDepth="500">
+					<IfFileName glob="*/*/debug-*.log">
+						<IfLastModified age="15d" />
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		<RollingFile name="infoAppender"
+			fileName="${LOG_HOME}/info.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/info-%d{MM-dd}.log">
+			<filters>
+				<ThresholdFilter level="error" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="warn" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="info" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</filters>
+			<PatternLayout charset="UTF-8">
+				<pattern>${LOG_PATTERN}</pattern>
+			</PatternLayout>
+			<Policies>
+				<OnStartupTriggeringPolicy />
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="500">
+				<Delete basePath="${LOG_HOME}" maxDepth="500">
+					<IfFileName glob="*/*/info-*.log">
+						<IfLastModified age="15d" />
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		<RollingFile name="warnAppender"
+			fileName="${LOG_HOME}/warn.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/warn-%d{MM-dd}.log">
+			<filters>
+				<ThresholdFilter level="error" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="warn" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</filters>
+			<PatternLayout charset="UTF-8">
+				<pattern>${LOG_PATTERN}</pattern>
+			</PatternLayout>
+			<Policies>
+				<OnStartupTriggeringPolicy />
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="500">
+				<Delete basePath="${LOG_HOME}" maxDepth="500">
+					<IfFileName glob="*/*/warn-*.log">
+						<IfLastModified age="15d" />
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		<RollingFile name="errorAppender"
+			fileName="${LOG_HOME}/error.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}-%i/error-%d{MM-dd}.log">
+			<filters>
+				<ThresholdFilter level="error" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</filters>
+			<PatternLayout charset="UTF-8">
+				<pattern>${LOG_PATTERN}</pattern>
+			</PatternLayout>
+			<Policies>
+				<OnStartupTriggeringPolicy />
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="500">
+				<Delete basePath="${LOG_HOME}" maxDepth="500">
+					<IfFileName glob="*/*/error-*.log">
+						<IfLastModified age="15d" />
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<AsyncRoot level="${COMMON_LEVEL}" includeLocation="true">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="debugAppender" />
+			<AppenderRef ref="infoAppender" />
+			<AppenderRef ref="warnAppender" />
+			<AppenderRef ref="errorAppender" />
+		</AsyncRoot>
+	</Loggers>
+</Configuration>
 ```
 
 
@@ -6595,6 +6738,49 @@ logging:
 >2、将图片转为  .ico     =>  http://favicon.htmlkit.com/favicon/
 >
 >3、将图片放到  resources >  static 该目录下即可
+
+### 使用 log4j2 记录日志
+
+[解决办法](#springboot 将默认的logback改为 slf4j2)
+
+### springboot 修改 请求结果
+
+> 具体描述：
+>
+> 前端请求 localhost:8090/hello，而我后端没有  /hello 对应的 url，正常请求的话会报错 404。我这里想修改请求结果，改为 200 加自定义结果返回
+
+```java
+@Order(0)
+@WebFilter(value = "/*")
+@Component
+public class EntranceFilter implements Filter {
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+         // 请求放行
+        chain.doFilter(request,wrapper);
+        try{
+                Class clazz=ResponseFacade.class;
+                Field field=clazz.getDeclaredField("response");
+                field.setAccessible(true);
+                Object o = field.get(((ResponseFacade) response));
+                //  修改状态，默认情况 放过调用链执行后 response.setStatus 失败
+                ((Response)o).setAppCommitted(false);
+                ((Response)o).setSuspended(false);
+            }
+            catch (Exception e){
+                logger.error("========> 反射获取response失败");
+            }
+        // =====>  reset() 方法可以清空缓冲区以及重置状态码 200   但是这里又需要依赖前面的try模块，需要先设置他们
+        //  =====>  还需要设置 内容类型，这块也被重置了
+        response.reset();
+        response.setContentType("text/html;charset=UTF-8");
+        response.getOutputStream().write("Don't ask at will".getBytes());
+        response.flushBuffer();
+    }
+}
+```
+
+
 
 ### 单元测试
 
