@@ -10,7 +10,7 @@
 7、springboot @ResponseBody 不显示 换行
 8、传输协议 优化
 9、netty channel 添加异常处理 handler
-10、自定义网关  判断是否正常请求、netty是否请求正确， 出现异常则对它进行标记拉黑，最多三次
+10、自定义网关  判断是否正常请求、netty是否请求正确， 出现异常则对它进行标记拉黑，   `√`
 
 
 # 设计抉择
@@ -18,8 +18,12 @@
 2、
 
 
+# 待处理问题
+t_visit_host 表的自增id是跳跃式的 ，可能原因为插入数据 由于唯一索引拒绝后id仍在自增  <font color=red> 确实如此</font>
+netty 连接的监控，添加异常处理 handler   => 已处理，添加 NettyExceptionHandler
+
 # 待研究问题
-1、netty 心跳机制具体是怎么实现的
+1、netty 心跳机制具体是怎么实现的  =>  指定时间间隔如果没有读取或者写入消息，发送心跳包
 2、ctx.writeAndFlush()  同  ctx.channel().writeAndFlush()  区别
 3、ctx.disconnect()     ctx.channel().closeFuture().sync()  区别  后者运行好像会报错
 4、替换日志  将springboot默认的logback 改为 slf4j2    `√`

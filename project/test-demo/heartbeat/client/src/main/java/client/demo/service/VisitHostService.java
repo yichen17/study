@@ -17,7 +17,7 @@ import java.util.List;
 public interface VisitHostService {
 
     /**
-     * 插入一条 访问记录
+     * 插入一条 访问记录，ip唯一，如果已存在对应ip，则插入失败(-1)
      * @param ip 访问的ip地址
      * @param status 是都被禁用 Y 被禁 N 没被禁
      * @param rejectTime 拒绝次数，到3次被禁

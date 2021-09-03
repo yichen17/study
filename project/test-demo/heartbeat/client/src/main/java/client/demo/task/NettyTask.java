@@ -1,6 +1,7 @@
 package client.demo.task;
 
 import client.demo.handler.HeartBeatReqHandler;
+import client.demo.handler.NettyExceptionHandler;
 import client.demo.handler.ReqHandler;
 import com.yichen.handler.RpcDecoder;
 import com.yichen.handler.RpcEncoder;
@@ -46,7 +47,7 @@ public class NettyTask implements Runnable{
                                     // 指定心跳频率  60s发送一次心跳
                                     .addLast(new IdleStateHandler(120,90,0, TimeUnit.SECONDS))
                                     .addLast(new HeartBeatReqHandler())
-                                    .addLast(new ReqHandler());
+                                    .addLast(new ReqHandler()).addLast(new NettyExceptionHandler());
                         }
                     });
             ChannelFuture f=b.bind(7421).sync();
