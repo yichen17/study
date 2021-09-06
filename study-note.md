@@ -920,6 +920,62 @@ df -h
 - `systemd` - select the **systemd (systemctl)** tab below.
 - `init` - select the **System V Init (service)** tab below.
 
+## grep 命令
+
+### 单词准确匹配
+
+> //a.txt内容如下
+>
+> name = yichen
+> age = shanliang
+> sex = gril
+>
+> grep -w 'e' a.txt    //  显示空
+>
+> grep -w "name"  // 显示   name = yichen
+
+## awk 命令
+
+==默认分隔符为空格或者 tab键==
+
+[参考文章](https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html)
+
+### 常用变量
+
+> ARGC               命令行参数个数
+> ARGV               命令行参数排列
+> ENVIRON            支持队列中系统环境变量的使用
+> FILENAME           awk浏览的文件名
+> FNR                浏览文件的记录数
+> FS                 设置输入域分隔符，等价于命令行 -F选项
+> NF                 浏览记录的域的个数
+> NR                 已读的记录数
+> OFS                输出域分隔符
+> ORS                输出记录分隔符
+> RS                 控制记录分隔符
+
+### 起头 结尾
+
+> // 添加 起头和即为
+>
+> cat /etc/passwd |awk  -F ':'  'BEGIN {print "name,shell"}  {print $1","$7} END {print "blue,/bin/nosh"}'
+>
+> // 结果
+>
+> name,shell
+> root,/bin/bash
+> daemon,/bin/sh
+> bin,/bin/sh
+> sys,/bin/sh
+> ....
+> blue,/bin/nosh
+
+### 命令
+
+> //  查看 a.txt ，以 | 分隔，获取第一个  =》  第一个为空则显示空。
+>
+> cat a.txt | awk -F '|' '{print $1}'
+
 ## top命令 介绍
 
 [参考文章](https://blog.csdn.net/dxl342/article/details/53507673)
@@ -1059,6 +1115,8 @@ tar [选项...] [FILE]...
 
 ## bash 脚本命令
 
+[归纳](https://blog.csdn.net/h70614959/article/details/8985165)
+
 [入门文档](https://www.w3cschool.cn/bashshell/bashshell-n2xd37ig.html)
 
 ### 查看系统支持的bash，以及 bash的绝对路径
@@ -1155,7 +1213,23 @@ Hello World!
 Hello User, $comment
 ```
 
+### 常用
 
+> // 大写字母，引入系统环境变量
+>
+> echo JAVA_HOME
+>
+> // 引用
+>
+> () 命令组，创建子SHELL执行
+> {} 命令组，不创建子SHELL
+> ' ' 保护所有的元字符不被解析，想打印'，必须放在双引号内，或者使用/转义
+> " " 只允许变量和命令替换，保护其余的元字符不被解析
+>
+> //  数学表达式
+>
+> $[ exp ]
+> $(( exp ))
 
 
 
@@ -1182,7 +1256,13 @@ Hello User, $comment
 
 #### 基本操作
 
-
+> // 修改错误日志
+>
+> cat a.txt 2>/dev/null
+>
+> // 错误日志和正常日志放在一起
+>
+> cat a.txt 2>&1
 
 ### - 和  -- 的区别
 
