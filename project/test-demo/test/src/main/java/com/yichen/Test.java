@@ -2,6 +2,7 @@ package com.yichen;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -32,6 +33,13 @@ public class Test {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date=sdf.format(new Date());
         System.out.println(date);
+        // BigDecimal 默认值的情况下 不能运算
+        BigDecimal decimalA=new BigDecimal(10);
+        BigDecimal decimalB=new BigDecimal(10);
+        System.out.println(decimalB.add(decimalA));
+        // BigDecimal 默认值为null
+        BigTest bigTest=new BigTest();
+        System.out.println(bigTest.getData());
 
     }
 }
