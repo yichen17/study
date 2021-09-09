@@ -5,7 +5,9 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -19,7 +21,8 @@ public class ClientApplication implements CommandLineRunner {
 	private NettyTask nettyTask;
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClientApplication.class, args);
+//		SpringApplication.run(ClientApplication.class, args);
+		new SpringApplicationBuilder(ClientApplication.class).web(WebApplicationType.SERVLET).run(args);
 	}
 
 	@Override

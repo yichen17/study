@@ -11,10 +11,9 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -26,8 +25,7 @@ import java.util.Map;
  * @date 2021/8/12 9:20
  * @describe 用户相关的操作
  */
-@RestController
-@RequestMapping("/user")
+@Controller
 @Slf4j
 public class UserController {
 
@@ -37,10 +35,15 @@ public class UserController {
     private String password;
 
     @RequestMapping("/login")
-    @ResponseBody
-    public ReturnT login(HttpServletRequest httpServletRequest){
+    public String login(HttpServletRequest httpServletRequest){
         log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
-        return new ReturnT("请输入账号密码登陆");
+        return "login.jsp";
+    }
+
+    @RequestMapping("/hello")
+    public String hello(HttpServletRequest httpServletRequest){
+        log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
+        return "hello.html";
     }
 
 

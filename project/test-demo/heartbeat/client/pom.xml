@@ -127,6 +127,19 @@
     </dependencies>
 
 	<build>
+		<!--打包时将 web 页面文件拷贝到META-INF目录下-->
+		<resources>
+			<!--将指定目录下的资源文件放在target目录下才能访问-->
+			<resource>
+				<directory>src/main/webapp</directory>
+				<targetPath>/</targetPath>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
