@@ -6823,6 +6823,71 @@ logging:
 
 [解决办法](#springboot 将默认的logback改为 slf4j2)
 
+### 整合 前端页面
+
+<font color=red size=5px>注意，两种只能一种生效，都存在的话会覆盖其中一种导致出错</font>
+
+#### 访问 jsp 页面
+
+```java
+//添加如下依赖
+
+   <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-jasper</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
+    </dependency>
+//  配置文件中添加信息
+// 前端配置  匹配路径
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+// controller 示例
+    @RequestMapping("/login")
+    public String login(HttpServletRequest httpServletRequest){
+        log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
+        return "login";
+    }
+```
+
+<img src="./images/2021-09-10-2.jpg" alt="目录结构" style="zoom:67%;" />
+
+#### 访问 html 页面
+
+```java
+springboot 默认资源(html、js、css等)放置位置：
+
+classpath:/META-INF/resources/      classpath:/resources/    classpath:/statis/  classpath:/public/    /
+
+//  1、手动指定资源目录   = 》 直接通过url 访问，不能通过 controller 跳转
+
+spring.resources.static-locations=classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,classpath:/templates/
+
+// 2、controller 跳转 到 html 页面
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+    
+// 配置文件添加如下内容
+// 指定静态页面资源 地址  存在默认值  默认值为 1中的4个
+// spring.resources.static-locations=
+// 指定  controller 返回 string 后的跳转到指定界面的 路径前缀
+spring.thymeleaf.prefix=classpath:/static/    // 这里只能这样不能 /static/views
+spring.thymeleaf.suffix=.html
+// controller 调用示例
+@RequestMapping("/hello")
+    public String hello(HttpServletRequest httpServletRequest){
+        log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
+        return "views/hello";
+    }
+```
+
+<img src="./images/2021-09-10-1.jpg" alt="目录结构" style="zoom:67%;" />
+
 ### springboot 修改 请求结果
 
 > 具体描述：

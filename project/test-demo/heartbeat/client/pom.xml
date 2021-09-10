@@ -124,22 +124,28 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- springboot 能跳转 jsp -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		<!-- end -->
+		<!-- controller 跳转 html -->
+		<!--<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>-->
+		<!-- end -->
+
+
     </dependencies>
 
 	<build>
-		<!--打包时将 web 页面文件拷贝到META-INF目录下-->
-		<resources>
-			<!--将指定目录下的资源文件放在target目录下才能访问-->
-			<resource>
-				<directory>src/main/webapp</directory>
-				<targetPath>/</targetPath>
-				<filtering>false</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

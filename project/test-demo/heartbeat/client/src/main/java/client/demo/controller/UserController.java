@@ -37,14 +37,19 @@ public class UserController {
     @RequestMapping("/login")
     public String login(HttpServletRequest httpServletRequest){
         log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
-        return "login.jsp";
+        return "login";
     }
 
-    @RequestMapping("/hello")
-    public String hello(HttpServletRequest httpServletRequest){
-        log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
-        return "hello.html";
-    }
+    /**
+     * 跳转 html 实现， 依赖于thymeleaf
+      * @param httpServletRequest  请求 request
+     * @return 跳转的html 页面的位置
+     */
+//    @RequestMapping("/hello")
+//    public String hello(HttpServletRequest httpServletRequest){
+//        log.info("请求ip地址为{}",httpServletRequest.getRemoteAddr());
+//        return "views/hello";
+//    }
 
 
 
