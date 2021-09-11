@@ -70,12 +70,11 @@ public class UserController {
             subject.login(token);
             log.info("登陆成功");
             String key=SecretUtils.constructPrivateKey();
-            String encodeKey= SecretUtils.transform(key);
-            log.info("随机生成md5=key >>> {},加密后的key >>> {}",key,encodeKey);
-            MapTools.md5_keys.put(httpServletRequest.getRemoteAddr(),encodeKey);
+            log.info("随机生成md5=key >>> {}",key);
+            MapTools.md5_keys.put(httpServletRequest.getRemoteAddr(),key);
             res.put("status","1");
-            res.put("secret",encodeKey);
-            res.put("msg","登陆成功");
+            res.put("secret",key);
+            res.put("msg","欢迎来到狂杀一条街");
             mav.setViewName("show");
         } catch (UnknownAccountException | IncorrectCredentialsException e) {
             log.error("用户名或密码错误");

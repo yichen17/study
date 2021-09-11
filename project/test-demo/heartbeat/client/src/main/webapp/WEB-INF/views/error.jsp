@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.Map" %><%--
   Created by IntelliJ IDEA.
   User: E480
   Date: 2021/9/11
@@ -6,11 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<% Object name = request.getAttribute("res"); %>
+<% Map<String,String> name = (Map<String, String>) request.getAttribute("res"); %>
 <html>
 <head>
     <title>Title</title>
-    <h1> <%=name %></h1>
+    <h2><%=name.get("error")%></h2>
 </head>
 <body>
 
