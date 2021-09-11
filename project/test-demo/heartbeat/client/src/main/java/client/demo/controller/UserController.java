@@ -14,8 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +29,7 @@ import java.util.Map;
  * @describe 用户相关的操作
  */
 @Controller
+@RequestMapping("/user")
 @Slf4j
 public class UserController {
 
@@ -54,26 +58,33 @@ public class UserController {
 
 
     @RequestMapping("/loginCheck")
-    public ReturnT loginCheck(HttpServletRequest httpServletRequest,
+    public ModelAndView loginCheck(HttpServletRequest httpServletRequest,
                          @RequestParam("username") String username, @RequestParam("password")String password){
         log.info("请求ip地址为{},入参username:{},password:{}",httpServletRequest.getRemoteAddr(),username,password);
 
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+        ModelAndView mav=new ModelAndView();
+        Map<String,String> res=new HashMap<>(2);
         try {
             subject.login(token);
             log.info("登陆成功");
-            Map<String,String> data=new HashMap<>();
             String key=SecretUtils.constructPrivateKey();
             String encodeKey= SecretUtils.transform(key);
-            data.put("secret",encodeKey);
-            log.info("随机生成md5=key{},加密后的key{}",key,encodeKey);
+            log.info("随机生成md5=key >>> {},加密后的key >>> {}",key,encodeKey);
             MapTools.md5_keys.put(httpServletRequest.getRemoteAddr(),encodeKey);
-            ReturnT res=new ReturnT(data);
-            return res;
+            res.put("status","1");
+            res.put("secret",encodeKey);
+            res.put("msg","登陆成功");
+            mav.setViewName("show");
         } catch (UnknownAccountException | IncorrectCredentialsException e) {
-            return new ReturnT("1","用户名或密码错误");
+            log.error("用户名或密码错误");
+            res.put("status","0");
+            res.put("error","用户名或密码错误");
+            mav.setViewName("error");
         }
+        mav.addObject("res",res);
+        return mav;
     }
 
 }

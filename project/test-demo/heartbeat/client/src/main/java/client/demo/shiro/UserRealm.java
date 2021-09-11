@@ -1,5 +1,6 @@
 package client.demo.shiro;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -18,6 +19,7 @@ import java.util.Set;
  * @date 2021/8/13 9:55
  * @describe 用于用户认证
  */
+@Slf4j
 public class UserRealm extends AuthorizingRealm {
 
     @Value("${yichen.username}")
@@ -57,7 +59,11 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         if(this.username.equals(token.getUsername())&&this.password.equals(String.valueOf(token.getPassword()))){
-            return new SimpleAuthenticationInfo();
+            log.info("用户 =》 {} 登陆成功",token.getUsername());
+            return new SimpleAuthenticationInfo(this.username,this.password,"UserRealm");
+        }
+        else{
+            log.info("登陆失败，用户名为{}",token.getUsername());
         }
         return null;
     }

@@ -11,11 +11,11 @@
     <title>用户登陆</title>
 </head>
 <body>
-    <form>
+    <form action="/user/loginCheck">
         <label>用户名</label>
-        <input type="text" placeholder="请输入用户名" id="username">
+        <input type="text" placeholder="请输入用户名" id="username" name="username" value="banyu" >
         <label>密码</label>
-        <input type="password" placeholder="请输入密码" id="password">
+        <input type="password" placeholder="请输入密码" id="password" name="password" value="7421">
         <button type="submit">登陆</button>
         <button type="reset">重置</button>
     </form>
