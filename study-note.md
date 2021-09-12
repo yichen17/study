@@ -6827,6 +6827,36 @@ logging:
 
 <font color=red size=5px>注意，两种只能一种生效，都存在的话会覆盖其中一种导致出错</font>
 
+#### 遍历目录
+
+==项目运行后target目录下没有jsp文件或者有文件但是无法访问到==
+
+```java
+<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/webapp</directory>
+				<targetPath>META-INF/resources</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+```
+
+
+
 #### 访问 jsp 页面
 
 ```java
