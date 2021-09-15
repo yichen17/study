@@ -33,9 +33,9 @@ import java.util.Objects;
  * @describe 入口过滤器
  *  通过一下三个注解这里实现过滤器功能，也可以通过 FilterConfig 使 filter 生效
  */
-//@Order(0)
-//@WebFilter(urlPatterns = "/outer/*")
-//@Component
+@Order(0)
+@WebFilter(urlPatterns = "/*")
+@Component
 public class EntranceFilter implements Filter {
 
     private static Logger logger= LoggerFactory.getLogger(EntranceFilter.class);
@@ -51,12 +51,19 @@ public class EntranceFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        // 包装 response 使得容易获取返回的响应数据
-        ResponseWrapper wrapper = new ResponseWrapper((HttpServletResponse) response);
         HttpServletRequest req = (HttpServletRequest) request;
-        VisitHost visitHost=null;
         // 请求的  uri
         String uri = req.getRequestURI();
+        // 排除与前端交互的uri，它们返回的是 字符串，没有走我们默认的 返回消息体。
+        if(uri.startsWith("/user")){
+            logger.info("请求uri为{},不进行请求记录",uri);
+            chain.doFilter(request,response);
+            return ;
+        }
+
+        // 包装 response 使得容易获取返回的响应数据
+        ResponseWrapper wrapper = new ResponseWrapper((HttpServletResponse) response);
+        VisitHost visitHost=null;
         long hostId=-1;
         int localRejectTime=-1;
         logger.info("EntranceFilter开始执行过滤操作");
@@ -101,12 +108,6 @@ public class EntranceFilter implements Filter {
         String result = wrapper.getResponseData(response.getCharacterEncoding());
         logger.info("获取的返回结果为{}",result);
         if(result==null||"".equals(result)){
-            // 排除正常请求时无返回数据的情况，例如  请求重定向
-            if(wrapper.getStatus()==302){
-                // 重定向不算一次成功请求，只算部分成功
-                logger.info("为 302 临时重定向，重定向地址为{},原请求地址为{}",wrapper.getHeader("Location"),uri);
-                return ;
-            }
             // 请求结果为空说明调用链存在异常，一种情况是 dispatch 无法分发请求路由
             result=JSONObject.toJSONString(new ReturnT("2","请核对你的请求，请勿随意访问"));
             logger.warn("请求调用返回结果为空，设定默认值");
