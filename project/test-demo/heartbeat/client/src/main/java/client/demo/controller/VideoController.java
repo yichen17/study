@@ -42,7 +42,7 @@ public class VideoController {
         //流转换
         IOUtils.copy(inputStream,response.getOutputStream());
         //设置返回类型
-        response.addHeader("Content-Type", "audio/mpeg;charset=utf-8");
+        response.addHeader("Content-Type", "video/mp4");
 
         response.flushBuffer();
     }

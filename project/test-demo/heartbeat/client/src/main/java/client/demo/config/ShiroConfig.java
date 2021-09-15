@@ -31,7 +31,7 @@ public class ShiroConfig {
         map.put("/test","authc");
         factoryBean.setFilterChainDefinitionMap(map);
         //设置登录页面
-        factoryBean.setLoginUrl("/views/login.jsp");
+        factoryBean.setLoginUrl("/user/login");
 //        factoryBean.setLoginUrl("http://localhost:8080");
 //        Map<String, Filter> filters=factoryBean.getFilters();
 //        filters.put("authc",new EntranceFilter());
