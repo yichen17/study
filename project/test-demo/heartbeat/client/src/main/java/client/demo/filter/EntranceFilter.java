@@ -108,6 +108,12 @@ public class EntranceFilter implements Filter {
         String result = wrapper.getResponseData(response.getCharacterEncoding());
         logger.info("获取的返回结果为{}",result);
         if(result==null||"".equals(result)){
+            // 排除正常请求时无返回数据的情况，例如  请求重定向
+            if(wrapper.getStatus()==302){
+                // 重定向不算一次成功请求，只算部分成功
+                logger.info("为 302 临时重定向，重定向地址为{},原请求地址为{}",wrapper.getHeader("Location"),uri);
+                return ;
+            }
             // 请求结果为空说明调用链存在异常，一种情况是 dispatch 无法分发请求路由
             result=JSONObject.toJSONString(new ReturnT("2","请核对你的请求，请勿随意访问"));
             logger.warn("请求调用返回结果为空，设定默认值");

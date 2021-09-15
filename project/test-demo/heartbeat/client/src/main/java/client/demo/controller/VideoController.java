@@ -29,7 +29,7 @@ public class VideoController {
     }
 
     /**
-     * 测试读取大文件，看看数据是否会分片问题
+     * 测试本地文件 在前端展示视频
      * @return
      */
     @RequestMapping("/read")
