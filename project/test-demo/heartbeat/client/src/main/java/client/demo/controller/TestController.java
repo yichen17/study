@@ -18,6 +18,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import sun.security.provider.Sun;
 
@@ -49,7 +50,13 @@ public class TestController {
 
 
     @RequestMapping(value = "/get")
-    public ReturnT getData(HttpServletRequest request, @RequestParam("path") String path){
+    public ReturnT getData(HttpServletRequest request, @RequestParam(value = "path",required = false) String path){
+
+        if("/video".equals(path)){
+            log.warn("调用video请求错误方法");
+            return new ReturnT("1","调用video不能使用该方法");
+        }
+
         try{
             log.info("接收到请求，访问ip为{}",request.getRemoteAddr());
             log.info("get方法开始调用");

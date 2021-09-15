@@ -110,6 +110,7 @@ public class EntranceFilter implements Filter {
         if(result==null||"".equals(result)){
             // 排除正常请求时无返回数据的情况，例如  请求重定向
             if(wrapper.getStatus()==302){
+                // TODO shiro 登陆拦截后应该调回原请求地址
                 // 重定向不算一次成功请求，只算部分成功
                 logger.info("为 302 临时重定向，重定向地址为{},原请求地址为{}",wrapper.getHeader("Location"),uri);
                 return ;

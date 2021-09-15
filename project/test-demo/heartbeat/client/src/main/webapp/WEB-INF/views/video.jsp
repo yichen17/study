@@ -14,15 +14,14 @@
 <%--    Your browser does not support the audio element.  a--%>
 <%--</audio>--%>
 
-<video src="http://127.0.0.1:8090/video/read" controls="controls">
+<%--<video src="http://127.0.0.1:8090/video/read" controls="controls">--%>
+<%--    Your browser does not support the audio element.  a--%>
+<%--</video>--%>
+
+<video src="http://127.0.0.1:8090/get?path=/video" controls="controls">
     Your browser does not support the audio element.  a
 </video>
 
-
-
-<%--<audio src="http://127.0.0.1:8766/iodemo/test" controls="controls">--%>
-<%--    Your browser does not support the audio element.   b--%>
-<%--</audio>--%>
 
 </body>
 </html>
