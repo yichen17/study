@@ -29,8 +29,8 @@ public class RespHandler extends ChannelDuplexHandler {
             //TODO 访问本地服务，获取结果  可进行优化
             String result="";
             try{
-//                result= HttpRequest.post("localhost:8088/get").timeout(2000).execute().body();
-                result= HttpRequest.post("localhost:8088/getFile").timeout(2000).execute().body();
+                // 调用方法时指定远程服务 的调用接口地址
+                result= HttpRequest.post("localhost:8088"+nettyMessage.getData()).timeout(2000).execute().body();
                 log.info("内部请求结果是"+result);
             }
             catch (Exception e){

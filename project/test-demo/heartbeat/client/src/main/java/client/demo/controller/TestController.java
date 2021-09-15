@@ -4,6 +4,7 @@ import client.demo.service.VisitHostService;
 import client.demo.service.VisitLogService;
 import client.demo.utils.MapTools;
 import client.demo.utils.ReturnT;
+import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
@@ -13,11 +14,16 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.security.provider.Sun;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -43,7 +49,7 @@ public class TestController {
 
 
     @RequestMapping(value = "/get")
-    public ReturnT getData(HttpServletRequest request){
+    public ReturnT getData(HttpServletRequest request, @RequestParam("path") String path){
         try{
             log.info("接收到请求，访问ip为{}",request.getRemoteAddr());
             log.info("get方法开始调用");
@@ -55,7 +61,7 @@ public class TestController {
             // 远程调用服务
             NettyMessage nettyMessage=new NettyMessage();
             nettyMessage.setCode(2);
-            nettyMessage.setData("调用内网服务");
+            nettyMessage.setData(path);
             ChannelFuture channelFuture = channel.writeAndFlush(nettyMessage);
             log.info("向管道写入数据，管道为"+channel+"数据为"+nettyMessage);
             channelFuture.addListener(new ChannelFutureListener() {
@@ -82,11 +88,12 @@ public class TestController {
                     if(future.isDone()){
                         String res= future.get();
                         ReturnT data= JSONObject.parseObject(res,ReturnT.class);
-                        log.info("远程调用返回的结果{},加密数据为:{}",res,data.getData().toString());
-                        SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
-                        String decryptStr = aes.decryptStr(data.getData().toString(), CharsetUtil.CHARSET_UTF_8);
-                        log.info("解密后的数据结果{}",decryptStr);
-                        return new ReturnT(decryptStr.replace("|","\n"));
+                        return data;
+//                        log.info("远程调用返回的结果{},加密数据为:{}",res,data.getData().toString());
+//                        SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, "yichenshanliangz".getBytes());
+//                        String decryptStr = aes.decryptStr(data.getData().toString(), CharsetUtil.CHARSET_UTF_8);
+//                        log.info("解密后的数据结果{}",decryptStr);
+//                        return new ReturnT(decryptStr.replace("|","\n"));
                     }
                 }
                 catch (Exception e){

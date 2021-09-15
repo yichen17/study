@@ -55,7 +55,7 @@ public class EntranceFilter implements Filter {
         // 请求的  uri
         String uri = req.getRequestURI();
         // 排除与前端交互的uri，它们返回的是 字符串，没有走我们默认的 返回消息体。
-        if(uri.startsWith("/user")){
+        if(uri.startsWith("/user")||uri.startsWith("/video")){
             logger.info("请求uri为{},不进行请求记录",uri);
             chain.doFilter(request,response);
             return ;
