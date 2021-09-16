@@ -38,6 +38,12 @@ import java.util.Iterator;
 
 import javax.swing.JTextField;
 
+/**
+ * @author Qiuxinchao
+ * @version 1.0
+ * @date 2021/9/16 14:39
+ * @describe xuggle 读取摄像头数据
+ */
 public class WebCamDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;

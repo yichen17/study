@@ -14,6 +14,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<javacpp.version>1.5.5</javacpp.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -64,6 +65,19 @@
 			<version>5.4</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}\src\main\resources\jar\xuggle-xuggler-5.4.jar</systemPath>
+		</dependency>
+		<!-- end -->
+
+		<!-- javacv -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv</artifactId>
+			<version>${javacpp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv-platform</artifactId>
+			<version>${javacpp.version}</version>
 		</dependency>
 		<!-- end -->
 
