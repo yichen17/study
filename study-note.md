@@ -6638,6 +6638,25 @@ server.tomcat.uri-encoding=UTF-8
 
 ## springboot 
 
+### 引入外部jar包
+
+[参考文章](https://www.jianshu.com/p/8c28a52e90c6)
+
+```java
+//  在resource目录下创建 jar文件夹(可以自定义)，放入需要引入的jar包。然后在pom中添加如下内容
+<!-- 视频 音频流处理 -->
+<dependency>
+    <groupId>xuggle</groupId>
+    <artifactId>xuggle-xuggler</artifactId>
+    <version>5.4</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}\src\main\resources\jar\xuggle-xuggler-5.4.jar</systemPath>
+</dependency>
+    <!-- end -->
+```
+
+![放置jar包位置](./images/2021-09-16-1.jpg)
+
 ### 整合shiro
 
 [参考链接](https://cloud.tencent.com/developer/article/1643122)
@@ -7192,9 +7211,31 @@ public class ImportPartsTest {
 }
 ```
 
+#### SpyBean vs MockBean
+
+[参考文章](https://zhuanlan.zhihu.com/p/258977808#:~:text=SpyBean%20%E5%92%8C%20MockBean%20%E6%98%AF%20spring-boot-test%20%E5%8C%85%E6%89%80%E6%8F%90%E4%BE%9B%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%B3%A8%E8%A7%A3%EF%BC%8C%E7%94%A8%E4%BA%8ESpy%E6%88%96Mock%20Spring%E5%AE%B9%E5%99%A8%E6%89%80%E7%AE%A1%E7%90%86%E7%9A%84%E5%AE%9E%E4%BE%8B%EF%BC%9B%20%E4%BD%BF%E7%94%A8,SpyBean%20%E6%88%96%E8%80%85%20Spy%20%E6%97%B6%EF%BC%8C%E5%BD%93%E9%9C%80%E8%A6%81%E5%AF%B9%E6%9F%90%E4%B8%AA%E6%96%B9%E6%B3%95%E8%BF%9B%E8%A1%8C%E6%89%93%E6%A1%A9%E6%97%B6%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E9%99%90%E5%88%B6%EF%BC%9B%20%E4%B8%BA%E6%B5%8B%E8%AF%95%E4%B8%BB%E4%BD%93%E7%B1%BB%E9%83%A8%E5%88%86%E6%89%93%E6%A1%A9%E8%80%83%E8%99%91%E4%BD%BF%E7%94%A8%20SpyBean%2C%E4%B8%BA%E5%A4%96%E9%83%A8%E4%BE%9D%E8%B5%96%E6%89%93%E6%A1%A9%EF%BC%8C%E8%80%83%E8%99%91%E4%BD%BF%E7%94%A8%20MockBean%20%E3%80%82)
+
+```java
+// spybean 是复制一个真实的bean，然后通过 以下方式指定其中某个方法的实现，其他方法走原有逻辑
+Mockito.doReturn(返回值).when(spyBean对象)
+    .方法名称(入参);
+// Mockbean 是mock掉原来的bean，通过一下方法 指定其中某个方法的实现，其他方法默认不执行。
+Mockito.when(mockBean对象.方法名称(入参)).thenReturn(返回值);
+
+// 测试类常用添加注解
+@RunWith(SpringRunner.class)
+@SpringBootTest
+```
+
+
+
+
+
 #### 思考
 
 1、a使用b，b使用c，c对象mock了，b对象使用 injectMock，那a怎么办。  ==》 理论，测a到b的时候应该已经测试了b到c
+
+==》 解决方式，通过 @SpyBean 和 @MockBean 即可实现自动注入，且能调用我们自定义的方法
 
 ### 问题记录
 

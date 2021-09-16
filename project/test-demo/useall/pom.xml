@@ -57,6 +57,16 @@
 			<artifactId>fastjson</artifactId>
 		</dependency>
 
+		<!-- 视频 音频流处理 -->
+		<dependency>
+			<groupId>xuggle</groupId>
+			<artifactId>xuggle-xuggler</artifactId>
+			<version>5.4</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}\src\main\resources\jar\xuggle-xuggler-5.4.jar</systemPath>
+		</dependency>
+		<!-- end -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -69,6 +79,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- 视频 音频流处理 -->
+				<configuration>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>
