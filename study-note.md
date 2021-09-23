@@ -1113,6 +1113,66 @@ tar [选项...] [FILE]...
 >
 > curl -k http://www.baidu.com
 
+## ionice
+
+[参考文章](http://linux.51yip.com/search/ionice)
+
+```java
+命令格式：
+ionice [[-c class] [-n classdata] [-t]] -p PID [PID]…
+ionice [-c class] [-n classdata] [-t] COMMAND [ARG]…
+
+参数说明：
+-c class ：class表示调度策略，其中0 for none, 1 for real time, 2 for best-effort, 3 for idle。
+-n classdata：classdata表示IO优先级级别，对于best effort和real time，classdata可以设置为0~7。
+    数值越小，优先级越高
+-p pid：指定要查看或设置的进程号或者线程号，如果没有指定pid参数，
+    ionice will run the listed program with the given parameters。
+-t ：忽视设置优先级时产生的错误。
+COMMAND：表示命令名
+
+
+```
+
+## link
+
+[参考文章](https://www.linuxprobe.com/soft-hard-links-comments.html)
+
+### 硬链接
+
+硬链接是通过索引节点进行的链接。在Linux中，多个文件指向同一个索引节点是允许的，像这样的链接就是硬链接。硬链接只能在同一文件系统中的文件之间进行链接，不能对目录进行创建。如果删除硬链接对应的源文件，则硬链接文件仍然存在，而且保存了原有的内容，这样可以起到防止因为误操作而错误删除文件的作用。由于硬链接是有着相同 inode 号仅文件名不同的文件，因此，删除一个硬链接文件并不影响其他有相同 inode 号的文件。
+
+```java
+link oldfile newfile 
+ln oldfile newfile
+```
+
+###  软连接
+
+软链接（也叫符号链接）与硬链接不同，文件用户数据块中存放的内容是另一文件的路径名的指向。软链接就是一个普通文件，只是数据块内容有点特殊。软链接可对文件或目录创建。
+
+软链接主要应用于以下两个方面：一是方便管理，例如可以把一个复杂路径下的文件链接到一个简单路径下方便用户访问；另一方面就是解决文件系统磁盘空间不足的情况。例如某个文件文件系统空间已经用完了，但是现在必须在该文件系统下创建一个新的目录并存储大量的文件，那么可以把另一个剩余空间较多的文件系统中的目录链接到该文件系统中，这样就可以很好的解决空间不足问题。删除软链接并不影响被指向的文件，但若被指向的原文件被删除，则相关软连接就变成了死链接。
+
+```java
+ln -s old.file soft.link
+ln -s old.dir soft.link.dir
+```
+
+## ls
+
+### -i
+
+显示 inode 信息
+
+```java
+// 显示当前目录文件，附带 inode信息
+ls -li
+// 查看对应 inode 文件所在位置，当前目录
+find . inum 4222124650801021
+```
+
+
+
 ## bash 脚本命令
 
 [归纳](https://blog.csdn.net/h70614959/article/details/8985165)
