@@ -2294,6 +2294,61 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### idea 内启动 tomat 报错 增加缓存空间大小
+
+> 具体内容如下
+>
+> 。。。的资源添加到Web应用程序[]的缓存中，因为在清除过期缓存条目后可用空间仍不足 - 请考虑增加缓存的最大空间。
+
+[解决办法](https://www.cnblogs.com/saoge/p/15035909.html)
+
+```java
+// tomcat 安装目录 下 conf/context.xml  添加如下内容
+//  <WatchedResource>WEB-INF/web.xml</WatchedResource>
+//    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>  下面
+<Resources
+          cachingAllowed="true"
+		  cacheMaxSize="100000"
+    />
+
+
+
+```
+
+
+
+### idea 内启动tomcat，日志显示乱码
+
+[解决办法](https://blog.csdn.net/weixin_43160251/article/details/105434911)
+
+== tomcat 日志编码格式和 idea 虚拟机中的编码格式一致，即都为 UTF-8
+
+### 启动项目 报错端口占用，但是查看本地端口显示没被使用
+
+[参考解决办法](https://blog.csdn.net/weixin_40555722/article/details/109046172)
+
+> typee-v  端口保留问题
+>
+> //  查看保留端口，里面的端口不能使用
+>
+> netsh interface ipv4 show excludedportrange protocol=tcp
+
+<img src="./images/2021-09-24-3.jpg" alt="查询结果" style="zoom:67%;" />
+
+### 引入外部的jar包
+
+[参考文章-可行](https://blog.csdn.net/limengautoman/article/details/81186120)
+
+file > project structure  > SDKs  右侧引入外部jar包
+
+![参考步骤](./images/2021-09-24-2.jpg)
+
+然后点击 ok，之后重新加载项目即可
+
+![参考图片](./images/2021-09-24-1.jpg)
+
+[参考文章-待验证](https://blog.csdn.net/cm15835106905/article/details/107964194)
+
 ### 从git上下载的项目中，pom显示被划掉
 
 [参考链接](https://blog.csdn.net/xufengzhu/article/details/114496727)
