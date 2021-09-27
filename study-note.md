@@ -1373,6 +1373,31 @@ Hello User, $comment
 + netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
 + tasklist | findstr "上一步最后一列查询出来的  pid "
 
+## 重启window 子系统
+
+[参考文章](https://blog.csdn.net/weixin_37251044/article/details/114108199)
+
+```java
+//  管理员 运行  cmd
+net stop LxssManager
+net start LxssManaer
+```
+
+## xshell 连接 window子系统
+
+==失败==
+
+[参考解决办法](https://www.cnblogs.com/ACDIV/p/9047825.html)
+
+```java
+sudo apt-get remove --purge openssh-server
+sudo apt-get install openssh-server
+// 备份  ssh_config
+cp  /etc/ssh/ssh_config  /yichen/
+sudo rm /etc/ssh/ssh_config
+sudo service ssh --full-restart
+```
+
 
 
 # git 常用命令
@@ -5916,9 +5941,72 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 >
 > -Xmx512m
 >
-> #启动命令
+> #启动命令   后加 -d  后台启动
 >
 > /software/elasticsearch-6.4.0/bin/elasticsearch
+>
+> #测试启动成功  
+>
+> curl 'http://localhost:9200/?pretty'
+
+### 使用
+
+#### 构造数据
+
+```java
+PUT /megacorp/employee/1
+{
+    "first_name" : "John",
+    "last_name" :  "Smith",
+    "age" :        25,
+    "about" :      "I love to go rock climbing",
+    "interests": [ "sports", "music" ]
+}
+
+PUT /megacorp/employee/2
+{
+    "first_name" :  "Jane",
+    "last_name" :   "Smith",
+    "age" :         32,
+    "about" :       "I like to collect rock albums",
+    "interests":  [ "music" ]
+}
+
+PUT /megacorp/employee/3
+{
+    "first_name" :  "Douglas",
+    "last_name" :   "Fir",
+    "age" :         35,
+    "about":        "I like to build cabinets",
+    "interests":  [ "forestry" ]
+}
+```
+
+
+
+#### 聚合报错
+
+==未解决==
+
+```java
+Fielddata is disabled on text fields by default. Set fielddata=true ...
+// 解决办法  先删除 index，再重新导入数据
+PUT megacorp
+{
+    "mappings": {
+        "properties": {
+            "megacorp": {
+                "type": "text",
+                "fielddata": true
+            }
+        }
+    }
+}
+```
+
+
+
+
 
 ### 问题
 
@@ -5943,6 +6031,30 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 > sysctl -w vm.max_map_count=262144
 >
 > // 如果失败直接 vi创建对应文件，然后写入数值即可
+
+####  max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]
+
+```java
+// 查看进程打开的文件数数量限制
+ulimit -Sn
+ulimit -Hn
+```
+
+## kibana
+
+[参考解决办法](https://www.cnblogs.com/cnsdhzzl/p/9564097.html)
+
+```java
+wget https://artifacts.elastic.co/downloads/kibana/kibana-6.4.0-linux-x86_64.tar.gz
+
+tar -zxvf kibana-6.4.0-linux-x86_64.tar.gz
+
+// 启动 
+//  默认配置即可运行，需要 elasticsearch 安装在本地  如今不在需要 sense ，改为 dev tools 
+bin/kibana
+```
+
+
 
 ## hbase
 
