@@ -1538,6 +1538,66 @@ git log
 
 ```
 
+## git rebase
+
+### 合并多个提交
+
+[合并多个提交](https://blog.csdn.net/w57685321/article/details/86597808)
+
+#### 提示字段选择
+
+```java
+pick：保留该commit（缩写:p）
+reword：保留该commit，但我需要修改该commit的注释（缩写:r）
+edit：保留该commit, 但我要停下来修改该提交(不仅仅修改注释)（缩写:e）
+squash：将该commit和前一个commit合并（缩写:s）
+fixup：将该commit和前一个commit合并，但我不要保留该提交的注释信息（缩写:f）
+exec：执行shell命令（缩写:x）
+drop：我要丢弃该commit（缩写:d）
+```
+
+>合并最近的 n个提交
+>
+>git rebase -i head~n
+>
+>合并到指定 commit 为止
+>
+>git rebase -i 332d43c31d5cf536ae6971f5e9f5b73100c591ce
+>
+> 
+>
+>修改前面几行的提示字段，含义如上，从上到下commit时间变长
+>
+>  :wq 退出编辑
+>
+> 
+>
+>将 This is the commit message #2 下面的内容改成你想提交的概述即可
+>
+>  :wq 退出编辑
+>
+>
+
+
+
+### 合并分支
+
+[合并分支](https://blog.csdn.net/nrsc272420199/article/details/85555911)
+
+==示例 yichen分支合到master分支==
+
+> 1、先拉取需要合上去的分支的最新代码   git pull 
+>
+> 2、切换到 需要被合的分支  git checkout yichen
+>
+> 3、将 yichen 做的修改加到 master分支的最后   git rebase master
+>
+> 4、切换到 需要合的分支   git checkout master
+>
+> 5、合并分支  git merge yichen
+>
+> 6、推送分支  git push origin master
+
 ## 用到的命令
 
 + 查看本地分支  
@@ -5982,6 +6042,18 @@ PUT /megacorp/employee/3
 }
 ```
 
+#### 集群健康
+
+```java
+GET /_cluster/health
+```
+
+#### 单机启动多个实例
+
+
+
+
+
 
 
 #### 聚合报错
@@ -7465,6 +7537,39 @@ Mockito.when(mockBean对象.方法名称(入参)).thenReturn(返回值);
 ==》 解决方式，通过 @SpyBean 和 @MockBean 即可实现自动注入，且能调用我们自定义的方法
 
 ### 问题记录
+
+#### Assert.isTrue(ZLjava/util/function/Supplier;)V
+
+具体内容
+
+```java
+java.lang.NoSuchMethodError: org.springframework.util.Assert.isTrue(ZLjava/util/function/Supplier;)V
+	at org.springframework.boot.context.properties.bind.Bindable.withExistingValue(Bindable.java:162) ~[spring-boot-2.0.6.RELEASE.jar:2.0.6.RELEASE]
+	at org.springframework.boot.context.properties.bind.Bindable.ofInstance(Bindable.java:192) ~[spring-boot-2.0.6.RELEASE.jar:2.0.6.RELEASE]
+```
+
+##### 解决办法
+
+[常规解决](https://www.cnblogs.com/hjieone/articles/9854597.html)
+
+==特殊情况，修改项目的jre目录==
+
+![修改配置图示](./images/2021-10-19-1.jpg)
+
+#### @Builder 导致 fastjson转对象出错
+
+==报错内容==
+
+```java
+"com.alibaba.fastjson.JSONException","commonElementCount":0,"message":"default constructor not found. class 
+```
+
+##### 解决办法
+
+> // Builder  在添加以下两个注解
+>
+> @NoArgsConstructor
+> @AllArgsConstructor
 
 #### 读取配置文件中文显示乱码
 
