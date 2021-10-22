@@ -1745,7 +1745,9 @@ git config --global core.quotepath false
 
 > git merge master --allow-unrelated-histories
 
+### Support for password authentication was removed.
 
+[密码认证移除解决办法](https://blog.csdn.net/qq_31310793/article/details/119779574)
 
 # dubbo 源码学习
 
@@ -7578,6 +7580,12 @@ java.lang.NoSuchMethodError: org.springframework.util.Assert.isTrue(ZLjava/util/
 > // 在读取的配置文件中添加如下内容
 >
 > spring.http.encoding.enabled=true
+
+#### redis 改变后其他地方未查询到
+
+==springboot 默认使用的databases 是0==
+
+> 排查连个地方使用的redis 地址是否是同一个，以及使用的数据库是否是同一个。redis不同数据库之间是隔离的。  
 
 ## mybatis generator
 
