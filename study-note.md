@@ -6939,6 +6939,132 @@ server.tomcat.uri-encoding=UTF-8
 
 ## springboot 
 
+### 整合redis-jedis
+
+[参考链接](https://www.iteye.com/blog/ydlmlh-2259129)
+
+#### 所需依赖
+
+```java
+<!-- redis 所需要的依赖 -->
+<dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-redis</artifactId>
+    <version>2.2.6.RELEASE</version>
+</dependency>
+<!-- 连接池需要配置 -->
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+</dependency>
+<!-- end -->
+```
+
+
+
+#### 配置信息  application.properties
+
+```java
+# redis  配置信息，设置默认 database库为 10
+spring.redis.password=yichen
+spring.redis.host=127.0.0.1
+spring.redis.port=6379
+spring.redis.database=10
+# jedis 连接池配置信息
+spring.redis.max.idle=10
+spring.redis.max.total=30
+spring.redis.max.wait.mills=-1
+```
+
+####  配置类
+
+```java
+@Configuration
+public class RedisConfig {
+
+    @Value("${spring.redis.password}")
+    private String password;
+
+    @Value("${spring.redis.port}")
+    private Integer port;
+
+    @Value("${spring.redis.host}")
+    private String host;
+
+    @Value("${spring.redis.database}")
+    private Integer index;
+
+    @Value("${spring.redis.max.idle}")
+    private Integer maxIdle;
+
+    @Value("${spring.redis.max.total}")
+    private Integer maxTotal;
+
+    @Value("${spring.redis.max.wait.mills}")
+    private Integer maxWaitMills;
+
+
+    /**
+     * 每次连接都会创建新的连接，资源消耗较大
+     * @return
+     */
+    @Bean
+    public JedisConnectionFactory jedisConnectionFactory(){
+        RedisStandaloneConfiguration redisStandaloneConfiguration=new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setDatabase(index);
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPassword(password);
+        redisStandaloneConfiguration.setPort(port);
+        return new JedisConnectionFactory(redisStandaloneConfiguration);
+    }
+
+    /**
+     * 使用 redis 连接池
+     * @return
+     */
+    @Bean("jedisConnectionFactory2")
+    public RedisConnectionFactory redisConnectionFactory(){
+        JedisPoolConfig poolConfig=new JedisPoolConfig();
+        poolConfig.setMaxIdle(maxIdle);
+        poolConfig.setMaxTotal(maxTotal);
+        poolConfig.setTestOnBorrow(true);
+        poolConfig.setTestOnReturn(true);
+        poolConfig.setTestWhileIdle(true);
+        poolConfig.setNumTestsPerEvictionRun(10);
+        poolConfig.setTimeBetweenEvictionRunsMillis(60000L);
+        poolConfig.setMaxWaitMillis(maxWaitMills);
+        RedisStandaloneConfiguration redisStandaloneConfiguration=new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setDatabase(index);
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPassword(password);
+        redisStandaloneConfiguration.setPort(port);
+        JedisClientConfiguration.JedisClientConfigurationBuilder builder=JedisClientConfiguration.builder();
+        JedisClientConfiguration jedisClientConfiguration=builder.usePooling().poolConfig(poolConfig).build();
+        return new JedisConnectionFactory(redisStandaloneConfiguration,jedisClientConfiguration);
+    }
+
+
+    @Bean
+    public StringRedisTemplate redisTemplate(JedisConnectionFactory factory) {
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(factory);
+        // key采用String的序列化方式
+        template.setKeySerializer(new StringRedisSerializer());
+        // hash的key也采用String的序列化方式
+        template.setHashKeySerializer(new StringRedisSerializer());
+        // value序列化方式采用jackson
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        // hash的value序列化方式采用jackson
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.afterPropertiesSet();
+        return template;
+    }
+
+}
+```
+
+
+
 ### 引入外部jar包
 
 [参考文章](https://www.jianshu.com/p/8c28a52e90c6)
