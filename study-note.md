@@ -6796,6 +6796,8 @@ server.tomcat.uri-encoding=UTF-8
 
 ==参考 log4j2.xml==
 
+[官方参考文档](https://logging.apache.org/log4j/2.x/manual/appenders.html#RolloverStrategies)
+
 ```java
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
@@ -7268,6 +7270,20 @@ logging:
 ### 使用 log4j2 记录日志
 
 [解决办法](#springboot 将默认的logback改为 slf4j2)
+
+#### 期间问题
+
+##### 按配置文件配置，但是项目重启后日志没归档
+
+[官方文档](https://logging.apache.org/log4j/2.x/manual/appenders.html#RolloverStrategies)
+
+具体描述
+
+> log4j2.xml中配置了对应的日志 策略( OnStartupTriggeringPolicy )，但是在 k8s中重启项目时，发现日志没有归档，仍使用的是同一个日志文件，而不是新生成一个，将旧的日志文件归档
+
+==解决==
+
+> k8s项目的重启是旧的关闭同时新的开启，而 OnStartupTriggeringPolicy  比较的是日志中的时间和jvm启动时间。  如果先将 k8s项目关闭等一会 在启动k8s项目，此时日志会归档。
 
 ### 整合 前端页面
 
