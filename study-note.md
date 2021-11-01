@@ -6935,7 +6935,28 @@ server.tomcat.uri-encoding=UTF-8
 </Configuration>
 ```
 
+## springboot 项目构建 编译报错，提示 找不到符号
 
+==具体报错内容示例==
+
+```java
+17:00:10   symbol:   method setSmscontent(java.lang.String)
+17:00:10   location: variable smsLog of type com.onecard.orderservice.model.loando.SmsLogDO
+17:00:10 [ERROR] /data/jenkins-home/archive/src/XJ-onecard-orderService/orderService.git/test-k8s/orderService-web/src/main/java/com/onecard/orderservice/service/impl/OrgCapitalLoanNoticeServiceImpl.java:[192,43] cannot find symbol
+17:00:10   symbol:   method getContent()
+17:00:10   location: variable notice of type com.onecard.orderservice.model.dto.OrgCapitalLoanNoticeDTO
+17:00:10 [ERROR] /data/jenkins-home/archive/src/XJ-onecard-orderService/orderService.git/test-k8s/orderService-web/src/main/java/com/onecard/orderservice/service/impl/OrgCapitalLoanNoticeServiceImpl.java:[193,74] cannot find symbol
+17:00:10   symbol:   method getAppId()
+17:00:10   location: variable content of type com.onecard.orderservice.model.dto.OrgCapitalLoanNoticeDTO.NoticeContent
+17:00:10 [ERROR] /data/jenkins-home/archive/src/XJ-onecard-orderService/orderService.git/test-k8s/orderService-web/src/main/java/com/onecard/orderservice/service/impl/OrgCapitalLoanNoticeServiceImpl.java:[194,38] cannot find symbol
+17:00:10   symbol:   method getAppStatus()
+```
+
+### 解决办法
+
+> 找到一开始报错的地方，进入代码查看。
+>
+> 我这里是因为git 分支合并导致controller中有两个一模一样的方法
 
 # JAVA
 
@@ -7416,6 +7437,39 @@ public class EntranceFilter implements Filter {
     }
 }
 ```
+
+### 服务熔断降级
+
+#### feign和hystrix实现
+
+[参考实现](http://www.javashuo.com/article/p-zysimjgd-r.html)
+
+```java
+<dependency>
+     <groupId>org.springframework.cloud</groupId>
+     <artifactId>spring-cloud-starter-hystrix</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+</dependency>
+```
+
+> //  添加 fallback 实现类，为接口异常默认值
+>
+> @FeignClient(name = "mall-user", url = "${wk.url.mall}",fallback = MallHystrix.class)
+>
+> // 配置文件开启 hystrix
+>
+> ```java
+> feign:
+>   hystrix:
+>     enabled: true    
+> ```
+>
+> // 方法限流
+>
+> @HystrixCommand
 
 
 
@@ -8461,6 +8515,12 @@ long stop=System.currentTimeMillis();
 + 代码分层架构设计的思维模型是简化思维，本质是抽象和拆解
 + 代码分层架构设计的目的是将复杂问题拆分为更容易解决的小问题，降低实现难度
 + 代码分层架构设计的原则和方法是通用方法，可以应用到其他需要分层设计的地方
+
+# ddd
+
+## 贫血模型和充血模型
+
+
 
 # 计算机网络
 
@@ -9520,6 +9580,8 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 #### 唯一索引拦截不会影响自增id
 
 > 例如我 host列设置为了唯一索引，id为自增主键，然后我重复插入两条host值相同的记录，则虽然插入会失败，但是自增id在插入失败的情况下还是会自动加一。导致产生数据跳跃。
+
+
 
 
 
