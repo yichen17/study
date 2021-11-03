@@ -1372,6 +1372,7 @@ Hello User, $comment
 + netstat -ano  // 展示端口列表
 + netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
 + tasklist | findstr "上一步最后一列查询出来的  pid "
++ tasklill \F \PID  进程号
 
 ## 重启window 子系统
 
@@ -5342,6 +5343,10 @@ Caused by: java.lang.NoClassDefFoundError: org/apache/kafka/clients/consumer/Con
 
 > 先关闭 kafka，后关闭 zookeeper，如果先关闭 zookeeper 就会出现该问题
 
+#### 启动报错 java.io.IOException: Invalid argument at java.io.RandomAccess
+
+> 查看日志  logs 目录下，  执行   rm -rf /tmp/kafka-logs 
+
 ## redis
 
 ### redis  安装
@@ -5614,7 +5619,71 @@ db.password.0=root
 
 ## rocketmq
 
+[参考步骤](https://blog.csdn.net/mario08/article/details/107243730)
 
+### 主要内容
+
+> 修改 runserver.sh 和 runbroker.sh 中 jvm 参数，改为 256m
+
+### 问题
+
+#### 启动 server 报错 端口拒绝
+
+==分析==
+
+> 出错原因是电脑本机开启了 hyper-v 功能，禁用了某些端口。具体查看
+>
+> windows cmd 输入下面命令
+>
+> netsh interface ipv4 show excludedportrange protocol=tcp
+>
+> // 查询后会有如下不可用端口范围，其中有 9876，即造成端口不可用，而不是常见的非 root账户无法使用 1000以下端口
+>
+> ----------    --------
+>     协议 tcp 端口排除范围
+>     开始端口    结束端口
+>       1064        1163
+>       1364        1463
+>       1464        1563
+>       1564        1663
+>       2501        2600
+>       2801        2900
+>       2901        3000
+>       3001        3100
+>       5357        5357
+>       7639        7738
+>       7739        7838
+>       9834        9933
+>      10034       10133
+>      10241       10340
+>      10341       10440
+>      10441       10540
+>      10541       10640
+>      12066       12165
+>      12166       12265
+>      50000       50059     
+>      管理的端口排除。
+>
+
+##### 解决
+
+[参考解决办法](https://www.cnblogs.com/quchunhui/p/9234860.html)
+
+> 修改rocketmq 使用的端口，改为 9950 端口
+>
+> 项目目录 ：  /software/rocketmq
+>
+> 在 /conf 目录下创建   namesrv.properties 文件
+>
+> 内容为    listenPort=9950 
+>
+> server 启动脚本  start-server.sh 
+>
+> nohup sh /software/rocketmq/bin/mqnamesrv -c /software/rocketmq/conf/namesrv.properties & > ./server.log 2>&1
+>
+> broker 启动脚本 start-broker.sh
+>
+> nohup sh /software/rocketmq/bin/mqbroker -n localhost:9950 & > ./broker.log 2>&1
 
 ## rabbitMq
 
@@ -6960,7 +7029,62 @@ server.tomcat.uri-encoding=UTF-8
 
 # JAVA
 
-## springboot 
+## springboot
+
+ ### 搭建本地 eureka
+
+[参考方法](https://blog.csdn.net/tlycherry/article/details/106401579)
+
+#### 步骤
+
+1、添加依赖
+
+```java
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+    <version>2.0.2.RELEASE</version>
+</dependency>
+//  注意 springboot 和 springcloud 版本号需要对应。
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.6.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+```
+
+2、添加配置信息
+
+```java
+
+#由于该应用为注册中心，所以设置为false，表示不向注册中心注册自己
+eureka.client.fetch-registry=false
+#注册中心的职责是维护实例，并不需要去检索服务，所以设置为false
+eureka.client.register-with-eureka=false
+#服务注册中心地址
+eureka.client.serviceUrl.defaultZone=http://${eureka.instance.hostname}:${server.port}/eureka/
+eureka.instance.hostname=127.0.0.1
+server.port=8099
+```
+
+3、启动注册中心服务
+
+```java
+@EnableEurekaServer // 启动类上添加注解
+@SpringBootApplication
+public class EurekaServerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServerApplication.class, args);
+    }
+
+}
+```
+
+4、测试
+
+> 浏览器访问  http://127.0.0.1:8099
 
 ### 整合redis-jedis
 
