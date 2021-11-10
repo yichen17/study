@@ -1543,6 +1543,10 @@ git log
 
 ### 合并多个提交
 
+#### idea 快捷 rebase
+
+![操作示例](./images/2021-11-04-1.jpg)
+
 [合并多个提交](https://blog.csdn.net/w57685321/article/details/86597808)
 
 #### 提示字段选择
@@ -7029,6 +7033,22 @@ server.tomcat.uri-encoding=UTF-8
 
 # JAVA
 
+## mybatis 配置
+
+### 日期大小比对
+
+```java
+// 数据库中的类型是  datetime   
+<select id="selectByTime" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from t_vip_dz_recharge_record
+    where  <![CDATA[ recharge_date >= #{start ,jdbcType=TIMESTAMP}  ]]> and  <![CDATA[ recharge_date < #{end ,jdbcType=TIMESTAMP}  ]]>
+  </select>
+```
+
+
+
 ## springboot
 
  ### 搭建本地 eureka
@@ -7929,6 +7949,30 @@ select  host_id, visit_url, status  from t_visit_log
 ```
 
 <font color=red>这里可以看到，他把原来的一个字节的字符串变成了数字
+
+#### 解决
+
+```java
+// 新建类，指定 tinyint 转换类型
+public class MyResolver extends JavaTypeResolverDefaultImpl {
+    public MyResolver(){
+        super();
+        typeMap.put(-6, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("TINYINT", new FullyQualifiedJavaType(Integer.class.getName()))); // 当类型为TINYINT时，则生成的Java类型为Integer
+    }
+}
+// 在 GeneratorConfig.xml 中  <javaModelGenerator> 标签上添加 解析标签
+<javaTypeResolver type="client.config.MyResolver">
+            <!--
+            true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
+            false：默认,
+               scale>0;length>18：使用BigDecimal;
+               scale=0;length[10,18]：使用Long；
+               scale=0;length[5,9]：使用Integer；
+               scale=0;length<5：使用Short；
+             -->
+            <property name="forceBigDecimals" value="true"/>
+</javaTypeResolver>
+```
 
 
 
