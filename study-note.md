@@ -5506,6 +5506,12 @@ failed
 
 ## mysql
 
+### windows 安装 mysql
+
+[多版本mysql](#windows下安装多个数据库)
+
+
+
 ### 安装
 
 + apt-cache search mysql | grep mysql-server    // 查看可以安装的版本
@@ -5919,6 +5925,17 @@ apt install rabbitmq-server
 将 该文件删除即可
 
 ## tomcat 安装
+
+### 修改运行内存大小
+
+[参考文章](http://www.xitongzhijia.net/xtjc/20171211/114356.html)
+
+> 修改 catalina.bat ，添加如下内容
+>
+> JAVA_OPTS='-Xms512m -Xmx1024m'
+> JAVA_OPTS=" -server -XX:PermSize=64M -XX:MaxPermSize=256m"
+
+![填写位置](./images/2021-11-15-2.jpg)
 
 ### 基础知识
 
