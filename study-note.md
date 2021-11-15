@@ -2386,6 +2386,14 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 拷贝别人能正常运行的maven 仓库，idea 没有自动引入仓库里的包
+
+> 查看项目结构中的 libraries
+>
+> 如果没有手动引入，点击上面的加号 》 选择 java  》 选中 拷贝的maven 仓库目录
+
+<img src="./images/2021-11-15-1.jpg" alt="看libraries" style="zoom:67%;" />
+
 ### idea 内启动 tomat 报错 增加缓存空间大小
 
 > 具体内容如下
