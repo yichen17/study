@@ -2404,6 +2404,14 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 拷贝别人能正常运行的maven 仓库，idea 没有自动引入仓库里的包
+
+> 查看项目结构中的 libraries
+>
+> 如果没有手动引入，点击上面的加号 》 选择 java  》 选中 拷贝的maven 仓库目录
+
+<img src="./images/2021-11-15-1.jpg" alt="看libraries" style="zoom:67%;" />
+
 ### idea 内启动 tomat 报错 增加缓存空间大小
 
 > 具体内容如下
@@ -5516,6 +5524,12 @@ failed
 
 ## mysql
 
+### windows 安装 mysql
+
+[多版本mysql](#windows下安装多个数据库)
+
+
+
 ### 安装
 
 + apt-cache search mysql | grep mysql-server    // 查看可以安装的版本
@@ -5929,6 +5943,17 @@ apt install rabbitmq-server
 将 该文件删除即可
 
 ## tomcat 安装
+
+### 修改运行内存大小
+
+[参考文章](http://www.xitongzhijia.net/xtjc/20171211/114356.html)
+
+> 修改 catalina.bat ，添加如下内容
+>
+> JAVA_OPTS='-Xms512m -Xmx1024m'
+> JAVA_OPTS=" -server -XX:PermSize=64M -XX:MaxPermSize=256m"
+
+![填写位置](./images/2021-11-15-2.jpg)
 
 ### 基础知识
 
