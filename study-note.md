@@ -2136,6 +2136,22 @@ Javassist 是一个开源的生成 Java 字节码的类库，其主要优点在�
 
 # idea 相关 问题
 
+## 使用配置记录
+
+> 1、安装插件
+>
+> Translate
+>
+> Alibaba Java Coding Guidelines    
+>
+> Activate-power-mode   
+>
+> Lombok    
+>
+> Material Theme UI
+>
+> free mybatis plugins 
+
 ##  快捷键
 
 ctrl+alt+T      生成try catch
@@ -2359,6 +2375,8 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 + jclasslib  用于查看字节码的工具，   功能类似  javap
 
 + Git Commit Template     git  提交的commit 模板
+
++ free mybatis plugins   =》  能够从mybatis 的 dao 层快速跳转到  mapper
 
 
 
@@ -7036,6 +7054,8 @@ server.tomcat.uri-encoding=UTF-8
 ## mybatis 配置
 
 ### 日期大小比对
+
+<font size=6px color=red>datetime数据库类型，jdbcType必须为TIMESTAMP，不能是DATE</font>
 
 ```java
 // 数据库中的类型是  datetime   
