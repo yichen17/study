@@ -2151,6 +2151,8 @@ Javassist 是一个开源的生成 Java 字节码的类库，其主要优点在�
 > Material Theme UI
 >
 > free mybatis plugins 
+>
+> Maven helper
 
 ##  快捷键
 
@@ -2403,6 +2405,10 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 
 ## 问题记录
+
+### springboot 项目打开未被识别为 maven
+
+> 选中 pom.xml ，右键选择 add as a maven 
 
 ### 拷贝别人能正常运行的maven 仓库，idea 没有自动引入仓库里的包
 
