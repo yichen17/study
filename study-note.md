@@ -5343,7 +5343,7 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >
 > bin/kafka-server-stop.sh
 
-### 可视化界面
+### 可视化界面  kafka-manager
 
 
 
@@ -7979,6 +7979,14 @@ java.lang.NoSuchMethodError: org.springframework.util.Assert.isTrue(ZLjava/util/
 > 排查连个地方使用的redis 地址是否是同一个，以及使用的数据库是否是同一个。redis不同数据库之间是隔离的。  
 
 ## mybatis generator
+
+> 可以直接通过命令行 mvn mybatis-generator:generate 或者通过idea 的可视化界面
+
+![示例](./images/2021-12-03-1.jpg)
+
+### maven 运行 mybatis generator
+
+
 
 ### varchar(1) 自动构造 变成 byte类型
 
