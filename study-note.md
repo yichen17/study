@@ -1175,6 +1175,14 @@ find . inum 4222124650801021
 
 ## bash 脚本命令
 
+### 重要-必看
+
+> 1、赋值 = 号左右不要加空格 
+>
+> 2、函数调用 后返回结果 通过 $? 获取， ==> 注意，这里需要该调用函数后立即获取，如果中间有echo 等操作后，是获取不到了的
+>
+> 3、if 后面必须有then，不能有其他语句，不然会只执行该语句
+
 [归纳](https://blog.csdn.net/h70614959/article/details/8985165)
 
 [入门文档](https://www.w3cschool.cn/bashshell/bashshell-n2xd37ig.html)
@@ -1291,7 +1299,48 @@ Hello User, $comment
 > $[ exp ]
 > $(( exp ))
 
+### 常用脚本命令
 
+#### 前n 天日期
+
+> //  获取 前 n天日期
+>
+> now=`date +%D
+>
+> day=`date -d "15 days ago $now" +%Y-%m-%d`    # 今天前15天的日期
+
+#### 循环遍历
+
+> for num in {0..10..1}
+> do
+> echo $num
+> done
+
+#### 删除部分字符
+
+[参考](https://www.cnblogs.com/zwgblog/p/6031256.html)
+
+> // 原字符     var=http://www.aaa.com/123.htm
+>
+> echo ${val#*//}     //  删除左边第一个匹配的，  结果   www.aaa.com/123.htm
+>
+> echo ${val##*/}    // 删除左边左后一个出现的    结果   123.htm
+>
+> echo ${var%/*}  // 从右边开始删除第一个 / 及右边的字符   结果 http://www.aaa.com
+>
+> echo ${var%%/*}   // 从右边开始删除最左边  / 及右边的子反复  结果 http:
+>
+> echo ${var:0:5}  // 截取 从左边开始  n个字符   结果 http:
+>
+> echo ${var:7}   // 从左边开始第n个字符，直到结束   结果 www.aaa.com/123.htm
+>
+> echo ${var:0-7:3}    // 从右边开始第几个字符开始，拿到n个字符  结果   123
+>
+> echo ${var:0-7}  // 从右边第n个字符开始，直到结束  结果 123.htm
+
+#### 字符串包含关系
+
+[参考](https://blog.csdn.net/rznice/article/details/71086839)
 
 
 
@@ -5251,6 +5300,18 @@ if (p.hash == hash &&
 ### notepadding 中取消网址自动链接
 
 > 通过  设置 =》 首选项 =》 其他 =》 右侧 超链接设置不启用
+
+### 远程打开文件
+
+>  
+
+### 设置为中文
+
+> settings > references > 左边的   localization  选中文简体即可
+
+### 竖向选择
+
+> 按住 alt 键，鼠标左键进行选区
 
 ## typora 
 
