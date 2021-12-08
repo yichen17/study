@@ -1835,6 +1835,10 @@ git config --global core.quotepath false
 
 [密码认证移除解决办法](https://blog.csdn.net/qq_31310793/article/details/119779574)
 
+> // token 注意保存，单次生成后只有第一次能看到，之后不在能看到它，只能在生成一个信息
+>
+> settings  =>  Developer Settings =>  Personal Access Token  => Generate New Token  =>  填写该 token 拥有的对应权限 =>  Generate token  => 复制
+
 # dubbo 源码学习
 
 ## 搭建源码环境
