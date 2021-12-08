@@ -1342,6 +1342,38 @@ Hello User, $comment
 
 [参考](https://blog.csdn.net/rznice/article/details/71086839)
 
+## 文件命令
+
+### du 查看文件大小
+
+du => disk usage
+
+> du -k a.txt 以kb显示文件大小
+>
+> du -m a.txt 以mb显示文件大小
+>
+> du -h a.txt 以 k、m、g显示文件大小
+
+### df 看磁盘大小
+
+df  => disk free
+
+> df -h  以k、m、g显示文件大小
+>
+> df -a 显示全部磁盘，默认为 KB
+
+## 清空运行中文件
+
+### 清空 tomcat catalina.out
+
+[参考](https://www.cnblogs.com/ainihaozhen/p/9466524.html)
+
+```shell
+du -h catalina.out # 查看大小
+> catalina.out  # 清空
+du -h catalina.out  # 再次查看大小
+```
+
 
 
 ## 在linux 上部署常用命令
@@ -9561,6 +9593,8 @@ possible_keys 列指示 MySQL 可以选择从中查找该表中行的索引。
 ### 数字类型
 
 #### 整数类型
+
+<font color=red>这里指定字段类型后，存储的是定长，即tinyint(1) 和 tinyint(3)都可以存储  `-128-127`范围的数值。</font>
 
 ==默认为signed类型,如果使用unsigned，搭配sql_mode=NO_UNSIGNED_SUBTRACTION使用==
 
