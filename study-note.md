@@ -7201,7 +7201,21 @@ server.tomcat.uri-encoding=UTF-8
 
 ### springboot 和 springcloud 版本对应
 
-[版本对应](https://start.spring.io/actuator/info)
+[版本对应-范围判定](https://start.spring.io/actuator/info)
+
+#### 两者具体的对应关系
+
++ 打开springcloud 官网  https://spring.io/projects/spring-cloud#learn
+
+<img src="./images/2021-12-14-1.jpg" alt="示例" style="zoom: 50%;" />
+
++ 点击对应的 `Reference Doc`  我这里选  `Hoxton.SR12`
+
+<img src="./images/2021-12-14-2.jpg" alt="示例" style="zoom:50%;" />
+
++ 通过 改 url切换
+
+<img src="./images/2021-12-14-3.jpg" alt="示例" style="zoom:50%;" />
 
 #### 全局指定 spring-cloud版本
 
