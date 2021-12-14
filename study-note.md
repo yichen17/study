@@ -7199,6 +7199,28 @@ server.tomcat.uri-encoding=UTF-8
 
 ## springboot
 
+### springboot 和 springcloud 版本对应
+
+[版本对应](https://start.spring.io/actuator/info)
+
+#### 全局指定 spring-cloud版本
+
+```java
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>Hoxton.SR12</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+
+
  ### 搭建本地 eureka
 
 [参考方法](https://blog.csdn.net/tlycherry/article/details/106401579)
