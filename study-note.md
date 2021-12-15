@@ -1771,6 +1771,29 @@ git reset --hard  xxx(版本号)
 git push -f
 ```
 
+## 将模块独立成单独 git
+
+```
+//目录结构
+  project
+  |_____  case-test
+  |_____  heartbeat
+// 进入父目录(project目录)，为新目录创建新分支   成功后会提示成功，并提供一个 revision
+git subtree split -P case-test -b case-test
+// 退到父目录同级
+cd ..
+// 创建目录并进入目录
+mkdir case-test
+cd case-test
+// 初始化 git
+git init 
+// 将分离出来的分支 full到新的文件目录下
+git pull ../project case-test
+// 上传到仓库
+git remote add origin XXX.git
+git push -u origin master
+```
+
 
 
 ## 能快速访问github.com 以及 加速下载
