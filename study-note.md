@@ -7202,6 +7202,26 @@ server.tomcat.uri-encoding=UTF-8
 
 # JAVA
 
+## JVM
+
+### 查看运行中的类
+
+#### 使用 jdk自带的  HSDB
+
+[参考步骤](https://www.cnblogs.com/alinainai/p/11070923.html)
+
+```java
+// 启动 HSDB
+java -cp ./sa-jdi.jar sun.jvm.hotspot.HSDB   // sa-jdi.jar在 jdk安装目录下的 lib目录  可用
+java -classpath "%JAVA_HOME%/lib/sa-jdi.jar" sun.jvm.hotspot.HSDB   // 待测试
+// 绑定要查看的jvm
+jps -l  //查看对应的 进程号
+==>  HSDB 右上角  File >  Attach to HotSpot process 输入对应的进程号
+// 开始查看相关信息
+```
+
+
+
 ## mybatis 配置
 
 ### 日期大小比对
