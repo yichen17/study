@@ -1819,6 +1819,21 @@ git config --global credential.helper store
 
 ## 问题
 
+### 每次都需要输入账号密码
+
+```java
+// 保存凭证  之后再输入一次账号密码之后就不用再输入了
+git config --global credential.helper store
+```
+
+### 初始化项目后无法通过token 登录
+
+```java
+// 虽然弹窗还是提示输入用户名和密码，但是实际的密码那里输入(PAT token即可)
+```
+
+
+
 ### 删除是 因为文件或者路径是中文找不到
 
 ```
@@ -7199,11 +7214,13 @@ server.tomcat.uri-encoding=UTF-8
 
 ## springboot
 
- ### 搭建本地 eureka
+### eureka
+
+ #### 搭建本地 eureka
 
 [参考方法](https://blog.csdn.net/tlycherry/article/details/106401579)
 
-#### 步骤
+##### 步骤
 
 1、添加依赖
 
@@ -7253,6 +7270,33 @@ public class EurekaServerApplication {
 4、测试
 
 > 浏览器访问  http://127.0.0.1:8099
+
+#### springcloud 使用 eureka
+
+##### pom 依赖
+
+```java
+<!--  eureka 注册中心   -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        <version>2.0.2.RELEASE</version>
+    </dependency>
+<!--  end  -->
+```
+
+##### 配置
+
+```java
+// 配置文件
+# eureka 配置信息
+eureka.client.service-url.defaultZone=http://127.0.0.1:8099/eureka/
+spring.application.name=feign-user
+// 启动类  添加注解
+@EnableEurekaClient
+```
+
+
 
 ### 整合redis-jedis
 
