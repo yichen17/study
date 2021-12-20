@@ -1771,6 +1771,29 @@ git reset --hard  xxx(版本号)
 git push -f
 ```
 
+## 将模块独立成单独 git
+
+```
+//目录结构
+  project
+  |_____  case-test
+  |_____  heartbeat
+// 进入父目录(project目录)，为新目录创建新分支   成功后会提示成功，并提供一个 revision
+git subtree split -P case-test -b case-test
+// 退到父目录同级
+cd ..
+// 创建目录并进入目录
+mkdir case-test
+cd case-test
+// 初始化 git
+git init 
+// 将分离出来的分支 full到新的文件目录下
+git pull ../project case-test
+// 上传到仓库
+git remote add origin XXX.git
+git push -u origin master
+```
+
 
 
 ## 能快速访问github.com 以及 加速下载
@@ -7194,6 +7217,26 @@ server.tomcat.uri-encoding=UTF-8
 
 # JAVA
 
+## JVM
+
+### 查看运行中的类
+
+#### 使用 jdk自带的  HSDB
+
+[参考步骤](https://www.cnblogs.com/alinainai/p/11070923.html)
+
+```java
+// 启动 HSDB
+java -cp ./sa-jdi.jar sun.jvm.hotspot.HSDB   // sa-jdi.jar在 jdk安装目录下的 lib目录  可用
+java -classpath "%JAVA_HOME%/lib/sa-jdi.jar" sun.jvm.hotspot.HSDB   // 待测试
+// 绑定要查看的jvm
+jps -l  //查看对应的 进程号
+==>  HSDB 右上角  File >  Attach to HotSpot process 输入对应的进程号
+// 开始查看相关信息
+```
+
+
+
 ## mybatis 配置
 
 ### 日期大小比对
@@ -7217,6 +7260,43 @@ server.tomcat.uri-encoding=UTF-8
 ### eureka
 
  #### 搭建本地 eureka
+### springboot 和 springcloud 版本对应
+
+[版本对应-范围判定](https://start.spring.io/actuator/info)
+
+#### 两者具体的对应关系
+
++ 打开springcloud 官网  https://spring.io/projects/spring-cloud#learn
+
+<img src="./images/2021-12-14-1.jpg" alt="示例" style="zoom: 50%;" />
+
++ 点击对应的 `Reference Doc`  我这里选  `Hoxton.SR12`
+
+<img src="./images/2021-12-14-2.jpg" alt="示例" style="zoom:50%;" />
+
++ 通过 改 url切换
+
+<img src="./images/2021-12-14-3.jpg" alt="示例" style="zoom:50%;" />
+
+#### 全局指定 spring-cloud版本
+
+```java
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>Hoxton.SR12</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+
+
+ ### 搭建本地 eureka
 
 [参考方法](https://blog.csdn.net/tlycherry/article/details/106401579)
 
