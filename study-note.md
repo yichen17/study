@@ -7257,9 +7257,6 @@ jps -l  //查看对应的 进程号
 
 ## springboot
 
-### eureka
-
- #### 搭建本地 eureka
 ### springboot 和 springcloud 版本对应
 
 [版本对应-范围判定](https://start.spring.io/actuator/info)
