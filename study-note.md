@@ -1460,7 +1460,7 @@ du -h catalina.out  # 再次查看大小
 + netstat -ano  // 展示端口列表
 + netstat -ano | findstr "3306"   // 查找指定端口对应的pid，这里是找3306的端口
 + tasklist | findstr "上一步最后一列查询出来的  pid "
-+ tasklill \F \PID  进程号
++ taskkill  /f  /pid  进程号
 
 ## 重启window 子系统
 
@@ -9338,7 +9338,32 @@ long stop=System.currentTimeMillis();
 
 ## 抓包工具
 
+### wireshark
+
 [下载链接](https://www.wireshark.org/download.html)
+
+[基本使用](https://www.cnblogs.com/lsdb/p/9254544.html)
+
+#### 注意点
+
+> 抓包需要 选择正确的网络接口，如果在错误的网络寻找包，无异于我是个傻子。。。
+>
+> 1、本地服务调用，选择  Adapter for loopback traffic capture
+
+#### 常用捕获过滤器表达式
+
+```java
+// 根据远程 ip查询
+ip.dst_host == '39.97.213.131'
+// 协议 
+最开始输入  http
+```
+
+
+
+
+
+
 
 ## DNS
 
