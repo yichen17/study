@@ -1171,6 +1171,13 @@ ls -li
 find . inum 4222124650801021
 ```
 
+## tree
+
+```shell
+// 树形展示目录
+tree /project
+```
+
 
 
 ## bash 脚本命令
@@ -1793,6 +1800,17 @@ git pull ../project case-test
 git remote add origin XXX.git
 git push -u origin master
 ```
+
+## 冲突解决
+
+### 命令行解决冲突
+
+> // 先通过 vi 打开冲突文件，其中
+> `<<<<<<< HEAD` 和 `=======` 中间的是你自己的代码    `=======` 和 `>>>>>>>` 中间的是其他人修改的代码
+>
+> 选择需要保留的代码，然后删除以上的标志，之后再`git add`  `git commit` 即可。
+>
+> ==注意,如果没有删除标志，则它们会作为代码的一部分被提交==
 
 
 
@@ -5480,6 +5498,22 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 ### 可视化界面  kafka-manager
 
+### 修改启动内存大小
+
+[参考修改方式](https://www.jianshu.com/p/944d7f129abb)
+
+```java
+//   ===> 可使用默认值，可以改小点，但是不要改成下面这么小  Xmx和Xms最好一样大
+// zookeeper 启动内存修改  /bin/zookeeper-server-start.sh
+export KAFKA_HEAP_OPTS="-Xmx128M -Xms32M"
+//  kafka 启动内存修改  /bin/kafka-server-start.sh
+export KAFKA_HEAP_OPTS="-Xmx128 -Xms32M"
+// 修改初始化  buffer size  => Kafka初始化LogManager时候用到的buffer size  => 无用
+log.cleaner.dedupe.buffer.size= prefered buffer size in byte
+```
+
+
+
 
 
 ### 问题
@@ -7884,6 +7918,17 @@ public class EntranceFilter implements Filter {
 >
 > @HystrixCommand
 
+### 排除本地配置，不上传
+
+```
+// 修改 .gitignore ,指定排除本地文件，例如  application-dev.yml
+**/application-dev.yml
+// 删除本地 git cache  一般都是命中的
+git rm -rf --cached src/main/resource/application-dev.yml
+// 删除 本地 .gitignore cache，也不上传
+git rm -rf --cached .gitignore
+```
+
 
 
 ### 单元测试
@@ -8195,6 +8240,10 @@ java.lang.NoSuchMethodError: org.springframework.util.Assert.isTrue(ZLjava/util/
 ==springboot 默认使用的databases 是0==
 
 > 排查连个地方使用的redis 地址是否是同一个，以及使用的数据库是否是同一个。redis不同数据库之间是隔离的。  
+
+## springcloud
+
+
 
 ## mybatis generator
 
