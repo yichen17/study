@@ -7753,6 +7753,46 @@ logging:
 
 > k8s项目的重启是旧的关闭同时新的开启，而 OnStartupTriggeringPolicy  比较的是日志中的时间和jvm启动时间。  如果先将 k8s项目关闭等一会 在启动k8s项目，此时日志会归档。
 
+##### 启动报错  multiple SLF4J bindings
+
+```java
+// 具体错误内容
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/D:/maven/repository/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/D:/maven/repository/org/apache/logging/log4j/log4j-slf4j-impl/2.13.3/log4j-slf4j-impl-2.13.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+Logging system failed to initialize using configuration from 'classpath:log4j2.xml'
+java.lang.IllegalStateException: Logback configuration error detected: 
+```
+
+###### 解决过程
+
++ 打开 `pom.xml`  打开依赖图标(disgrams)
+
+![示例](./images/2021-12-24-1.jpg)
+
++ 搜索冲突 `ctrl+f`，这里是 `logback`
+
+![示例](./images/2021-12-24-2.jpg)
+
++ 查找源头 
+
+![查找源头](./images/2021-12-24-3.jpg)
+
++ 最终结构
+
+```java
+// 该依赖中有 spring-boot-starter-logging
+//  spring-boot-starter-web 存在该依赖可以直接删除。
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+</dependency>
+```
+
+
+
 ### 整合 前端页面
 
 <font color=red size=5px>注意，两种只能一种生效，都存在的话会覆盖其中一种导致出错</font>
