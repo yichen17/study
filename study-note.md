@@ -7969,6 +7969,37 @@ git rm -rf --cached src/main/resource/application-dev.yml
 git rm -rf --cached .gitignore
 ```
 
+### swagger
+
+#### pom
+
+```java
+<properties>
+        <swagger.version>2.9.2</swagger.version>
+</properties>
+<!--swagger 查询接口定义和调用  调用方式  服务启动地址后加  /swagger-ui.html -->
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>${swagger.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>${swagger.version}</version>
+    </dependency>
+<!-- end -->
+```
+
+#### 基本配置
+
+```java
+// 启动类上开启 swagger
+@EnableSwagger2
+// controller上的方法添加
+@ApiOperation(value = "测试接口请求数据")
+```
+
 
 
 ### 单元测试
