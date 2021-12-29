@@ -7249,6 +7249,54 @@ server.tomcat.uri-encoding=UTF-8
 >
 > 我这里是因为git 分支合并导致controller中有两个一模一样的方法
 
+## 排除 父项目中的插件
+
+```java
+// 通过 configuration/skip 来进行排除 
+<build>
+     <plugins>
+         <plugin>
+             <groupId>org.sonarsource.scanner.maven</groupId>
+             <artifactId>sonar-maven-plugin</artifactId>
+             <configuration>
+            	 <skip>true</skip>
+             </configuration>
+         </plugin>
+     </plugins>
+</build>
+```
+
+## deploy打包到私服
+
+```java
+// 修改maven 的配置信息，配置私服的账号和密码  => settings.xml
+<servers>
+    <server>   
+		<id>releases</id>   
+		<username>admin</username>   
+		<password>admin123</password>   
+	</server>
+	<server>   
+		<id>snapshots</id>   
+		<username>admin</username>   
+		<password>admin123</password>   
+	</server>
+</servers>
+// 修改pom.xml中私服地址
+<distributionManagement>
+	<snapshotRepository>
+		<id>snapshots</id>
+		<name>snapshots</name>
+		<url>http://maven.9f.cn/nexus/content/repositories/snapshots/</url>
+		<layout>default</layout>
+	</snapshotRepository>
+</distributionManagement>
+//  =======  注意：这里 pom.xml中repository.id字段需要和 settings.xml中的server.id字段一样
+//            不然会上传失败，报错401 Unauthorized   ======
+```
+
+
+
 # JAVA
 
 ## JVM
