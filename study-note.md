@@ -5260,6 +5260,8 @@ if (p.hash == hash &&
 >
 > 2、通过equals方法比较两个key
 
+## 代码监控  sonarqube
+
 
 
 
@@ -7300,6 +7302,12 @@ server.tomcat.uri-encoding=UTF-8
 # JAVA
 
 ## JVM
+
+### 常用命令
+
+> // 查看基础配置信息
+>
+> java -XX:+PrintFlagsInitial
 
 ### 查看运行中的类
 
