@@ -5476,6 +5476,32 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 > df -h 
 
+
+
+## xshell  连接
+
+[xshell 连接wsl参考](https://blog.csdn.net/sinat_33784741/article/details/83865490)
+
+> sudo apt-get remove --purge openssh-server   ## 先删ssh
+> sudo apt-get install openssh-server          ## 在安装ssh  
+>
+> sudo rm /etc/ssh/ssh_config                  ## 删配置文件，让ssh服务自己想办法链接
+> sudo service ssh --full-restart   启动 ssh 服务
+
+### 问题处理
+
+#### 无法登陆 root账户
+
+[无法用root账户连接参考](https://jingyan.baidu.com/article/154b463112d8f328ca8f419b.html)
+
+> 1、关闭 `ssh`服务，服务启动中可能无法修改文件
+>
+> 2、修改  `/etc/ssh/sshd_config` 文件 ，把 `PermitRootLogin Prohibit-password` 添加 `#` 注释掉，新添加 `PermitRootLogin yes` 
+>
+> 3、启动 ssh服务 `service ssh restart`
+>
+> 4、重新使用 `root`账户连接，测试成功
+
 ## kafka
 
 ### 安装
