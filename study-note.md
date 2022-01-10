@@ -5601,6 +5601,10 @@ Caused by: java.lang.NoClassDefFoundError: org/apache/kafka/clients/consumer/Con
 >auth yichen  // 登陆
 >
 >flushall   //清空所有数据
+>
+>// 连接远程 redis
+>
+>redis-cli -h host -p port -a password
 
 
 
@@ -5616,7 +5620,14 @@ Caused by: java.lang.NoClassDefFoundError: org/apache/kafka/clients/consumer/Con
 ```java
 keys *hello*    //对key 进行模糊查询
 type  hello    // 查看 hello 保存的类型
+info server   // 查看 server 的相关参数，需要先 redis-cli 连接上
+```
 
+### 性能监控
+
+```java
+redis-cli -h 192.168.80.24 -p 6379 --latency-dist   // 延时监控
+latency doctor  // 潜伏登陆，需要先登陆redis
 ```
 
 
