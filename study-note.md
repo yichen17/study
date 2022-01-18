@@ -2826,7 +2826,13 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 <img src="./images/2021-08-07-2.jpg" alt="参考步骤" style="zoom: 80%;" />
 
-# 响应式编程
+### maven 启动项目profile失效
+
+![参考图片](./images/2022-01-18-1.jpg)
+
+#### 解决
+
+这里指定的是`maven`的`profile`，而不是项目的`profile`
 
 <font color=red size=5px ><b>全栈式响应式编程，指的是响应式开发方式的有效性取决于整个请求链路的各个环节是否都采用了响应式编程模型。</b><br/><b>响应式系统的价值在于提供了即时响应性、可维护性和扩展性，表现的形式是回弹性和弹性，而实现的手段则是消息驱动。</b></font>
 
@@ -8756,6 +8762,25 @@ public class MyResolver extends JavaTypeResolverDefaultImpl {
              -->
             <property name="forceBigDecimals" value="true"/>
 </javaTypeResolver>
+```
+
+### 提示无法获得主键
+
+#### 具体内容
+
+```
+Cannot obtain primary key information from the database, generated objects may be incomplete
+```
+
+#### 解决
+
+[参考解决办法](https://blog.csdn.net/babybabyup/article/details/84099469)
+
+```java
+// jdbc url中添加如下内容
+nullCatalogMeansCurrent=true
+// 示例
+jdbc:mysql://localhost:3307/dev_clearing?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=GMT&amp;nullCatalogMeansCurrent=true
 ```
 
 
