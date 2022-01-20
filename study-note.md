@@ -7351,6 +7351,10 @@ server.tomcat.uri-encoding=UTF-8
 > // 查看基础配置信息
 >
 > java -XX:+PrintFlagsInitial
+>
+> // 打印 gc日志，并保存到外部文件
+>
+> -XX:+PrintGCDetails -Xloggc:./gc/gc.log
 
 ### 查看运行中的类
 
