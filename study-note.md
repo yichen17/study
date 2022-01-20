@@ -10423,6 +10423,8 @@ select auto_increment from information_schema.tables where table_schema=database
 
 > mysql 5.8版本(innodb引擎)前如果数据库重启，自增id会变化，如果表为空，则自增id变为0，否则变为当前表id最大加1。如果是MyISAM引擎则没事。
 
+> mysql  `>` `=` `<` `!=` 不会比较 `null` ，`null`只能通过 `is`、`is not`比较
+
 ###  相关操作
 
 #### windows下安装多个数据库
