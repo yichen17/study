@@ -7348,6 +7348,21 @@ server.tomcat.uri-encoding=UTF-8
 
 # JAVA
 
+## 便捷方法
+
+### 手动执行分页
+
+```java
+List<Object> data=getData();
+int pageNo=1;
+int pageSize=30;
+int iPageSize=(pageNo-1)*pageSize;
+Stream<Object> pageData=data.stream().skip(iPageSize).limit(pageSize);
+List<Object> res=pageData.collect(Collectors.toList());
+```
+
+
+
 ## JVM
 
 ### 常用命令
