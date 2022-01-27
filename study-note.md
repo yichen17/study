@@ -6182,6 +6182,18 @@ apt install rabbitmq-server
 
 ## tomcat 安装
 
+### 清空catalina.out
+
+[参考解决办法](https://www.cnblogs.com/ainihaozhen/p/9466524.html)
+
+> // 执行如下命令   =>  重定向方法清空文件
+>
+> `> catalina.out`
+>
+> // 查看执行后的文件大小
+>
+> df -h catalina.out
+
 ### 修改运行内存大小
 
 [参考文章](http://www.xitongzhijia.net/xtjc/20171211/114356.html)
