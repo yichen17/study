@@ -7391,6 +7391,22 @@ List<Object> res=pageData.collect(Collectors.toList());
 
 ## JVM
 
+### 个人版 idea  jvm配置
+
+```java
+-Xms2g
+-Xmx3g
+-Xmn1536m
+-XX:MetaspaceSize=256m
+-XX:MaxMetaspaceSize=768m
+-XX:ReservedCodeCacheSize=256m
+-XX:+PrintGCDetails             
+-Xloggc:G:\base\logs\idea.log
+-XX:MaxDirectMemorySize=512m
+```
+
+
+
 ### 常用命令
 
 > // 查看基础配置信息
@@ -7399,7 +7415,19 @@ List<Object> res=pageData.collect(Collectors.toList());
 >
 > // 打印 gc日志，并保存到外部文件
 >
-> -XX:+PrintGCDetails -Xloggc:./gc/gc.log
+> -XX:+PrintGCDetails             -Xloggc:./gc/gc.log
+>
+> //  配置 eden 和 survivor 大小 =>  eden/from  =>  默认8
+>
+> -XX:SurvivorRatio
+>
+> // 配置 新生代 和 老生代 比例  =>  老年代/新生代  =>  默认2
+>
+> -XX:NewRatio
+>
+> // 设置直接内存大小
+>
+> -XX:MaxDirectMemorySize=512m
 
 ### 查看运行中的类
 
