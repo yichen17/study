@@ -4615,7 +4615,46 @@ location /shanliang/ {
 
 # 基础知识
 
-## 并发队列
+## windows 下 java jdk安装
+
+[java-jdk-下载地址](https://www.oracle.com/java/technologies/downloads/archive/)
+
+### 步骤
+
++ 首先在oracle 选择指定版本的java-jdk进行下载
+
++ 对下载的jdk进行安装，记得修改安装目录，默认是C盘，最好修改。
+
++ 配置环境变量
+
+  + 配置`JAVA_HOME` 指定为 `java-jdk`安装目录
+
+  ```java
+  //  系统变量中添加如下内容，可以指定多个版本的jdk
+  JAVA_HOME   =>  %JAVA8_HOME%
+  JAVA6_HOME  =>  E:\java\jdk\jdk6\setup
+  JAVA8_HOME  =>  E:\java\jdk\jdk8\setup
+  ```
+
+  + 配置`CLASSPATH`
+
+  ```java
+  %JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;
+  ```
+
++ 测试
+
+```java
+win+r  打开 运行框
+输入  cmd
+输入  java -version  查看当前 jdk 版本信息
+```
+
+
+
+
+
+## 并发队列  
 
 ### 阻塞队列
 
