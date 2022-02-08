@@ -7559,6 +7559,10 @@ jps -l  //查看对应的 进程号
 
 #### -XX:MetaspaceSize貌似没生效
 
+[参考](https://stackoverflow.com/questions/47426407/java8-metaspacesize-flag-not-working)
+
+[官方解读参数](https://bugs.openjdk.java.net/browse/JDK-8067205)
+
 ```java
 1、如果没有配置-XX:MetaspaceSize，那么触发FGC的阈值是21807104（约20.8m），可以通过jinfo -flag MetaspaceSize pid得到这个值；
 2、如果配置了-XX:MetaspaceSize，那么触发FGC的阈值就是配置的值；
@@ -7568,6 +7572,10 @@ jps -l  //查看对应的 进程号
 ```
 
 > -XX:MetaspaceSize 设置了不代表它的初始大小就是改设定值，我观察发现它的默认大小一般在20m，之后再每次GC(不论新生代还是老生代)触发后，它的大小都会动态变化。可以通过看GC日志。
+
+#### jstat MC 小于 MU
+
+[参考](https://stackoverflow.com/questions/65841876/why-is-mc-greater-than-mu-when-i-use-the-jstat-command)
 
 ## mybatis 配置
 
@@ -10614,8 +10622,17 @@ select version()
 show engines
 // 查看表自增id值
 select auto_increment from information_schema.tables where table_schema=database() and table_name = 'test'
-
-
+// 查看运行中的事务
+select * from information_schema.innodb_trx;
+// 查看当前运行的事务的账户和事务开始的时间,及其事务语句
+select 
+    a.id,a.user,a.host,b.trx_started,b.trx_query 
+from information_schema.processlist a right outer join information_schema.innodb_trx b
+on a.id = b.trx_mysql_thread_id;
+// 查看连接数
+SHOW FULL PROCESSLIST;
+// 上面的连接数等于这里的  Threads_connected 字段
+show status like 'Threads%'; 
 ```
 
 ### 备注
