@@ -7430,6 +7430,24 @@ List<Object> res=pageData.collect(Collectors.toList());
 
 ## JVM
 
+### 观测工具
+
+#### visual vm
+
+##### 启动 jconsole 插件
+
+[参考使用方法](https://blog.csdn.net/qq_22597325/article/details/86623911)
+
+[demos-and-samples下载样例，不同jdk版本好像通用](https://download.oracle.com/otn/java/jdk/8u321-b07-demos/df5ad55fdd604472a86a45a217032c7d/jdk-8u321-windows-x64-demos.zip)
+
+```java
+1、安装该插件
+2、关联目录，需要下载jdk的 demos and samples
+3、重启 visual vm
+```
+
+
+
 ### 个人版 idea  jvm配置
 
 ```java
@@ -7464,9 +7482,58 @@ List<Object> res=pageData.collect(Collectors.toList());
 >
 > -XX:NewRatio
 >
-> // 设置直接内存大小
+> // 设置直接内存大小  =>   貌似无用，直接内存不归jvm分配
 >
 > -XX:MaxDirectMemorySize=512m
+>
+> // 设置年轻代大小  => 优先级比 NewRatio高
+>
+> -Xmn1536m
+>
+> //  设置指针压缩大小  => 可行  
+>
+> //  需要先开启 -XX:+UseCompressedOops    -XX:+UseCompressedClassesPointers   =>  jdk8默认开启
+>
+> -XX:CompressedClassSpaceSize=128m
+>
+> // 本地内存追踪  => 三个选项 off | summary | detail   =>   配合  jcmd pid VM.native_memory 使用
+>
+> //   =>  windows 下无效
+>
+> -XX:NativeMemoryTracking=detail
+
+### 通用查询命令
+
+```java
+// 查看运行中的 Metaspace  =>  以字节为单位
+jinfo -flag MaxMetaspaceSize pid
+//  查看使用了哪种垃圾回收算法
+java -XX:+PrintCommandLineFlags -version
+```
+
+### GC收集器选择
+
+[参考](https://blog.csdn.net/pf1234321/article/details/82288921)
+
+|                   java 命令                   |                新生代GC方式                 |          老年代/持久代GC方式           |
+| :-------------------------------------------: | :-----------------------------------------: | :------------------------------------: |
+|               -XX:+UseSerialGC                |                   串行GC                    |                 串行GC                 |
+|              -XX:+UseParallelGC               |              PS GC-ParallerGC               |              并行 MSC GC               |
+|            -XX:+UseConcMarkSweepGC            |                  ParNew GC                  |           并行GC，出错串行GC           |
+|               -XX:+UseParNewGC                |                并行GC-ParNew                |                 串行GC                 |
+|             -XX:+UseParallelOldGC             |                    PS GC                    |           并行 Compacting GC           |
+| -XX:+UseConcMarkSweepGC<br />-XX:-UseParNewGC |                   串行GC                    |      并发GC，当出现错误使用穿行GC      |
+|                  不支持方式                   | -XX:+UseParNewGC<br />-XX:+UseParallelOldGC | -XX:+UseParNewGC<br />-XX:+UseSerialGC |
+
+#### 名词定义
+
+```java
+ParNew  =>  多线程的串行
+PS GC  =>  Parallel Scavenge  
+并行GC   =>  Parallel Old
+```
+
+
 
 ### 查看运行中的类
 
@@ -7484,7 +7551,23 @@ jps -l  //查看对应的 进程号
 // 开始查看相关信息
 ```
 
+### 问题
 
+#### Native memory tracking is not enabled
+
+==window好像无法查看本地内存，unbutu测试可以==
+
+#### -XX:MetaspaceSize貌似没生效
+
+```java
+1、如果没有配置-XX:MetaspaceSize，那么触发FGC的阈值是21807104（约20.8m），可以通过jinfo -flag MetaspaceSize pid得到这个值；
+2、如果配置了-XX:MetaspaceSize，那么触发FGC的阈值就是配置的值；
+3、Metaspace由于使用不断扩容到-XX:MetaspaceSize参数指定的量，就会发生FGC；且之后每次Metaspace扩容都可能会发生FGC（至于什么时候会，比较复杂，跟几个参数有关）；
+4、如果Old区配置CMS垃圾回收，那么扩容引起的FGC也会使用CMS算法进行回收；
+5、如果MaxMetaspaceSize设置太小，可能会导致频繁FullGC，甚至OOM；
+```
+
+> -XX:MetaspaceSize 设置了不代表它的初始大小就是改设定值，我观察发现它的默认大小一般在20m，之后再每次GC(不论新生代还是老生代)触发后，它的大小都会动态变化。可以通过看GC日志。
 
 ## mybatis 配置
 
