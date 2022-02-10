@@ -1511,7 +1511,11 @@ sudo rm /etc/ssh/ssh_config
 sudo service ssh --full-restart
 ```
 
+## window搜索文件
 
+> win+r 打开搜索框
+>
+> where  java     //  搜索java目录，根据环境变量 
 
 # git 常用命令
 
@@ -4649,7 +4653,14 @@ location /shanliang/ {
   + 配置`CLASSPATH`
 
   ```java
-  %JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;
+  .;%JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;
+  ```
+
+  + 配置`PATH`
+
+  ```java
+  %JAVA_HOME%\bin
+  %JAVA_HOME%\jre\bin
   ```
 
 + 测试
@@ -4660,9 +4671,15 @@ win+r  打开 运行框
 输入  java -version  查看当前 jdk 版本信息
 ```
 
+## 问题
 
+### 切换版本失效
 
+[参考解决办法](https://blog.csdn.net/weixin_42241455/article/details/122850351?spm=1001.2014.3001.5501)
 
+> 1、切换版本后需要将原来的cmd关掉重新开一个
+>
+> 2、在 cmd 中 输入 where java，看看有几个  java.exe  把不是的删掉即可
 
 ## 并发队列  
 
