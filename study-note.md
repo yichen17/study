@@ -807,6 +807,16 @@ shutdown.sh
 >
 > gunzip -c  hello.gz >  hello
 
+## 有用命令
+
++ 根据 `pid`查询进程启动时间
+
+```java
+ps -eo pid,user,comm,lstart,etime | grep mysql
+```
+
+
+
 ### wc
 
 ==用来计算字数==
@@ -7412,6 +7422,15 @@ server.tomcat.uri-encoding=UTF-8
 
 
 # JAVA
+
+## 简写对照表
+
+```java
+ECS ==>  Elastic Compute Service  =>  云服务器
+RDS ==>  Relation Data System  => 关系数据系统
+```
+
+
 
 ## 便捷方法
 
