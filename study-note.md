@@ -943,6 +943,10 @@ df -h
 > grep -w 'e' a.txt    //  显示空
 >
 > grep -w "name"  // 显示   name = yichen
+>
+> //  同类型 通用查询
+>
+> grep -C 10 "name" *.log
 
 ## awk 命令
 
@@ -7545,6 +7549,9 @@ List<Object> res=pageData.collect(Collectors.toList());
 jinfo -flag MaxMetaspaceSize pid
 //  查看使用了哪种垃圾回收算法
 java -XX:+PrintCommandLineFlags -version
+//  给运行中的进程 添加日志打印 => 输出到标准输出流  => 为启动bash中nohup指向文件
+jinfo -flag +PrintGCDetails  或  jinfo -flag +PrintGC
+
 ```
 
 ### GC收集器选择
