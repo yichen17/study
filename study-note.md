@@ -930,6 +930,24 @@ df -h
 - `systemd` - select the **systemd (systemctl)** tab below.
 - `init` - select the **System V Init (service)** tab below.
 
+## 内存监控
+
+### atop
+
+### free
+
+> free -m  // 以M为单位展示
+
+## apt
+
++ 模糊查 可以安装的
+
+```java
+apt search *top
+```
+
+
+
 ## grep 命令
 
 ### 单词准确匹配
