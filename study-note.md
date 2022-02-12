@@ -4655,7 +4655,7 @@ location /shanliang/ {
 
 [java-jdk-下载地址](https://www.oracle.com/java/technologies/downloads/archive/)
 
-### 步骤
+### jdk
 
 + 首先在oracle 选择指定版本的java-jdk进行下载
 
@@ -4692,6 +4692,32 @@ win+r  打开 运行框
 输入  cmd
 输入  java -version  查看当前 jdk 版本信息
 ```
+
+### openjdk
+
+####  下载 openjdk-可行
+
+[参考下载步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
+
+> http://hg.openjdk.java.net/
+>
+> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
+>
+> <font color=red>下面的是openjdk 的源代码，不包含native 部分</font>
+>
+> [参考步骤](https://stackoverflow.com/questions/410756/is-it-possible-to-browse-the-source-of-openjdk-online/410765)
+>
+> 操作方式 ： 选择  jdk8u> jdk8u 下的jdk>点击左侧tags > 选择指定版本 > 点击 browse >  进入到 src/share/classes > 左侧选择格式下载
+
+#### object.wait 和 object.notify
+
+[参考链接](https://blog.51cto.com/13981400/2374217)
+
+#### 安装redhat 提供的openjdk
+
+[下载链接](https://developers.redhat.com/products/openjdk/download)
+
+下载安装包解压，然后配置环境变量即可
 
 ## 问题
 
@@ -5283,26 +5309,6 @@ public class Test {
 
 
 
-## 看 openjdk
-
-###  下载 openjdk
-
-[参考步骤](https://www.cnblogs.com/jpfss/p/10936167.html)
-
-> http://hg.openjdk.java.net/
->
-> 通过访问  以上链接可以选择指定版本的  openjdk 并进行下载操作
->
-> <font color=red>下面的是openjdk 的源代码，不包含native 部分</font>
->
-> [参考步骤](https://stackoverflow.com/questions/410756/is-it-possible-to-browse-the-source-of-openjdk-online/410765)
->
-> 操作方式 ： 选择  jdk8u> jdk8u 下的jdk>点击左侧tags > 选择指定版本 > 点击 browse >  进入到 src/share/classes > 左侧选择格式下载
-
-### object.wait 和 object.notify
-
-[参考链接](https://blog.51cto.com/13981400/2374217)
-
 
 
 ## 编码格式
@@ -5409,14 +5415,6 @@ if (p.hash == hash &&
 
 
 ## window   
-
-### 安装 openjdk
-
-==安装redhat 提供的openjdk==
-
-[下载链接](https://developers.redhat.com/products/openjdk/download)
-
-下载安装包解压，然后配置环境变量即可
 
 ### 安装子系统 (WSL)
 
@@ -7508,6 +7506,8 @@ List<Object> res=pageData.collect(Collectors.toList());
 
 ### 个人版 idea  jvm配置
 
+##### cms收集器
+
 ```java
 -Xms2g
 -Xmx3g
@@ -7515,9 +7515,29 @@ List<Object> res=pageData.collect(Collectors.toList());
 -XX:MetaspaceSize=256m
 -XX:MaxMetaspaceSize=768m
 -XX:ReservedCodeCacheSize=256m
+-XX:CompressedClassSpaceSize=256m
 -XX:+PrintGCDetails             
 -Xloggc:G:\base\logs\idea.log
 -XX:MaxDirectMemorySize=512m
+```
+
+#####  parallel 收集器
+
+> 根据观察 -Xmn即为eden的大小，survivor的区域没包含进去
+
+```java
+-Xms2048m
+-Xmx2048m
+-Xmn1g
+-XX:SurvivorRatio=6
+-XX:MetaspaceSize=512m
+-XX:MaxMetaspaceSize=768m
+-XX:ReservedCodeCacheSize=256m
+-XX:CompressedClassSpaceSize=256m
+-XX:+PrintGCDetails             
+-Xloggc:D:\personal-project-list\gc-logs\idea.log
+-XX:+UseParallelOldGC
+-XX:ParallelGCThreads=2
 ```
 
 
@@ -7592,7 +7612,73 @@ jinfo -flag +PrintGCDetails  或  jinfo -flag +PrintGC
 ParNew  =>  多线程的串行
 PS GC  =>  Parallel Scavenge  
 并行GC   =>  Parallel Old
+MSC  =>  Serial Old
 ```
+
+### GC ROOT	
+
+```java
+1、虚拟机栈(栈帧中的本地变量表)中引用的对象
+2、方法区中类静态变量引用的对象
+3、方法区中常量引用的对象
+4、本机方法栈中JNI(即一般说的Native方法)引用的对象
+```
+
+### 垃圾收集器
+
++ `-XX:+UseSerialGC`
+
+> 新生代 - Serial   复制算法  单线程 gc  STW(stop the world)
+>
+> 老年代 - Serial Old 标记整理算法  单线程 gc STW(stop the world)
+
++ `-XX:+UseParNewGC` 
+
+> 新生代 - ParNew 复制算法   多线程 gc STW(stop the world)
+>
+> 老年代 - Serial Old 标记整理算法  单线程 gc  STW(stop the world)
+
++ `-XX:+UseParallerGC`
+
+> 追求吞吐量：  (运行用户代码时间)/(运行用户代码时间 + 垃圾收集时间)
+>
+> -XX:MaxGCPauseMills  最大垃圾收集停顿时间
+>
+> -XX:GCTimeRatio  吞吐量大小
+>
+> -XX:+UseAdaptiveSizePolicy  自动调整
+
+> 新生代 - ParallelScavenge  复制算法  多线程gc
+>
+> 老年代 -  Serial Old  标记整理算法  单线程  STW(stop the world)
+
++ `-XX:+UseParallelOldGC`
+
+> 新生代 - Parallel Scavenge 复制算法  多线程gc
+>
+> 老年代 - Parallel Old  标记整理算法  多线程gc
+
++ `XX:+UseConcMarkSweepGC`
+
+> 过程：1、初始标记 2、并发标记 3、重新标记 4、并发清除
+
+> -XX:CMSInitiatingOccupancyFraction 触发 gc条件  =>  需要预留空间给浮动垃圾(并发清理时生成的对象)
+>
+> -XX:CMSFullGCsBeforeCompaction  多少次不压缩gc后压缩一次
+>
+> -XX:UseCMSCompactAtFullCollection   Full gc时开启内存碎片整合
+
+> 新生代 - ParNew 复制算法  多线程 gc  STW(stop the world)
+>
+> 老年代 - Concurrent Mark Sweep 标记清除算法 多线程 gc    初始标记、重新标记  => STW(stop the world)
+>
+> =>  Concurrent Mode Failure  时改为  Serial Old   STW(stop the world)
+
++ `XX:+UseG1GC`
+
+> 过程：1、初始标记 2、并发标记 3、最终标记  4、筛选回收
+
+> 新生代、老年代都是用 G1
 
 
 
@@ -7657,6 +7743,14 @@ jps -l  //查看对应的 进程号
 
 
 ## springboot
+
+### 通用jar启动脚本
+
+```java
+nohup java -jar -Xms256m -Xmn256m -XX:+PrintGCDetails -XX:+PrintGC -Xloggc:./gc.log  eureka-server-0.0.1-SNAPSHOT.jar  > eureka.log 2>&1 &
+```
+
+
 
 ### springboot 和 springcloud 版本对应
 
