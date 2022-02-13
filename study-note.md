@@ -2597,6 +2597,12 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 <img src="./images/2021-01-27-3.jpg" alt="图解" style="zoom:67%;" />
 
+### 修改 force step into 键位
+
+> debug 的时候默认的时候 F7 为 step into，此时同行有多个方法的时候，debug 需要选择方法很烦，而 force step into 是逐个进入，默认键位是 ctrl+shift+f7，操作起来不方便，故修改键位
+
+![参考修改键位](./images/2022-02-12-1.jpg)
+
 
 
 ## 问题记录
@@ -2887,6 +2893,8 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 #### 解决
 
 这里指定的是`maven`的`profile`，而不是项目的`profile`
+
+# 响应式编程
 
 <font color=red size=5px ><b>全栈式响应式编程，指的是响应式开发方式的有效性取决于整个请求链路的各个环节是否都采用了响应式编程模型。</b><br/><b>响应式系统的价值在于提供了即时响应性、可维护性和扩展性，表现的形式是回弹性和弹性，而实现的手段则是消息驱动。</b></font>
 
