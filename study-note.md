@@ -2607,6 +2607,22 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 触摸板双指滚动失效
+
+```java
+//  具体请款待排查
+1、visualVm 启动的原因
+2、c盘内存空间太小  4个g
+3、win+r 输入 controller 后，选择个性化，查看触摸板设置，界面为关闭 => 测试 有一部分是该原因
+    
+
+ ==>  电脑重启后就可以用了
+```
+
+<img src="./images/2022-02-13-1.jpg" alt="步骤三截图" style="zoom:67%;" />
+
+
+
 ### springboot 项目打开未被识别为 maven
 
 > 选中 pom.xml ，右键选择 add as a maven 
