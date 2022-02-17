@@ -8485,6 +8485,23 @@ git rm -rf --cached .gitignore
 @ApiOperation(value = "测试接口请求数据")
 ```
 
+#### 问题记录
+
+##### 打开swagger报错 Unable to infer base url
+
+```java
+Unable to infer base url. This is common when using dynamic servlet registration or 
+when the API is behind an API Gateway. The base url is the root of where all 
+the swagger resources are served. For e.g. if the api is available at 
+http://example.org/api/v2/api-docs then the base url is http://example.org/api/. 
+Please enter the location manually: 
+```
+
+```java
+启动类中添加启用swagger注解
+@EnableSwagger2
+```
+
 
 
 ### 单元测试
