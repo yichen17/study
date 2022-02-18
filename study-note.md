@@ -2537,7 +2537,7 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 > help > edit custom vm options 
 
-## 推荐插件
+## 推荐插件  2020.2.2
 
 + Translation    翻译工具
 
@@ -2608,6 +2608,14 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 
 ## 问题记录
+
+### 2020.2.2  translation 提示网络问题
+
+```java
+// 可能原因是 idea 版本太低且插件库中该插件无法升级导致，去官方下载最新插件导入
+```
+
+
 
 ### 触摸板双指滚动失效
 
