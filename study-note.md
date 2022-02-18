@@ -2575,6 +2575,8 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 + free mybatis plugins   =》  能够从mybatis 的 dao 层快速跳转到  mapper
 
++ RestfulTookit  =》 快捷跳转到方法，快捷请求接口  =>  快捷键 `ctrl+ \ `
+
 
 
 
