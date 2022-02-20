@@ -2577,6 +2577,18 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 + RestfulTookit  =》 快捷跳转到方法，快捷请求接口  =>  快捷键 `ctrl+ \ `
 
+## 插件 2021.3.2
+
+```java
+1、alibaba java coding guidelines
+2、gsonformatflus
+3、material theme ui   => material oceanic
+4、maven helper
+5、mybatisX
+6、translation
+7、restfulToolKit-fix
+```
+
 
 
 
