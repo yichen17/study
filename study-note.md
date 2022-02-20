@@ -2932,6 +2932,10 @@ Log4j appears to be running in a Servlet environment, but there's no log4j-web m
 
 这里指定的是`maven`的`profile`，而不是项目的`profile`
 
+### idea中忽略文件
+
+> setting > editor > file types 
+
 # 响应式编程
 
 <font color=red size=5px ><b>全栈式响应式编程，指的是响应式开发方式的有效性取决于整个请求链路的各个环节是否都采用了响应式编程模型。</b><br/><b>响应式系统的价值在于提供了即时响应性、可维护性和扩展性，表现的形式是回弹性和弹性，而实现的手段则是消息驱动。</b></font>
