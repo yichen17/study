@@ -2581,12 +2581,13 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ```java
 1、alibaba java coding guidelines
-2、gsonformatflus
+2、gsonformatflus  =>  alt+s
 3、material theme ui   => material oceanic
 4、maven helper
 5、mybatisX
 6、translation
-7、restfulToolKit-fix
+7、restfulToolKit-fix  =>  ctrl + \
+8、jclasslib bytecode viewer
 ```
 
 
@@ -7590,7 +7591,10 @@ List<Object> res=pageData.collect(Collectors.toList());
 -XX:ParallelGCThreads=2
 ```
 
+##### 注意点
 
++ 高版本可能不知道打印gc日志的命令，测试版本`2021.3.2`
++ 
 
 ### 常用命令
 
