@@ -2409,6 +2409,12 @@ logging.level.dao对应的位置=debug
 
 > view  >  Appearance  > status bar widges  > memory indicator
 
+### 打开类图
+
+> settings > tools > diagrams > java class disgrams 下勾选
+>
+> 打开类， ctrl+alt+u 打开类图
+
 ### 设置标记
 
 #### 标记设置
