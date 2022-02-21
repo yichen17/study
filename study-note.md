@@ -2588,6 +2588,10 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 6、translation
 7、restfulToolKit-fix  =>  ctrl + \
 8、jclasslib bytecode viewer
+9、atom material icons
+10、rainbow brackets => 括号显示优化
+11、CodeGlance  =>  代码视图窗口
+12、SequenceDiagram  => 依赖美化展示
 ```
 
 
@@ -2628,7 +2632,9 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 // 可能原因是 idea 版本太低且插件库中该插件无法升级导致，去官方下载最新插件导入
 ```
 
+### 设置打开的文件tab数
 
+> settings > editor > general  > editor tabs  下边的closing policy 中 tab limit   以及 show tab in one row
 
 ### 触摸板双指滚动失效
 
