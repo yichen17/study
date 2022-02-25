@@ -2632,6 +2632,10 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 2021.3.2 没有 local change
+
+> file  > settings >  version control  >  commit > 去掉勾选  use non-model commit interface
+
 ### 2020.2.2  translation 提示网络问题
 
 ```java
@@ -5134,6 +5138,30 @@ java 中线程存在6种状态，new、runnable、blocked、waiting、timed_wait
 #### 大括号{}
 
 {}一般用来表示匹配的长度
+
+### notepading 正则替换
+
+#### 替换规则
+
+```java
+原文
+
+xxxxxx
+ name:yichen
+ sex:girl
+
+替换后
+xxxxxx
+"name":yichen
+"sex":girl
+```
+
+#### 方法
+
+```java
+查找目标： \s(\w*):
+替换：  "$1":
+```
 
 
 
