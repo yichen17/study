@@ -641,112 +641,6 @@ ipconfig/all
 
 
 
-# nginx 安装步骤
-
-## 前提
-
-### 安装nginx 前首先要确认系统中安装了如下内容：
-
-+ gcc
-+ pcre-devel
-+ zlib-devel
-+ openssl-devel
-
-### 安装命令如下
-
-```
-yum -y install gcc pcre-devel zlib-devel openssl openssl-devel
-```
-
-### 查看是否成功
-
-+ rpm包安装的，可以用 rpm -qa 看到，如果要查找某软件包是否安装，用 **rpm -qa | grep "软件或者包的名字"**
-
-+ 以deb包安装的，可以用 dpkg -l 看到。如果是查找指定软件包，用 **dpkg -l | grep "软件或者包的名字"**
-
-+ yum方法安装的，可以用 yum list installed 查找，如果是查找指定包，用 **yum list installed | grep "软件名或者包名"**
-
-## 安装
-
-[参考教程](https://www.cnblogs.com/xxoome/p/5866475.html)
-
-+ 在 https://nginx.org/  下载  nginx
-+ 将该压缩包放到  /usr/local/software   目录下
-+ 解压 下载的压缩包   tar -zxvf    nginx-1.9.9.tar.gz（文件名）
-+ 进入该目录 cd nginx-1.9.9.tar.gz
-+ 配置安装路径   ./configure --prefix=/usr/local/software/nginx
-+ make   、make install   
-+ 测试是否成功   
-
-```
-cd /usr/local/software/nginx/sbin
-./nginx -t
-```
-
-+ 如果成功则正式开启
-
-```
-./nginx
-```
-
-+ 快速关闭
-
-```
-nginx -s stop
-```
-
-+ 完整有序停止
-
-```
-nginx -s quit
-```
-
-+ 重启
-
-```
-nginx -s reload
-```
-
-+ 查看版本
-
-```
-nginx -v
-```
-
-
-
-+ 快速启动，设置 path
-
-```
-vi /etc/profile
-export NGINX_HOME=/usr/local/software/nginx
-export PATH=$PATH:$NGINX_HOME/sbin
-source /etc/profile
-```
-
-## 反向代理实验
-
-+ 将 tomcat 加入 path
-
-```
-vi /etc/profile
-export TOMCAT_HOME=/usr/local/software/apache-tomcat-9.0.41
-export PATH=$PATH:$TOMCAT_HOME/bin
-source /etc/profile
-```
-
-+ 开启 tomcat
-
-```
-startup.sh
-```
-
-+ 关闭 tomcat
-
-```
-shutdown.sh
-```
-
 
 
 
@@ -6382,6 +6276,31 @@ apt install rabbitmq-server
 
 ![填写位置](./images/2021-11-15-2.jpg)
 
+### 快速启动tomcat
+
++ 将 tomcat 加入 path
+
+```
+vi /etc/profile
+export TOMCAT_HOME=/usr/local/software/apache-tomcat-9.0.41
+export PATH=$PATH:$TOMCAT_HOME/bin
+source /etc/profile
+```
+
++ 开启 tomcat
+
+```
+startup.sh
+```
+
++ 关闭 tomcat
+
+```
+shutdown.sh
+```
+
+
+
 ### 基础知识
 
 tomcat 下 webapp 目录为运行的web 目录，其中可以放多个项目，但是都使用的是同一个端口，区分方式是在请求端口后面加文件夹名称做匹配。如果不想这样，直接默认为 `/` 做为根目录，则将原有 ROOT 文件夹删除，然后将你的文件夹改名为 ROOT
@@ -6807,6 +6726,122 @@ bin/kibana
 - /etc/nginx：存放配置文件
 - /usr/share/nginx：存放静态文件
 - /var/log/nginx：存放日志
+
+### 前置安装
+
++ gcc
++ pcre-devel
++ zlib-devel
++ openssl-devel
+
+#### center os 安装命令如下
+
+```
+yum -y install gcc pcre-devel zlib-devel openssl openssl-devel
+```
+
+##### 查看是否成功
+
++ rpm包安装的，可以用 rpm -qa 看到，如果要查找某软件包是否安装，用 **rpm -qa | grep "软件或者包的名字"**
++ 以deb包安装的，可以用 dpkg -l 看到。如果是查找指定软件包，用 **dpkg -l | grep "软件或者包的名字"**
++ yum方法安装的，可以用 yum list installed 查找，如果是查找指定包，用 **yum list installed | grep "软件名或者包名"**
+
+#### unbutu 安装
+
+[参考解决办法](https://blog.csdn.net/z920954494/article/details/52132125)
+
+```bash
+# 查看软件是否安装
+dpkg -l | grep zlib   # 查看 zlib 是否安装
+# 解决依赖包openssl安装，命令
+sudo apt-get install openssl libssl-dev
+# 解决依赖包pcre安装，命令：
+sudo apt-get install libpcre3 libpcre3-dev
+# 解决依赖包zlib安装，命令
+sudo apt-get install zlib1g-dev
+```
+
+
+
+### 安装
+
+[参考教程](https://www.cnblogs.com/xxoome/p/5866475.html)
+
++ 在 `https://nginx.org/download/`  下载  nginx
++ 将该压缩包放到  /usr/local/software   目录下
++ 解压 下载的压缩包   tar -zxvf    nginx-1.9.9.tar.gz（文件名）
++ 进入该目录 cd nginx-1.9.9.tar.gz
++ 配置安装路径   
+
+```bash
+#  --prefix 为编译后保存的目录，可执行
+./configure --prefix=/usr/local/software/nginx    
+```
+
++ make   、make install   
++ 测试是否成功   
+
+```
+cd /usr/local/software/nginx/sbin
+./nginx -t
+```
+
++ 如果成功则正式开启
+
+```
+./nginx
+```
+
++ 快速关闭
+
+```
+nginx -s stop
+```
+
++ 完整有序停止
+
+```
+nginx -s quit
+```
+
++ 重启
+
+```
+nginx -s reload
+```
+
++ 查看版本
+
+```
+nginx -v
+```
+
++ 快速启动，设置 path
+
+```
+vi /etc/profile
+export NGINX_HOME=/usr/local/software/nginx
+export PATH=$PATH:$NGINX_HOME/sbin
+source /etc/profile
+```
+
+### location 介绍
+
+[参考介绍](https://blog.csdn.net/luoyang_java/article/details/83507193)
+
+```java
+=    开头表示精确匹配
+^~   开头表示 uri 以某个常规字符串开头，理解为匹配 url 路径即可。nginx不对url做编码，因此请求为 
+    /static/20%/aa 可以被规则 ^~/static/ /aa 匹配到 (注意是空格)。
+~ 	 开头表示区分大小写的正则匹配
+~*   开头表示不区分大小写的正则匹配
+!~ 和  !~*  分别表示 区分大小写不匹配  以及 不区分大小写不匹配  的正则
+/   通用匹配，任何请求都会匹配到
+```
+
+### 匹配规则
+
+
 
 ## CAS server
 
