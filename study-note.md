@@ -6841,6 +6841,48 @@ source /etc/profile
 
 ### 匹配规则
 
+###  负载均衡
+
+> 1、轮询(RR)：默认的策略，每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器宕机，能自动剔除。
+>
+> 2、权重(weight)：可以给不同的后端服务器设置一个权重值，用于调整不同的服务器上请求的分配率。权重数据越大，被分配到请求的几率越大。该权重值，主要是针对实际工作环境中不同的后端服务器硬件配置进行调整的。
+>
+> 3、ip_hash：每个请求按照发起客户端的ip的hash结果进行匹配，这样的算法下一个固定ip地址的客户端总会访问到同一个后端服务器，这也在一定程度上解决了集群部署环境下session共享的问题。
+>
+> 4、fair：智能调整调度算法，动态的根据后端服务器的请求处理和响应时间进行均衡分配。响应时间短处理效率高的服务器分配到的请求的概率高，响应时间长处理效率低的服务器分配到的请求少。nginx默认不支持fair算法，如果要使用这种调度算法，请安装 upstream_fair 模块。
+>
+> 5、url_hash：按照访问的URL 的 hash 结果分配请求，每个请求的URL会指向后端固定的某个服务器，可以在nginx 作为静态服务器的情况下提高缓存效率。使用这种调度算法，需要安装  hash 软件包。
+
+### 日志格式
+
+```bash
+# nginx.conf 下 http{}  中
+log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                  '$status $body_bytes_sent "$http_referer" '
+                  '"$http_user_agent" "$http_x_forwarded_for" "$request_body"';
+
+log_format json '{"@timestamp":"$time_iso8601",'
+                '"host":"$server_addr",'
+                '"clientip":"$remote_addr",'
+                '"size":$body_bytes_sent,'
+                '"responsetime":$request_time,'
+                '"upstreamtime":"$upstream_response_time",'
+                '"upstreamhost":"$upstream_addr",'
+                '"http_host":"$host",'
+                '"url":"$uri",'
+                '"xff":"$http_x_forwarded_for",'
+                '"referer":"$http_referer",'
+                '"agent":"$http_user_agent",'
+                '"body":"$request_body",'	
+                '"status":"$status"}';
+# 使用
+http{
+	server{
+		access_log  logs/host.access.log  main;
+	}
+}
+```
+
 
 
 ## CAS server
