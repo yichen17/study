@@ -9534,7 +9534,11 @@ springboot 和  springcloud  版本不一致
 
 创建的springboot项目如果把启动类删除了，则把`build>plugins`下的`spring-boot-maven-plugin`删除。
 
+### 返回给前端的时间和数据库中时间不一样
 
+[参考解决办法](https://blog.csdn.net/weixin_42241455/article/details/123445943?spm=1001.2014.3001.5501)
+
+> 看数据库时区，jdbc连接时区，jackson全局配置
 
 ## mybatis 代码自动生成
 
