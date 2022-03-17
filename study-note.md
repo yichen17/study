@@ -1309,6 +1309,15 @@ df  => disk free
 >
 > df -a 显示全部磁盘，默认为 KB
 
+## 权限命令
+
+```bash
+# 将目录/opt 及其下面的所有文件、子目录的文件主改成 liuhai
+chown -R liuhai:liuhai /opt 
+```
+
+
+
 ## 清空运行中文件
 
 ### 清空 tomcat catalina.out
@@ -2165,7 +2174,9 @@ AbstractRegistry 中还有另外两个需要关注的方法：recover() 方法�
 >
 > keys * // 显示所有key，数量少可行，数量多容易卡死
 >
-> 
+> get name //获取 name 的值
+>
+> ttl name  // 获取name 的过期时间
 
 # 代理
 
@@ -5571,7 +5582,10 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 > df -h 
 
+## rpm、deb
 
+> rpm包主要用于redhat及分支如redhat，centos，Fedora等
+> 而deb包主要用于debian及分支如debian，ubuntu等。
 
 ## xshell  连接
 
@@ -6473,7 +6487,49 @@ apt install tomcat9 tomcat9-docs tomcat9-examples tomcat9-admin
 >
 > curl 'http://localhost:9200/?pretty'
 
+### 安装步骤 other
+
+[elasticsearch 和 kibana集成](https://blog.csdn.net/zhoudatianchai/article/details/113045119)
+
+> 1、下载  https://www.elastic.co/cn/downloads/elasticsearch    选择 linux-x86_64
+>
+> 2、tar -zxvf 解压
+>
+> 3、   ./bin/elasticsearch 启动，在最后会显示 密码和token
+>
+> ```linux
+> ✅ Elasticsearch security features have been automatically configured!
+> ✅ Authentication is enabled and cluster connections are encrypted.
+> 
+> ℹ️  Password for the elastic user (reset with `bin/elasticsearch-reset-password -u elastic`):
+>   c7AV_OQwlgQz=JjmzBQX
+> 
+> ℹ️  HTTP CA certificate SHA-256 fingerprint:
+>   cda0ca37b1221a3ab4ed2b4b4370e7c30276b0bc8425a812343bd9716b2f2f60
+> 
+> ℹ️  Configure Kibana to use this cluster:
+> • Run Kibana and click the configuration link in the terminal when Kibana starts.
+> • Copy the following enrollment token and paste it into Kibana in your browser (valid for the next 30 minutes):
+>   eyJ2ZXIiOiI4LjEuMCIsImFkciI6WyIxMC4zLjEuMjc6OTIwMCIsIjE5Mi4xNjguNTYuMTo5MjAwIiwiMTAuMjAzLjAuMjI2OjkyMDAiLCIxOTIuMTY4LjE3LjE6OTIwMCJdLCJmZ3IiOiJjZGEwY2EzN2IxMjIxYTNhYjRlZDJiNGI0MzcwZTdjMzAyNzZiMGJjODQyNWE4MTIzNDNiZDk3MTZiMmYyZjYwIiwia2V5IjoiX1E5U2tYOEJPVEE1SUdRT2p2cUE6cUpJMlF0dGZSLW0tVHd5VW5CSUFoQSJ9
+> 
+> ℹ️  Configure other nodes to join this cluster:
+> • On this node:
+>   ⁃ Create an enrollment token with `bin/elasticsearch-create-enrollment-token -s node`.
+>   ⁃ Uncomment the transport.host setting at the end of config/elasticsearch.yml.
+>   ⁃ Restart Elasticsearch.
+> • On other nodes:
+>   ⁃ Start Elasticsearch with `bin/elasticsearch --enrollment-token <token>`, using the enrollment token that you generated.
+> ```
+>
+> 4、验证是否启动成功   curl --cacert config/certs/http_ca.crt -u elastic https://localhost:9200
+>
+> 
+
 ### 使用
+
+#### 执行命令
+
+
 
 #### 构造数据
 
@@ -6546,6 +6602,14 @@ PUT megacorp
 
 ### 问题
 
+#### kibana environment token 失效
+
+```bash
+./bin/elasticsearch-create-enrollment-token -s kibana
+```
+
+
+
 #### Caused by: java.lang.RuntimeException: can not run elasticsearch as root
 
 > 不能使用root账户，用其他账户，不过要给该账户对应的目录所有权
@@ -6576,6 +6640,22 @@ ulimit -Sn
 ulimit -Hn
 ```
 
+#### 启动测试连接性报错   curl: (52) Empty reply from server
+
+```bash
+curl 'http://localhost:9200/?pretty'
+curl: (52) Empty reply from server   # 错误信息
+
+# 解决办法   https://stackoverflow.com/questions/35921195/curl-52-empty-reply-from-server-timeout-when-querying-elastiscsearch
+vi ./config/elasticsearch.yml
+and replace this setting with false
+# Enable security features
+xpack.security.enabled: false
+xpack.security.enrollment.enabled: false
+```
+
+
+
 ## kibana
 
 [参考解决办法](https://www.cnblogs.com/cnsdhzzl/p/9564097.html)
@@ -6588,9 +6668,93 @@ tar -zxvf kibana-6.4.0-linux-x86_64.tar.gz
 // 启动 
 //  默认配置即可运行，需要 elasticsearch 安装在本地  如今不在需要 sense ，改为 dev tools 
 bin/kibana
+//  启动页面
+http://localhost:5601
+```
+
+### 安装步骤 other
+
+> 1、下载  https://www.elastic.co/cn/downloads/kibana   linux-x86_64
+> 2、  ./bin/kibana 启动  启动完成后，会暴露目录一个网址
+>
+> http://localhost:5601/?code=189206
+>
+> 3、页面打开输入 之前elasticsearch 启动中的 environment token
+>
+> 4、账户登陆  用户名为 elastic  密码为 elasticsearch 启动中的密码
+>
+> 5、选择  add integration 搜索框输入 sample 导入样例数据，开始测试   [参考](https://www.elastic.co/guide/en/kibana/current/get-started.html#gs-get-data-into-kibana)
+
+### 基本使用
+
+[KQL官方文档](https://www.elastic.co/guide/en/kibana/current/kuery-query.html)
+
+```java
+1、空格  =>  准确搜索词
+2、引号  => 短语查询 
+3、优先级  and > or  取消默认优先级用括号
+4、取反  not
+5、多字段匹配值   => 示例  tags:(success and info and security)
+6、 >  < >=  <=   => 只在数字和时间有效
+7、通用匹配值  response:*
+8、嵌套查询
+	items:{ name:banana and stock > 10 }   // 匹配单个文档
+	items:{ name:banana } and items:{ stock:9 }   // 匹配不同文档
+	// 匹配单个不同文档
+	items:{ name:banana and stock > 10 } and items:{ category:vegetable }
+	// 嵌套字段内部其他字段
+	level1.level2:{ prop1:foo and prop2:bar }
+```
+
+### date math
+
+[官方 DATE MATH文档](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/common-options.html#date-math)
+
+#### 语法
+
+- `+1h`: Add one hour
+- `-1d`: Subtract one day
+- `/d`: Round down to the nearest day
+
+#### 单位
+
++ y   => 年
++ M  =>  月
++ w  =>  周
++ d  =>  天
++ h  => 12小时
++ H  => 24小时
++ m  => 分钟
++ s  => 秒
+
+```java
+以 || 结尾手动指定日期 示例 2001.02.01\|\|   => 2001.02.01
+```
+
+#### case
+
+|       表达式        |                             含义                             |
+| :-----------------: | :----------------------------------------------------------: |
+|       now+1h        | now  in milliseconds plus one hour. Resolves to: 2001-01-01 13:00:00 |
+|       now-1h        | now in milliseconds minus one hour. Resolves to: 2001-01-01 11:00:00 |
+|      now-1h/d       | now in milliseconds minus one hour, rounded down to UTC 00:00. Resolves to: 2001-01-01 00:00:00 |
+| 2001.02.01\|\|+1M/d | 2001-02-01 in milliseconds plus one month. Resolves to: 2001-03-01 00:00:00 |
+
+
+
+### 配置安全认证
+
+```bash
+./bin/kibana-encryption-keys generate   # 自动生成
+# 示例
+xpack.encryptedSavedObjects.encryptionKey: 25393453696a6186dea52b91c76f00b6
+xpack.reporting.encryptionKey: fc6cbc1284644d0ae9fdccd64e3c0a4c
+xpack.security.encryptionKey: 72090d5dcfa7d057d59b0e5210f60b04
 ```
 
 
+
+[官方使用教程](https://www.elastic.co/guide/en/kibana/current/get-started.html#gs-get-data-into-kibana)
 
 ## hbase
 
@@ -6880,6 +7044,16 @@ http{
 	server{
 		access_log  logs/host.access.log  main;
 	}
+}
+```
+
+### 常用配置
+
+```bash
+# 运行请求头有 下划线 _
+http{
+	# 添加如下配置
+	underscores_in_headers on
 }
 ```
 
