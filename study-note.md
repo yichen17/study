@@ -2537,6 +2537,12 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 文件存在但是无法引用
+
+> idea 缓存问题
+>
+> File >  invalidate caches
+
 ### 2021.3.2 没有 local change
 
 > file  > settings >  version control  >  commit > 去掉勾选  use non-model commit interface
