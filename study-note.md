@@ -5390,6 +5390,14 @@ if (p.hash == hash &&
 
 # 生活技巧
 
+## xshell
+
+### 日志展示不全
+
+[参考方法](https://www.cnblogs.com/niceland/p/0x0009.html)
+
+> 文件  》  会话属性   》   终端    》 缓冲区大小    》 默认的1024行改为4096
+
 ## ps
 
 ### 实现圆弧字
@@ -5696,6 +5704,25 @@ Caused by: java.lang.NoClassDefFoundError: org/apache/kafka/clients/consumer/Con
 > 查看日志  logs 目录下，  执行   rm -rf /tmp/kafka-logs 
 
 ## redis
+
+### centeros 安装
+
+```
+$ wget https://download.redis.io/releases/redis-6.2.6.tar.gz
+$ tar xzf redis-6.2.6.tar.gz
+$ cd redis-6.2.6
+$ make
+//  编译好后，命令脚本在 src目录下，配置文件 redis.conf在src同级目录
+```
+
+### 常用设置
+
+```bash
+# 设置运行内存
+maxmemory 128mb
+# 后台启动
+daemonize yes
+```
 
 ### redis  安装
 
