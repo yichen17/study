@@ -10190,7 +10190,17 @@ long stop=System.currentTimeMillis();
 
  `+`：匹配指定类型的子类型；仅能作为后缀放在类型模式后边。
 
+## luke
 
+==lucence 索引查看工具==
+
+[工具下载地址](https://github.com/DmitryKey/luke)
+
+### 问题
+
+#### index is locked try force unlock when opening
+
+> 版本不一致，使用对应版本的 luke
 
 # 设计模式
 
