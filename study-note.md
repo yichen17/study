@@ -7957,6 +7957,8 @@ List<Object> res=pageData.collect(Collectors.toList());
 > //   =>  windows 下无效
 >
 > -XX:NativeMemoryTracking=detail
+> // 回收缓存
+> -XX:+UseCodeCacheFlushing
 
 ### 通用查询命令
 
@@ -8121,6 +8123,203 @@ jps -l  //查看对应的 进程号
 
 
 ## springboot
+
+### AOP配置
+
+#### 结论
+
+>  //  一般流程
+>
+> around-before  =>  before => controller =>  afterReturing => after  =>  around-after 
+>
+> // 异常情况
+>
+> around-before  =>  before => controller =>  afterThrowing => after  =>  around-after 
+
+#### 前置依赖
+
+```java
+<!-- spring aop start-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+<!-- spring aop end-->
+```
+
+
+
+#### 一般模板
+
+```java
+@Aspect
+@Component
+@Slf4j
+public class DecryptHandlerAspect {
+    @Pointcut("execution(* com.yichen.basic.controller.*.*(..))")
+    	public void decryptPointCut() {
+    }
+	@Before("decryptPointCut()")
+    public void check(JoinPoint joinPoint) {
+        
+    }
+}
+```
+
+#### 多个切面优先级问题
+
+[参考解答](https://blog.csdn.net/Aeve_imp/article/details/93098524)
+
+> 可以通过 @Order() 注解，值越小越先  
+>
+> 经实验确定，确实是order越小越是最先执行，但更重要的是最先执行的最后结束。
+
+#### 测试demo
+
+##### aspect A
+
+```java
+@Aspect
+@Slf4j
+@Component
+@Order(-999)
+public class AspectTestA {
+
+    @Pointcut("execution(* com.yichen.casetest.controller.AspectController.*(..))")
+    public void decryptPointCut() {
+    }
+
+    @Before("decryptPointCut()")
+    public void before(){
+        log.info("AspectTestA before");
+    }
+
+    @After("decryptPointCut()")
+    public void after(){
+        log.info("AspectTestA after");
+    }
+
+    @AfterReturning("decryptPointCut()")
+    public void afterReturning(){
+        log.info("AspectTestA afterReturning");
+    }
+
+    @AfterThrowing("decryptPointCut()")
+    public void afterThrowing(){
+        log.info("AspectTestA AfterThrowing");
+    }
+
+
+    @Around("decryptPointCut()")
+    public Object around(ProceedingJoinPoint proceedJoinPoint) {
+        Object proceed = null;
+        log.info("AspectTestA around start");
+        try {
+            proceed = proceedJoinPoint.proceed();
+            log.info("AspectTestA 请求结果 {}",proceed);
+        }
+        catch (Throwable e){
+            log.error("AspectTestA 错误 {}",e.getMessage(),e);
+        }
+        log.info("AspectTestA around stop");
+        return proceed;
+    }
+
+}
+```
+
+##### aspect B
+
+```java
+@Aspect
+@Slf4j
+@Component
+@Order(-100)
+public class AspectTestB {
+
+    @Pointcut("execution(* com.yichen.casetest.controller.AspectController.*(..))")
+    public void decryptPointCut() {
+    }
+
+    @Before("decryptPointCut()")
+    public void before(){
+        log.info("AspectTestB before");
+    }
+
+    @After("decryptPointCut()")
+    public void after(){
+        log.info("AspectTestB after");
+    }
+
+    @AfterReturning("decryptPointCut()")
+    public void afterReturning(){
+        log.info("AspectTestB afterReturning");
+    }
+
+    @AfterThrowing("decryptPointCut()")
+    public void afterThrowing(){
+        log.info("AspectTestB AfterThrowing");
+    }
+
+
+    @Around("decryptPointCut()")
+    public Object around(ProceedingJoinPoint proceedJoinPoint) {
+        Object proceed = null;
+        log.info("AspectTestB around start");
+        try {
+            proceed = proceedJoinPoint.proceed();
+            log.info("AspectTestB 请求结果 {}",proceed);
+        }
+        catch (Throwable e){
+            log.error("AspectTestB 错误 {}",e.getMessage(),e);
+        }
+        log.info("AspectTestB around stop");
+        return proceed;
+    }
+
+}
+```
+
+##### controller
+
+```java
+@RequestMapping("/aspect")
+@RestController
+@Slf4j
+public class AspectController {
+
+    @RequestMapping("/test")
+    public String test(){
+        log.info("请求到达controller");
+        return "controller arrive";
+    }
+
+}
+```
+
+##### 测试
+
+> http://localhost:8088/aspect/test
+
+##### 运行结果
+
+```java
+2022-03-24 11:29:45.408  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestA   : AspectTestA around start
+2022-03-24 11:29:45.409  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestA   : AspectTestA before
+2022-03-24 11:29:45.409  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestB   : AspectTestB around start
+2022-03-24 11:29:45.409  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestB   : AspectTestB before
+2022-03-24 11:29:45.417  INFO 16208 --- [nio-8088-exec-1] c.y.c.controller.AspectController        : 请求到达controller
+2022-03-24 11:29:45.418  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestB   : AspectTestB afterReturning
+2022-03-24 11:29:45.418  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestB   : AspectTestB after
+2022-03-24 11:29:45.418  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestB   : AspectTestB 请求结果 controller arrive
+2022-03-24 11:29:45.419  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestB   : AspectTestB around stop
+2022-03-24 11:29:45.419  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestA   : AspectTestA afterReturning
+2022-03-24 11:29:45.420  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestA   : AspectTestA after
+2022-03-24 11:29:45.420  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestA   : AspectTestA 请求结果 controller arrive
+2022-03-24 11:29:45.420  INFO 16208 --- [nio-8088-exec-1] com.yichen.casetest.aspect.AspectTestA   : AspectTestA around stop
+```
+
+
 
 ### 通用jar启动脚本
 
