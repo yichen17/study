@@ -7472,6 +7472,28 @@ JSONObject jsonObject=new JSONObject(res);
 </dependency>
 ```
 
+### validate
+
+```java
+//  注意 如果两者版本不匹配，导致  No validator could be found for constraint
+<!--字段验证 start-->
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator</artifactId>
+    <version>6.0.16.Final</version>
+    <scope>compile</scope>
+</dependency>
+<dependency>
+    <groupId>javax.validation</groupId>
+    <artifactId>validation-api</artifactId>
+    <version>2.0.1.Final</version>
+</dependency>
+<!--字段验证 end-->
+//  字段前加 @NotEmpty()
+// controller 入参加 @Valid
+// 全局 Exception 监听   MethodArgumentNotValidException
+```
+
 
 
 
@@ -8126,7 +8148,13 @@ jps -l  //查看对应的 进程号
 
 ### AOP配置
 
-#### 结论
+#### 总结
+
+> 
+>
+> 
+
+#### 注解优先级
 
 >  //  一般流程
 >
