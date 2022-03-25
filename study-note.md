@@ -7329,6 +7329,18 @@ http{
 
 # maven 
 
+## 介绍
+
+### META-INF/services
+
+[官方解读](https://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html)
+
+>  =>   保存服务提供配置文件，
+>
+> 文件名 =>   接口的全限定类名
+>
+> 文件内容  =>  接口实现的全限定类名
+
 ## 常用注解以及对应的maven依赖
 
 ### @RestController
@@ -8171,7 +8183,25 @@ jps -l  //查看对应的 进程号
 
 ## springboot
 
+### 校验 validate
+
+[maven配置参考](#validate)
+
+#### 源码解读
+
+> 源码跟踪   入口：
+>
+> 文件    javax.validation.spi.ValidationProvider
+>
+> 类    HibernateValidator
+
 ### AOP配置
+
+#### 源码解读
+
+> 入口 ：
+>
+> 类 AopAutoConfiguration
 
 #### 总结
 
