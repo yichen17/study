@@ -1118,7 +1118,24 @@ find . inum 4222124650801021
 tree /project
 ```
 
+## file 判断文件类型
 
+### 参数
+
+```bash
+-b  # 列出识别结果时，不显示文件名称
+-c  #  详细显示指令执行过程，便于排错或分析程序执行的情况
+-f <文件名称>  #  指定文件名称，其内容有一个或多个文件名称时，让file依序辨识这些文件，
+	格式为每列一个文件名称
+-L  #  直接显示符号连接所指向的文件的类型
+-m <魔法数字文件> #  指定魔法数字文件
+-v  # 显示版本信息
+-z  # 尝试去解读压缩文件的内容
+```
+
+### 示例 
+
+> file  jar
 
 ## bash 脚本命令
 
@@ -5626,6 +5643,14 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 > 4、重新使用 `root`账户连接，测试成功
 
 ## kafka
+
+### 架构理解
+
+> kafka集群理解：
+>
+> kafka集群中每个机器对应broker，每个broken中可以有多个topic，每个topic可以分配多个partition，同一个topic下的partition消息不重复，每个partition有leader和follower之分，可用的维护在ISP(in sync replica)，follower会定时从leader拉取数据，如果指定时间获取offset偏亮大于指定值，则会移出ISP。
+>
+> 如果leader移出则会重新进行选举
 
 ### 安装
 
