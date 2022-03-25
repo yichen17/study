@@ -8190,6 +8190,7 @@ jps -l  //查看对应的 进程号
 #### 源码解读
 
 > 源码跟踪   入口：
+> 启动点   ValidationInitializer
 >
 > 文件    javax.validation.spi.ValidationProvider
 >
