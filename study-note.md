@@ -649,6 +649,16 @@ ipconfig/all
 
 # linux 命令
 
+## 问题记录
+
+### $'\r': command not found
+
+[参考解决办法](https://blog.csdn.net/bird3014/article/details/93122974)
+
+> 是因为windows系统的文件换行是  `\r\n` 而 unix系统是 `\n`
+>
+> 打开bash文件    =>   esc  :set ff=unix   =>  :wq
+
 ##  /目录下的文件夹介绍
 
 ![/目录下的文件夹](./images/v2-87fc82d4d9d3df7829ac3bbe6de9e77c_1440w.jpg)
@@ -11767,9 +11777,13 @@ xhr.setRequestHeader("Content-Disposition","hello");
 xhr.send();
 ```
 
+# 101Editor
 
+[工具下载](https://www.bilibili.com/read/cv9946926/)
 
+[模板下载](https://www.sweetscape.com/010editor/repository/templates/)
 
+>  模板  > 新建模板 > 复制模板数据即可
 
 
 
