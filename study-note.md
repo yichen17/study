@@ -1,3 +1,27 @@
+# 常用软件
+
+# postman
+
+> 用于模拟接口请求
+
+## apiPost
+
+> 国内版 postman
+
+## 101editor
+
+> 可以查看字节码文件，可以加在模板
+
+## virtual box
+
+> 虚拟机
+
+## vmware  
+
+> 虚拟机
+
+
+
 # vmware中 安装虚拟机
 
 ## 虚拟机账户信息
@@ -5637,6 +5661,12 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 >
 > sudo rm /etc/ssh/ssh_config                  ## 删配置文件，让ssh服务自己想办法链接
 > sudo service ssh --full-restart   启动 ssh 服务
+
+### 使用私钥登录
+
+> // 生成公钥和私钥
+>
+> ssh-keygen -t rsa  // 存放默认目录在 /root/.ssh/
 
 ### 问题处理
 
