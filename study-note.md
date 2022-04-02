@@ -5586,9 +5586,25 @@ if (p.hash == hash &&
 
 ![方法](./images/2021-05-08-1.jpg)
 
+## google
 
+### 开启 google 导入密钥
 
+[参考操作](https://www.zmki.cn/6519.html)
 
+> chrome地址栏输入: chrome://flags/#password-import-export  进入chrome配置
+>
+> 找到password import 并将其打开 设置调整为enabled 
+
+### 将edge密钥导入google
+
+> 1、打开edge，设置 >  个人信息  >  密码  >  在 `...`点击，导出密码
+>
+> 2、打开 google >  设置  >   自动填充  >   密码 >  在`...`点击，导入edge导出的密码即可
+
+### 无用文章
+
+1、配置注册表 [参考](http://www.win7zhijia.cn/jiaocheng/win7_39722.html)
 
 # 知识盲区
 
