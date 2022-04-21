@@ -7893,6 +7893,33 @@ server.tomcat.uri-encoding=UTF-8
 </Configuration>
 ```
 
+## mvn install 报错 在类路径或引导类路径中找不到程序包 java.lang
+
+[参考解决办法](https://blog.csdn.net/cleargreen/article/details/56284013)
+
+```java
+<!-- ... -->  
+<plugin>  
+ <groupId>org.apache.maven.plugins</groupId>  
+ <artifactId>maven-compiler-plugin</artifactId>  
+ <version>${maven.compiler.version}</version>  
+ <configuration>  
+   <source>${java.version}</source>  
+   <target>${java.version}</target>  
+   <encoding>${project.build.sourceEncoding}</encoding>  
+   <showWarnings>true</showWarnings>  
+   <compilerArguments>  
+     <verbose />  
+     <!-- 这个配置很特殊：windows下使用分号（;）分隔，linux/mac下使用冒号（:）分隔 -->  
+     <bootclasspath>${java.home}/lib/rt.jar;${java.home}/lib/jce.jar</bootclasspath>  
+   </compilerArguments>  
+ </configuration>  
+</plugin>  
+<!-- ... -->  
+```
+
+
+
 ## springboot 项目构建 编译报错，提示 找不到符号
 
 ==具体报错内容示例==
