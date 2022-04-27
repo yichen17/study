@@ -8297,6 +8297,20 @@ jps -l  //查看对应的 进程号
 
 ## springboot
 
+### java 发邮件服务
+
+#### 问题
+
+##### 配置了相关参数，报错535
+
+> 535 Error: authentication failed, system busy
+
+###### 解决办法
+
+> 1、确认对应的邮箱是否开启  POP3/SMTP服务
+>
+> 2、确认 客户端授权码 填写正确
+
 ### 校验 validate
 
 [maven配置参考](#validate)
@@ -9512,11 +9526,39 @@ Mockito.when(mockBean对象.方法名称(入参)).thenReturn(返回值);
 
 #### 思考
 
-1、a使用b，b使用c，c对象mock了，b对象使用 injectMock，那a怎么办。  ==》 理论，测a到b的时候应该已经测试了b到c
++ a使用b，b使用c，c对象mock了，b对象使用 injectMock，那a怎么办。  ==》 理论，测a到b的时候应该已经测试了b到c
 
 ==》 解决方式，通过 @SpyBean 和 @MockBean 即可实现自动注入，且能调用我们自定义的方法
 
++ 指定使用某个配置文件
+
+  > //  默认还是会使用类路径下的 application.properties 或者 application.yml，且不区分是测试包下还是代码包下
+  >
+  > @TestPropertySource(value = "classpath:application-test.properties")
+
++ 访问数据库
+
+  > 默认情况下，即单纯使用  @SpringBootTest 注解就能访问数据库。前提是 jdbc配置的没有问题
+
++ @Autowired 注入报空指针
+
+  > 类上添加如下注解  测试运行于Spring测试环境  <font color=red>但是我在本地测试没加这个注解也能直接跑。。</font>
+  >
+  > @RunWith(SpringJUnit4ClassRunner.class)
+
++ 
+
 ### 问题记录
+
+#### package org.apache.commons.io does not exist error
+
+[参考解答](https://stackoverflow.com/questions/21673618/package-org-apache-commons-io-does-not-exist-error)
+
+[FileUtils手册](https://zetcode.com/java/fileutils/)
+
+> 解决办法  将 commons-io 的版本号从2.6 改成 2.5
+>
+> 好像是maven指向不明，jar包中依赖版本是2.2， dependencyManagement 中指定的2.6，如果当前项目中没指定版本 jenkins compiler  failed ,如果指定版本号2.6.0，那编译可以成功。
 
 #### Assert.isTrue(ZLjava/util/function/Supplier;)V
 
