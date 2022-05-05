@@ -10863,6 +10863,26 @@ long stop=System.currentTimeMillis();
 
 > 版本不一致，使用对应版本的 luke
 
+## ssh
+
+### 关键词介绍
+
+> KEX    =>    Key Exchange
+>
+> 
+
+### 执行逻辑
+
+[ssh-handshake介绍](https://goteleport.com/blog/ssh-handshake-explained/)
+
+### 主要步骤
+
+> 1、SSH Version Exchange
+>
+> 2、Key Exchange
+>
+> 3、
+
 # 设计模式
 
 **设计模式解决的是“可复用”的设计问题**
