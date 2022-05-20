@@ -1147,6 +1147,10 @@ ls -li
 find . inum 4222124650801021
 ```
 
+### -lh
+
+> 以 K M G 等单位展示文件大小
+
 ## tree
 
 ```shell
@@ -10882,6 +10886,36 @@ long stop=System.currentTimeMillis();
 > 2、Key Exchange
 >
 > 3、
+
+### 开启日志
+
+[参考](https://blog.csdn.net/handonch/article/details/120862961)
+
+> cp /etc/ssh/sshd_config   /etc/ssh/sshd_config_back
+>
+> vi /etc/ssh/sshd_config
+>
+> //  取消下面的注释
+>
+> LogLevel INFO
+>
+>  SyslogFacility AUTHPRIV  #日志级别
+>
+> 
+>
+> cp /etc/rsyslog.conf /etc/rsyslog.conf.2021-1-27.bak
+>
+> vi /etc/rsyslog.conf
+>
+> //  前面加 auth
+>
+> auth,authpriv.* /var/log/secure
+>
+>  
+>
+> // 重启服务
+>
+> service sshd restart
 
 # 设计模式
 
