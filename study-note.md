@@ -10867,56 +10867,6 @@ long stop=System.currentTimeMillis();
 
 > 版本不一致，使用对应版本的 luke
 
-## ssh
-
-### 关键词介绍
-
-> KEX    =>    Key Exchange
->
-> 
-
-### 执行逻辑
-
-[ssh-handshake介绍](https://goteleport.com/blog/ssh-handshake-explained/)
-
-### 主要步骤
-
-> 1、SSH Version Exchange
->
-> 2、Key Exchange
->
-> 3、
-
-### 开启日志
-
-[参考](https://blog.csdn.net/handonch/article/details/120862961)
-
-> cp /etc/ssh/sshd_config   /etc/ssh/sshd_config_back
->
-> vi /etc/ssh/sshd_config
->
-> //  取消下面的注释
->
-> LogLevel INFO
->
->  SyslogFacility AUTHPRIV  #日志级别
->
-> 
->
-> cp /etc/rsyslog.conf /etc/rsyslog.conf.2021-1-27.bak
->
-> vi /etc/rsyslog.conf
->
-> //  前面加 auth
->
-> auth,authpriv.* /var/log/secure
->
->  
->
-> // 重启服务
->
-> service sshd restart
-
 # 设计模式
 
 **设计模式解决的是“可复用”的设计问题**
@@ -12191,3 +12141,52 @@ xhr.send();
 
 ## 连接步骤
 
+## ssh-other
+
+### 关键词介绍
+
+> KEX    =>    Key Exchange
+>
+> 
+
+### 执行逻辑
+
+[ssh-handshake介绍](https://goteleport.com/blog/ssh-handshake-explained/)
+
+### 主要步骤
+
+> 1、SSH Version Exchange
+>
+> 2、Key Exchange
+>
+> 3、
+
+### 开启日志
+
+[参考](https://blog.csdn.net/handonch/article/details/120862961)
+
+> cp /etc/ssh/sshd_config   /etc/ssh/sshd_config_back
+>
+> vi /etc/ssh/sshd_config
+>
+> //  取消下面的注释
+>
+> LogLevel INFO
+>
+> SyslogFacility AUTHPRIV  #日志级别
+>
+> 
+>
+> cp /etc/rsyslog.conf /etc/rsyslog.conf.2021-1-27.bak
+>
+> vi /etc/rsyslog.conf
+>
+> //  前面加 auth
+>
+> auth,authpriv.* /var/log/secure
+>
+> 
+>
+> // 重启服务
+>
+> service sshd restart
