@@ -2594,6 +2594,61 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### idea一直卡在启动界面
+
+[参考解决方法](https://blog.csdn.net/weixin_42241455/article/details/124961455?spm=1001.2014.3001.5502)
+
+#### 错误信息
+
+```
+2022-05-25 09:58:41,706 [   4882]  ERROR - llij.ide.plugins.PluginManager - java.net.BindException: Address already in use: bind 
+java.util.concurrent.CompletionException: java.net.BindException: Address already in use: bind
+	at java.base/java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:314)
+	at java.base/java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:319)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1702)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1692)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:183)
+Caused by: java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:455)
+	at java.base/sun.nio.ch.Net.bind(Net.java:447)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:227)
+	at io.netty.channel.socket.nio.NioServerSocketChannel.doBind(NioServerSocketChannel.java:134)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.bind(AbstractChannel.java:562)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.bind(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeBind(AbstractChannelHandlerContext.java:506)
+	at io.netty.channel.AbstractChannelHandlerContext.bind(AbstractChannelHandlerContext.java:491)
+	at io.netty.channel.DefaultChannelPipeline.bind(DefaultChannelPipeline.java:973)
+	at io.netty.channel.AbstractChannel.bind(AbstractChannel.java:260)
+	at io.netty.bootstrap.AbstractBootstrap$2.run(AbstractBootstrap.java:356)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:503)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2022-05-25 09:58:41,722 [   4898]  ERROR - llij.ide.plugins.PluginManager - IntelliJ IDEA 2021.3.2  Build #IU-213.6777.52 
+2022-05-25 09:58:41,722 [   4898]  ERROR - llij.ide.plugins.PluginManager - JDK: 11.0.13; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o. 
+2022-05-25 09:58:41,722 [   4898]  ERROR - llij.ide.plugins.PluginManager - OS: Windows 10 
+```
+
+#### 解决办法
+
+```
+// 以管理员方式运行 CMD(win + q 然后输入 cmd,右键，以管理员身份运行)
+netsh int ipv4 set dynamicport tcp start=49152 num=16383
+netsh int ipv4 set dynamicport udp start=49152 num=16383
+// 运行了上面两个，再次尝试打开 idea，还是失败
+net stop winnat
+net start winnat
+// 运行了这两个后，再次尝试打开idea，成功了。
+```
+
 ### 文件存在但是无法引用
 
 > idea 缓存问题
