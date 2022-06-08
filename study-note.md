@@ -2594,6 +2594,31 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 ## 问题记录
 
+### 全区搜没有搜到jar包中的文件
+
+> 需要下载jar包的源文件。
+>
+> 将项目打包并保存源代码
+>
+> 方法一：mvn source:jar install
+>
+> 方法二：
+>
+> ```
+> <plugin>
+>     <groupId>org.apache.maven.plugins</groupId>
+>     <artifactId>maven-source-plugin</artifactId>
+>     <executions>
+>         <execution>
+>             <id>attach-sources</id>
+>             <goals>
+>                 <goal>jar</goal>
+>             </goals>
+>         </execution>
+>     </executions>
+> </plugin>
+> ```
+
 ### idea一直卡在启动界面
 
 [参考解决方法](https://blog.csdn.net/weixin_42241455/article/details/124961455?spm=1001.2014.3001.5502)
