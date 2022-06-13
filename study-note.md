@@ -1387,7 +1387,33 @@ du -h catalina.out # 查看大小
 du -h catalina.out  # 再次查看大小
 ```
 
+## 环境部署
 
+### mysql
+
+[参考步骤](https://blog.csdn.net/qq_36539042/article/details/122924794)
+
+#### 清除系统自带的
+
+> whereis mysql
+>
+> find / -name mysql
+
+####  安装
+
+> wget https://downloads.mysql.com/archives/get/p/23/file/mysql-5.7.35-linux-glibc2.12-x86_64.tar.gz
+
+### java jdk
+
+#### 安装
+
+> 从官网下载，然后放到服务器上，因为有登录校验
+
+### redis
+
+#### 安装
+
+> 
 
 ## 在linux 上部署常用命令
 
