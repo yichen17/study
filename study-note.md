@@ -1158,6 +1158,37 @@ find . inum 4222124650801021
 tree /project
 ```
 
+## more
+
+```java
+//  空格向下翻页
+// enter 下移一行
+//  shift + pageUp 向上翻页
+//  shift + pageDown  向下翻页
+```
+
+## less
+
+```java
+//  空格向下翻页
+//  b 向上翻页
+// enter 下移一行
+//  shift + pageUp 向上翻页
+//  shift + pageDown  向下翻页
+```
+
+### less 和 more 区别
+
+[less、more、most差别](https://www.baeldung.com/linux/more-less-most-commands)
+
+> 1、less 能回退
+>
+> 2、支持文件格式
+>
+> 3、能够设置 mark 回退  设置标记  m + 标记值    返回标记  ' + 标记值
+>
+> 4、能够监控更新内容  less +F /var/log/syslog
+
 ## file 判断文件类型
 
 ### 参数
@@ -8188,6 +8219,23 @@ List<Object> res=pageData.collect(Collectors.toList());
 
 ## JVM
 
+### 线上问题定位
+
+```java
+// 生成当前 jvm dump文件
+jmap -dump:format=b,file=heap.prof pid
+//  查看整个 jvm 内存状态
+jmap -heap pid
+// 查看JVM堆中对象详细占用情况
+jmap -histo pid
+//  栈信息
+jstack pid > stack.txt
+// 查看进程中线程占cpu的比例
+ps -mp pid -o THREAD,tid,time
+```
+
+
+
 ### 观测工具
 
 #### visual vm
@@ -8286,6 +8334,12 @@ List<Object> res=pageData.collect(Collectors.toList());
 > -XX:NativeMemoryTracking=detail
 > // 回收缓存
 > -XX:+UseCodeCacheFlushing
+>
+> // 打印内存溢出 dump 文件
+>
+> -XX:+HeapDumpOnOutOfMemoryError 
+>
+> -XX:HeapDumpPath=/dump/heapdump.dump
 
 ### 通用查询命令
 
@@ -9896,6 +9950,29 @@ Mockito.when(mockBean对象.方法名称(入参)).thenReturn(返回值);
 + 
 
 ### 问题记录
+
+#### unable to create new native thread
+
+##### 校验是否超出用户最大线程限制
+
+> // 用户最大进程
+> ulimit -a 
+> //  正在运行的线程
+>
+> ps -elfT | wc -l
+
+##### 一个进程是否超出最大线程
+
+> // 对应进程有多少线程
+>
+> ps -p <PROCESS_PID> -lfT | wc -l
+>
+> // 系统支持最大线程数量
+> cat /proc/sys/kernel/threads-max
+>
+> // 系统全局 pid 限制，进程和线程都要 pid
+>
+> cat /proc/sys/kernel/pid_max
 
 #### package org.apache.commons.io does not exist error
 
