@@ -10571,6 +10571,18 @@ int d = 0x11;   //声明十六进制变量
 
 ## 开发问题记录
 
+### 空指针报错行号为空或者}或者注释行
+
+[参考办法](https://stackoverflow.com/questions/5987463/stack-trace-shows-exception-at-wrong-position)
+
+> 出现场景：
+>
+> 将原先test分支删除了。从master分支拉取新的test分支，上传。jenkins上打包能成功，docker运行能成功，报错行号有问题
+>
+> 解决办法：
+>
+> 删除分支后强制提交，删除本地的target文件
+
 ### springboot 无法进入controller 中的方法
 
 ==查看springboot 启动类和controller所在文件夹的关系，理论上应该是同级，且在同一个父文件夹下。==
