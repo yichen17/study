@@ -8340,6 +8340,20 @@ ps -mp pid -o THREAD,tid,time
 > -XX:+HeapDumpOnOutOfMemoryError 
 >
 > -XX:HeapDumpPath=/dump/heapdump.dump
+>
+> // 指定致命错误日志
+>
+> -XX:ErrorFile=/var/log/java/java_error%p.log
+>
+> // 设置永久代 jdk7之前
+>
+> -XX:PermSize
+>
+> -XX:MaxPermSize
+>
+> //  元数据大小，也在 heap 上
+>
+> XX:MaxMetaspaceSize
 
 ### 通用查询命令
 
@@ -8440,6 +8454,20 @@ MSC  =>  Serial Old
 > 过程：1、初始标记 2、并发标记 3、最终标记  4、筛选回收
 
 > 新生代、老年代都是用 G1
+
+### 汇总
+
+> serial  单线程收集 新生代   复制
+>
+> parnew 多线程版 serial
+>
+> Parallel Scavenge  新生代，能控制吞吐量  多线程复制
+>
+> Serial Old  serial老年代版本   标记清除整理
+>
+> Parallel Old   Parallel Scavenge 老年代版本  标记整理
+>
+> 
 
 
 
