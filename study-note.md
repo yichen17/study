@@ -6213,6 +6213,35 @@ failed
 
 ### 遇到的问题
 
+##### 用密码登陆mysql失败
+
+==被人攻击了，数据库改了密码，root被删了==
+
+[参考解决办法](https://blog.csdn.net/weixin_48838458/article/details/111867356)
+
+>找到mysql的配置文件  `my.ini` 或者 `my.cnf`  在`[mysqld]`后添加`skip-grant-tables`(可以不用密码登陆)
+>
+>重启mysql服务器 service mysql stop    service mysql start
+>
+>mysql -uroot -p  接着两个回车就能登陆了
+>
+>update user set password=PASSWORD(“Shanliang28”) where user=‘root’;
+>
+>将mysql的配置文件改回来，重启服务再次登陆即可
+
+```java
+先看看 `mysql`.`user`表里有没有root  
+
+5.7 添加记录sql  
+    
+INSERT INTO `mysql`.`user`(`Host`, `User`, `Select_priv`, `Insert_priv`, `Update_priv`, `Delete_priv`, `Create_priv`, `Drop_priv`, `Reload_priv`, `Shutdown_priv`, `Process_priv`, `File_priv`, `Grant_priv`, `References_priv`, `Index_priv`, `Alter_priv`, `Show_db_priv`, `Super_priv`, `Create_tmp_table_priv`, `Lock_tables_priv`, `Execute_priv`, `Repl_slave_priv`, `Repl_client_priv`, `Create_view_priv`, `Show_view_priv`, `Create_routine_priv`, `Alter_routine_priv`, `Create_user_priv`, `Event_priv`, `Trigger_priv`, `Create_tablespace_priv`, `ssl_type`, `ssl_cipher`, `x509_issuer`, `x509_subject`, `max_questions`, `max_updates`, `max_connections`, `max_user_connections`, `plugin`, `authentication_string`, `password_expired`, `password_last_changed`, `password_lifetime`, `account_locked`) VALUES ('localhost', 'root', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '', '', '', '', 0, 0, 0, 0, 'mysql_native_password', '*23AE809DDACAF96AF0FD78ED04B6A265E05AA257', 'N', '2021-11-15 22:54:28', NULL, 'N');
+
+// 非本地能连接数据库
+update user set host = '%' where user = 'root';   // %表示所有，默认为本机
+```
+
+
+
 ##### centeros  rpm 安装修改密码提示不符合当前策略要求
 
 > // 修改密码错误提示
