@@ -1738,7 +1738,16 @@ drop：我要丢弃该commit（缩写:d）
 >
 >
 
+## git add
 
+> git add -u <==> git add –update
+> 提交所有被删除和修改的文件到数据暂存区
+>
+> git add .
+> 提交所有修改的和新建的数据暂存区
+>
+> git add -A <==>  git add –all
+> 提交所有被删除、被替换、被修改和新增的文件到数据暂存区
 
 ### 合并分支
 
@@ -1818,6 +1827,24 @@ drop：我要丢弃该commit（缩写:d）
 > git merge dev
 
 ## 版本回退
+
+### revert 回退
+
+[参考](https://www.jb51.net/article/192219.htm)
+
+> git revert commit_id
+> //如果commit_id是merge节点的话,-m是指定具体哪个提交点
+> git revert commit_id -m 1
+> //接着就是解决冲突
+> git add -A
+> git commit -m ".."
+> git revert commit_id -m 2
+> //接着就是解决冲突
+> git add -A
+> git commit -m ".."
+> git push
+
+### reset 回退
 
 [版本回退](https://yijiebuyi.com/blog/8f985d539566d0bf3b804df6be4e0c90.html)
 
@@ -2650,6 +2677,10 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 
 
 ## 问题记录
+
+### idea vm配置目录
+
+> C:\Users\E480\AppData\Roaming\JetBrains\IntelliJIdea2021.3
 
 ### 全区搜没有搜到jar包中的文件
 
@@ -8290,10 +8321,42 @@ ps -mp pid -o THREAD,tid,time
 -XX:ParallelGCThreads=2
 ```
 
+##### 别人的参考
+
+[参考webstorm](https://gist.github.com/macd2/c5b5692a47abd06e6298d676971fcc7a)
+
+[idea64.vm](https://developpaper.com/intellij-idea-performance-optimization-tutorial-detailed-explanation/)
+
+```java
+-server
+-Xms3g
+-Xmx3g
+-XX:NewRatio=3
+-Xss16m
+-XX:+UseConcMarkSweepGC
+-XX:+CMSParallelRemarkEnabled
+-XX:ConcGCThreads=4
+-XX:ReservedCodeCacheSize=240m
+-XX:+AlwaysPreTouch
+-XX:+TieredCompilation
+-XX:+UseCompressedOops
+-XX:SoftRefLRUPolicyMSPerMB=50
+-Dsun.io.useCanonCaches=false
+-Djava.net.preferIPv4Stack=true
+-Djsse.enableSNIExtension=false
+-ea
+-Dsun.io.useCanonCaches=false
+-Djdk.http.auth.tunneling.disabledSchemes=""
+-Djdk.attach.allowAttachSelf=true
+-Djdk.module.illegalAccess.silent=true
+-Dkotlinx.coroutines.debug=off
+-XX:+HeapDumpOnOutOfMemoryError
+```
+
 ##### 注意点
 
 + 高版本可能不知道打印gc日志的命令，测试版本`2021.3.2`
-+ 
++ metaspace 和 heap 大小别固定。因为可能同时打开很多个项目，可能只打开一个。让他动态变化内容能使用更充分
 
 ### 常用命令
 
@@ -10029,6 +10092,12 @@ java.lang.NoSuchMethodError: org.springframework.util.Assert.isTrue(ZLjava/util/
 ==特殊情况，修改项目的jre目录==
 
 ![修改配置图示](./images/2021-10-19-1.jpg)
+
+##### 特殊情况
+
+==引入了重复jar包，可能包不一样==
+
+<img src="./images/2022-06-23-1.jpg" alt="解决办法" style="zoom:80%;" />
 
 #### @Builder 导致 fastjson转对象出错
 
