@@ -6075,7 +6075,33 @@ redis-cli -h 192.168.80.24 -p 6379 --latency-dist   // 延时监控
 latency doctor  // 潜伏登陆，需要先登陆redis
 ```
 
+### 插件安装
 
+#### bloom
+
+[bloom官网](https://github.com/RedisBloom/RedisBloom)
+
+[参考教程](https://www.codenong.com/cs110873427/)
+
+##### 问题
+
+###### [Makefile:403: adlist.o] Error 127
+
+```
+make cc Command not found，make: * [adlist.o] Error 127
+```
+
+没有安装c语言环境
+
+> apt install cpp
+>
+> apt install binutils 
+>
+> apt install gcc
+>
+> apt install pkg-config
+>
+> apt install make
 
 ### 设置redis  访问 auth 密码
 
