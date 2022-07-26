@@ -12249,7 +12249,24 @@ insert into t values(1,1,'2020-01-01','aaa',1);
  source d:/download/baidu_download/tpch_small/tpch_small.sql
 ```
 
+#### 释放表空间
 
+> // 查看表状态
+> show table status from wk_db_loan  like 'wk_loan_order';
+
+##### 提示错误
+
+![错误示例](./images/2022-07-26-1.jpg)
+
+##### 解决
+
+> alter table wk_loan_order(目标表) engine='innodb';
+>
+> // 修改启动参数
+>
+> 用mysqld --skip-new或者mysqld --safe-mode命令来重启MySQL
+
+innodb执行逻辑为
 
 ### 不太常用命令
 
@@ -12281,6 +12298,7 @@ on a.id = b.trx_mysql_thread_id;
 SHOW FULL PROCESSLIST;
 // 上面的连接数等于这里的  Threads_connected 字段
 show status like 'Threads%'; 
+// 
 ```
 
 ### 备注
