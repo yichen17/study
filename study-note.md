@@ -6103,6 +6103,22 @@ make cc Command not found，make: * [adlist.o] Error 127
 >
 > apt install make
 
+#### cell
+
+[github官网](https://github.com/brandur/redis-cell)
+
+>wget https://github.com/brandur/redis-cell/releases/download/v0.3.0/redis-cell-v0.3.0-x86_64-unknown-linux-gnu.tar.gz
+>
+>// 安装环境   无用跳过，直接拿现成文件
+>
+>apt install cargo
+>
+>// 修改redis.conf
+>
+>vi /etc/redis/redis.conf
+>
+>loadmodule /software/redis-cell-use/libredis_cell.so
+
 ### 设置redis  访问 auth 密码
 
 [参考文章](https://blog.csdn.net/u013829518/article/details/82621694)
