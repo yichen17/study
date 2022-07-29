@@ -2297,6 +2297,58 @@ AbstractRegistry 中还有另外两个需要关注的方法：recover() 方法�
 
 # redis
 
+## 查看内存使用情况
+
+[参考文章](https://linuxhint.com/check-redis-memory-usage/)
+
+>//   查看内存信息   _human  代表人类可读格式
+>
+>info memory 
+>
+>// 查看某个库的key数量
+>
+>dbsize
+>
+>//   具体的key信息
+>
+>info keyspace
+>
+>// 查看某个key具体使用多少内存
+>
+>memory usage key
+>
+>// 
+
+## 缓存策略
+
+[学习文章](https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/)
+
+[学习文章](https://www.jianshu.com/p/ca6bb4f4a31a)
+
+### Cache-Aside 策略
+
+> 会先查询缓存，如果缓存命中则直接返回。如果没有命中，则返回结果并写入缓存。这种场景下缓存内容和数据库DO可能不一样。因为缓存内容可能是由多个DO拼凑而成的
+
+### Read-Through 策略
+
+> 整体逻辑同`Cache-Aside`，但是有两个区分点。
+>
+> 1、`Cache-Aside`是应用主动查数据并写入缓存，而`Read-Through`则是`library`或者是`cache provider`来执行这个职能
+>
+> 2、`Read-Through`的缓存内容必须和数据库`DO`一致
+
+### Write-Through 策略
+
+> 先将数据写入缓存，在写入数据库。单看它，没啥作用。但是和`Read-Through`配合，它采用了延迟写入。获得了`Read-Through`的所有好处，能保证数据一致性以及不需要在使用缓存失效策略
+
+### Write-Around
+
+> 数据直接写入数据库，查询时才写入缓存。适用于写一次，读很少或没有的场景。可以配合`Read-aside`使用。使用场景如日志，聊天消息。
+
+### Write-Back|write-behind
+
+> 先将数据写入缓存，然后延迟一段时间写入数据库。它可以提高写入性能，适合写入繁重的工作场景。
+
 ## redis 运行变慢，性能排查
 
 ### 思维导图
