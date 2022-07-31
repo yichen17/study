@@ -2453,6 +2453,20 @@ Javassist 是一个开源的生成 Java 字节码的类库，其主要优点在�
 
 # idea 相关 问题
 
+## 修改默认配置文件夹
+
+[参考步骤](https://blog.csdn.net/weixin_44159171/article/details/119393044)
+
+> // 默认配置存放目录
+>
+> C:\Users\administrator\AppData\Local\JetBrains
+>
+> // 修改idea安装配置文件  idea.properties
+>
+> idea.config.path=E:/Intellij_ideal/idea-config/config
+>
+> idea.system.path=E:/Intellij_ideal/idea-config/system
+
 ## 使用配置记录
 
 > 1、安装插件
