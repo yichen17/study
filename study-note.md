@@ -8445,6 +8445,63 @@ server.tomcat.uri-encoding=UTF-8
 
 
 
+# gradle 
+
+## 安装
+
+[参考安装步骤](https://blog.csdn.net/qq_34972627/article/details/124911994)
+
+> 1、官网下载二进制文件  binary-only
+>
+> https://gradle.org/releases/
+>
+> 2、解压文件
+>
+> 3、配置环境变量
+>
+> GRADLE_HOME   => 解压目录
+>
+> Path  => 新加一行   %GRADLE_HOME%
+>
+> GRADLE_USER_HOME  =>  同级创建用户目录
+>
+> 4、验证  win+r  cmd   输入 gradle -v
+>
+> 5、添加配置文件    在 `init.d` 目录下添加 `init.gradle`文件，内容如下
+>
+> allprojects {
+>     repositories {
+>         mavenLocal()
+>         maven { name "aliyun" ; url 'https://maven.aliyun.com/repository/public' }
+>         mavenCentral()
+>     }
+>     buildscript { 
+>         repositories { 
+>             mavenLocal()
+>             maven { name "aliyun" ; url 'https://maven.aliyun.com/repository/public' }
+>             mavenCentral()
+>         }
+>     }
+> } 
+
+## 问题
+
+### 构建提示 Received status code 401 from server: Unauthorized
+
+> spring 5 用 gradle 	4.x版本
+
+### 下载包 read time out
+
+> 修改 gradle.properties  添加调用时长
+>
+> org.gradle.jvmargs=-Xmx1536M -Dorg.gradle.internal.http.connectionTimeout=120000 -Dorg.gradle.internal.http.socketTimeout=120000
+
+### springboot 构建时报错  Execution failed for task ':buildSrc:checkFormatMain'.
+
+[参考解决办法](https://blog.csdn.net/fxzzq/article/details/121804843)
+
+> 修改项目目录下的 `buildSrc` > `build.gradle` ，将其中的  `io.spring.javaformat` 行注释掉
+
 # JAVA
 
 ## 简写对照表
