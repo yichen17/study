@@ -2627,6 +2627,16 @@ logging.level.dao对应的位置=debug
 
 ## 常用设置
 
+### 字体缩放快捷键
+
+[参考操作](https://blog.csdn.net/m0_52673390/article/details/113094714)
+
+> file > settings > keymap 
+>
+> 输入 decrease 右键  `decrease font size` 选择`add mouse shortcut`， 按住`crtl` 滚轮向下滚动即可
+>
+> 输入 increase 右键  `increase font size` 选择`add mouse shortcut`， 按住`crtl` 滚轮向上滚动即可
+
 ### 不显示  .iml 文件
 
 > File > Settings > Editor > FIle Type  在最下面的  Ignore Files and Folders 末尾添加 *.iml;    即可
