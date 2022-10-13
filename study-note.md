@@ -1556,6 +1556,19 @@ sudo service ssh --full-restart
 >
 > where  java     //  搜索java目录，根据环境变量 
 
+## chrome插件
+
++ jsonview  json展示数据
++ infinity  新标签页美化
++ google 翻译  
++ onetab
++ xpath helper
++ vue.js devtools
++ adblock plus
++ imasus  鼠标放在图片上会自动放大
++ Chrono  下载界面美化
++ Awesome Screenshot 截图录屏
+
 # git 常用命令
 
 ## 配置  ssh key
