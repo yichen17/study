@@ -1518,6 +1518,12 @@ du -h catalina.out  # 再次查看大小
 
 # window相关问题记录
 
+## visio
+
+### 对齐网格
+
+> 视图 >  视觉帮助-动态网格
+
 ## window 查看端口以及对应的进程名称
 
 + netstat -ano  // 展示端口列表
@@ -12682,7 +12688,9 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 >
 > ALTER USER 'root'@'localhost'  IDENTIFIED WITH mysql_native_password  BY 'root';
 
++ 删除service
 
+> sc delete mysql
 
  
 
@@ -12691,7 +12699,19 @@ Server="D:/mysql-5.7/mysql-5.7.34-winx64/bin/mysqld.exe"
 > source /tmp/phone202103-mysql.sql     // 后面是对应的sql 文件位置
 > <font color=red>这里需要在cmd命令行执行，而不能用三方工具，如navicat premiun</font>
 
+#### mysql 5.6安装
 
+[参考地址](https://www.likecs.com/show-178862.html#sc=1700)
+
+> // 解压压缩包 配置环境变量
+>
+> mysqld install MySQL --defaults-file="D:\mysql56\my.ini"
+>
+> mysqld remove  // 移除命令
+>
+> mysql -h localhost –u root -p  // 第一次回车直接登录
+>
+> set password for root@localhost=password('123');
 
 ### 问题记录
 
