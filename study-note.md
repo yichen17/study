@@ -8065,6 +8065,54 @@ JSONObject jsonObject=new JSONObject(res);
 
 
 
+### swagger
+
+#### pom
+
+```java
+<properties>
+        <swagger.version>2.9.2</swagger.version>
+</properties>
+<!--swagger 查询接口定义和调用  调用方式  服务启动地址后加  /swagger-ui.html -->
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>${swagger.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>${swagger.version}</version>
+    </dependency>
+<!-- end -->
+```
+
+#### 基本配置
+
+```java
+// 启动类上开启 swagger
+@EnableSwagger2
+// controller上的方法添加
+@ApiOperation(value = "测试接口请求数据")
+```
+
+#### 问题记录
+
+##### 打开swagger报错 Unable to infer base url
+
+```java
+Unable to infer base url. This is common when using dynamic servlet registration or 
+when the API is behind an API Gateway. The base url is the root of where all 
+the swagger resources are served. For e.g. if the api is available at 
+http://example.org/api/v2/api-docs then the base url is http://example.org/api/. 
+Please enter the location manually: 
+```
+
+```java
+启动类中添加启用swagger注解
+@EnableSwagger2
+```
+
 
 
 
@@ -10020,54 +10068,6 @@ public class EntranceFilter implements Filter {
 git rm -rf --cached src/main/resource/application-dev.yml
 // 删除 本地 .gitignore cache，也不上传
 git rm -rf --cached .gitignore
-```
-
-### swagger
-
-#### pom
-
-```java
-<properties>
-        <swagger.version>2.9.2</swagger.version>
-</properties>
-<!--swagger 查询接口定义和调用  调用方式  服务启动地址后加  /swagger-ui.html -->
-    <dependency>
-        <groupId>io.springfox</groupId>
-        <artifactId>springfox-swagger2</artifactId>
-        <version>${swagger.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>io.springfox</groupId>
-        <artifactId>springfox-swagger-ui</artifactId>
-        <version>${swagger.version}</version>
-    </dependency>
-<!-- end -->
-```
-
-#### 基本配置
-
-```java
-// 启动类上开启 swagger
-@EnableSwagger2
-// controller上的方法添加
-@ApiOperation(value = "测试接口请求数据")
-```
-
-#### 问题记录
-
-##### 打开swagger报错 Unable to infer base url
-
-```java
-Unable to infer base url. This is common when using dynamic servlet registration or 
-when the API is behind an API Gateway. The base url is the root of where all 
-the swagger resources are served. For e.g. if the api is available at 
-http://example.org/api/v2/api-docs then the base url is http://example.org/api/. 
-Please enter the location manually: 
-```
-
-```java
-启动类中添加启用swagger注解
-@EnableSwagger2
 ```
 
 
