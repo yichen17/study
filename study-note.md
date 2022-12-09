@@ -7795,6 +7795,100 @@ http{
 >
 > AcceptFilter http none
 
+## prometheus
+
+[官方安装文档](https://prometheus.io/docs/prometheus/latest/getting_started/)
+
+### 安装
+
++ https://prometheus.io/download/  下载对应操作系统的安装包
+
++ ```
+  tar xvfz prometheus-*.tar.gz  // 解压
+  cd prometheus-*  // 进入解压目录
+  ```
+
++ ```bash
+  mv prometheus.yml prometheus-default.yml #保存默认配置
+  vi prometheus.yml # 填写自定义配置
+  global:
+    scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  
+    # Attach these labels to any time series or alerts when communicating with
+    # external systems (federation, remote storage, Alertmanager).
+    external_labels:
+      monitor: 'codelab-monitor'
+  
+  # A scrape configuration containing exactly one endpoint to scrape:
+  # Here it's Prometheus itself.
+  scrape_configs:
+    # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+    - job_name: 'prometheus'
+  
+      # Override the global default and scrape targets from this job every 5 seconds.
+      scrape_interval: 5s
+  
+      static_configs:
+        - targets: ['localhost:9090']
+  ```
+
++ ```bash 
+  ./prometheus --config.file=prometheus.yml  #启动
+  localhost:9090/metrics   # 访问地址
+  ```
+
+## grafana
+
+[官方文档](https://prometheus.io/docs/visualization/grafana/)
+
+### 安装
+
++ https://grafana.com/grafana/download 根据系统版本进行下载安装
+
+```
+sudo apt-get install -y adduser libfontconfig1
+wget https://dl.grafana.com/enterprise/release/grafana-enterprise_9.3.1_amd64.deb
+sudo dpkg -i grafana-enterprise_9.3.1_amd64.deb
+```
+
++ 启动
+
+[参考启动](https://blog.csdn.net/qq_40492048/article/details/126877029)
+
+[WSL中无法使用systemctl解决办法](https://segmentfault.com/a/1190000040670856)
+
+```shell
+service grafana-server start  // 启动
+service grafana-server stop // 关闭
+```
+
+### 问题
+
+#### gradana启动报错 database is locked
+
+[解决办法参考](https://blog.csdn.net/pengpengzhou/article/details/121946131)
+
+[解决办法参考](https://community.grafana.com/t/database-is-locked-unable-to-use-grafana-anymore/16557)
+
+> 查看启动日志  cd  /var/log/grafana/grafana.log
+>
+> grafana.db 默认地址   cd /var/lib/grafana
+>
+> sqlite3 grafana.db 
+>
+> .clone grafana-new.db
+>
+> .exit
+>
+> mv grafana.db grafana-old.db
+> mv grafana-new.db grafana.db
+
+#### 无法登录
+
+[参考解决办法](https://blog.csdn.net/weixin_29057619/article/details/112981242)
+
+> grafana.db 文件权限问题
+
 ## 安装openjdk 7u4 所依赖的东西
 
 >sudo apt-get install build-essential gawk m4 openjdk-6-jdk libasound2-dev libcups2-dev libxrender-dev xorg-dev xutils-dev xllproto-print-dev binutils libmotif3 libmotif-dev ant
