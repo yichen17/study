@@ -2824,9 +2824,11 @@ setting =》  editor  =》  color scheme  =》  general    右侧
 9、atom material icons
 10、rainbow brackets => 括号显示优化
 11、CodeGlance  =>  代码视图窗口
-12、SequenceDiagram  => 依赖美化展示
+12、SequenceDiagram  => 依赖美化展示,也可以看接口调用链路
 13、easyYapi   =>  自动生成yapi文档 
     https://blog.csdn.net/yuyu1067/article/details/110621621
+14、Grep Console  =>  不同日志级别可以设置不同颜色
+15、Java Bean to Json   => java 实体对象转成 json
 ```
 
 
