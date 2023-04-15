@@ -6117,7 +6117,17 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 
 ### 安装
 
-> [安装包下载](https://mirrors.tuna.tsinghua.edu.cn/)
+> wget https://archive.apache.org/dist/kafka/2.3.1/kafka_2.11-2.3.1.tgz
+>
+> tar -zxvf kafka_2.11-2.3.1.tgz
+>
+> vim /etc/profile
+> export KAFKA_HOME=/project/kafka
+> export PATH=$PATH:$KAFKA_HOME/bin
+>
+>  source /etc/profile
+>
+> 
 >
 > // 启动zookeeper
 >
@@ -6136,6 +6146,12 @@ CloseableHttpClient 类的  execute 方法执行过程中出错
 > bin/kafka-server-stop.sh
 
 ### 可视化界面  kafka-manager
+
+> wget https://github.com/yahoo/CMAK/releases/download/3.0.0.6/cmak-3.0.0.6.zip
+>
+> unzip cmak-3.0.0.6.zip
+>
+> nohup bin/kafka-manager  -Dconfig.file=conf/application.conf > ./manager.log 2>&1   &
 
 ### 修改启动内存大小
 
